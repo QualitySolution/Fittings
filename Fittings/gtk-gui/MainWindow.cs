@@ -7,7 +7,7 @@ public partial class MainWindow
 	
 	private global::Gtk.Action Action;
 	
-	private global::Gtk.Action Action6;
+	private global::Gtk.Action ActionPasswordChange;
 	
 	private global::Gtk.Action quitAction;
 	
@@ -20,6 +20,8 @@ public partial class MainWindow
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.MenuBar menubar1;
+	
+	private global::QSTDI.TdiNotebook tdiMain;
 	
 	private global::Gtk.Statusbar statusbar1;
 	
@@ -34,9 +36,9 @@ public partial class MainWindow
 		this.Action = new global::Gtk.Action ("Action", global::Mono.Unix.Catalog.GetString ("База"), null, null);
 		this.Action.ShortLabel = global::Mono.Unix.Catalog.GetString ("База");
 		w1.Add (this.Action, null);
-		this.Action6 = new global::Gtk.Action ("Action6", global::Mono.Unix.Catalog.GetString ("Изменить пароль"), null, null);
-		this.Action6.ShortLabel = global::Mono.Unix.Catalog.GetString ("Изменить пароль");
-		w1.Add (this.Action6, null);
+		this.ActionPasswordChange = new global::Gtk.Action ("ActionPasswordChange", global::Mono.Unix.Catalog.GetString ("Изменить пароль"), null, null);
+		this.ActionPasswordChange.ShortLabel = global::Mono.Unix.Catalog.GetString ("Изменить пароль");
+		w1.Add (this.ActionPasswordChange, null);
 		this.quitAction = new global::Gtk.Action ("quitAction", global::Mono.Unix.Catalog.GetString ("Выход"), null, "gtk-quit");
 		this.quitAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Выход");
 		w1.Add (this.quitAction, null);
@@ -59,7 +61,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='Action6' action='Action6'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action5' action='Action5'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action5' action='Action5'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -67,6 +69,14 @@ public partial class MainWindow
 		w2.Position = 0;
 		w2.Expand = false;
 		w2.Fill = false;
+		// Container child vbox1.Gtk.Box+BoxChild
+		this.tdiMain = new global::QSTDI.TdiNotebook ();
+		this.tdiMain.Name = "tdiMain";
+		this.tdiMain.CurrentPage = 0;
+		this.tdiMain.ShowTabs = false;
+		this.vbox1.Add (this.tdiMain);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.tdiMain]));
+		w3.Position = 1;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.statusbar1 = new global::Gtk.Statusbar ();
 		this.statusbar1.Name = "statusbar1";
@@ -76,15 +86,15 @@ public partial class MainWindow
 		this.labelStatus.Name = "labelStatus";
 		this.labelStatus.LabelProp = global::Mono.Unix.Catalog.GetString ("label1");
 		this.statusbar1.Add (this.labelStatus);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelStatus]));
-		w3.Position = 2;
-		w3.Expand = false;
-		w3.Fill = false;
-		this.vbox1.Add (this.statusbar1);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelStatus]));
 		w4.Position = 2;
 		w4.Expand = false;
 		w4.Fill = false;
+		this.vbox1.Add (this.statusbar1);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
+		w5.Position = 2;
+		w5.Expand = false;
+		w5.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
@@ -93,5 +103,9 @@ public partial class MainWindow
 		this.DefaultHeight = 300;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
+		this.ActionPasswordChange.Activated += new global::System.EventHandler (this.OnActionPasswordChangeActivated);
+		this.quitAction.Activated += new global::System.EventHandler (this.OnQuitActionActivated);
+		this.UsersAction.Activated += new global::System.EventHandler (this.OnUsersActionActivated);
+		this.aboutAction.Activated += new global::System.EventHandler (this.OnAboutActionActivated);
 	}
 }

@@ -18,21 +18,24 @@
         <property name="Label" translatable="yes">База</property>
         <property name="ShortLabel" translatable="yes">База</property>
       </action>
-      <action id="Action6">
+      <action id="ActionPasswordChange">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Изменить пароль</property>
         <property name="ShortLabel" translatable="yes">Изменить пароль</property>
+        <signal name="Activated" handler="OnActionPasswordChangeActivated" />
       </action>
       <action id="quitAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Выход</property>
         <property name="ShortLabel" translatable="yes">Выход</property>
         <property name="StockId">gtk-quit</property>
+        <signal name="Activated" handler="OnQuitActionActivated" />
       </action>
       <action id="UsersAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Пользователи</property>
         <property name="ShortLabel" translatable="yes">Пользователи</property>
+        <signal name="Activated" handler="OnUsersActionActivated" />
       </action>
       <action id="Action5">
         <property name="Type">Action</property>
@@ -44,6 +47,7 @@
         <property name="Label" translatable="yes">_О программе</property>
         <property name="ShortLabel" translatable="yes">_О программе</property>
         <property name="StockId">gtk-about</property>
+        <signal name="Activated" handler="OnAboutActionActivated" />
       </action>
     </action-group>
     <property name="MemberName" />
@@ -59,7 +63,7 @@
             <property name="MemberName" />
             <node name="__gtksharp_148_Stetic_Editor_ActionMenuBar" type="Menubar">
               <node type="Menu" action="Action">
-                <node type="Menuitem" action="Action6" />
+                <node type="Menuitem" action="ActionPasswordChange" />
                 <node type="Menuitem" action="UsersAction" />
                 <node type="Separator" />
                 <node type="Menuitem" action="quitAction" />
@@ -77,7 +81,15 @@
           </packing>
         </child>
         <child>
-          <placeholder />
+          <widget class="QSTDI.TdiNotebook" id="tdiMain">
+            <property name="MemberName" />
+            <property name="CurrentPage">0</property>
+            <property name="ShowTabs">False</property>
+          </widget>
+          <packing>
+            <property name="Position">1</property>
+            <property name="AutoSize">False</property>
+          </packing>
         </child>
         <child>
           <widget class="Gtk.Statusbar" id="statusbar1">

@@ -41,4 +41,28 @@ public partial class MainWindow: Gtk.Window
 		Application.Quit ();
 		a.RetVal = true;
 	}
+		
+	protected void OnActionPasswordChangeActivated (object sender, EventArgs e)
+	{
+		QSMain.User.ChangeUserPassword (this);
+	}
+
+	protected void OnUsersActionActivated (object sender, EventArgs e)
+	{
+		Users winUsers = new Users ();
+		winUsers.Show ();
+		winUsers.Run ();
+		winUsers.Destroy ();
+	}
+		
+	protected void OnQuitActionActivated (object sender, EventArgs e)
+	{
+		Application.Quit ();
+	}
+
+	protected void OnAboutActionActivated (object sender, EventArgs e)
+	{
+		QSMain.RunAboutDialog ();
+	}
+
 }
