@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using QSOrmProject;
 using QSOrmProject.DomainMapping;
 using QSProjectsLib;
+using Fittings.Domain;
 
 namespace Fittings
 {
@@ -20,29 +21,20 @@ namespace Fittings
 			logger.Info ("Настройка параметров базы...");
 
 			// Настройка ORM
-	/*		OrmMain.ConfigureOrm (QSMain.ConnectionString, new System.Reflection.Assembly[] {
-				System.Reflection.Assembly.GetAssembly (typeof(Vodovoz.HMap.OrganizationMap)),
-				System.Reflection.Assembly.GetAssembly (typeof(QSBanks.QSBanksMain)),
-				System.Reflection.Assembly.GetAssembly (typeof(QSContacts.QSContactsMain))
+			var db = FluentNHibernate.Cfg.Db.MySQLConfiguration.Standard
+				.ConnectionString (QSMain.ConnectionString)
+				.ShowSql ()
+				.FormatSql ();
+
+			OrmMain.ConfigureOrm (db, new System.Reflection.Assembly[] {
+				System.Reflection.Assembly.GetAssembly (typeof(MainClass)),
 			});
 			OrmMain.ClassMappingList = new List<IOrmObjectMapping> {
 				//Простые справочники
-				OrmObjectMapping<CullingCategory>.Create().DefaultTableView().SearchColumn("Название", x => x.Name).End(),
+				OrmObjectMapping<User>.Create().DefaultTableView().SearchColumn("Название", x => x.Name).End(),
 
 			};
-			OrmMain.ClassMappingList.AddRange (QSBanks.QSBanksMain.GetModuleMaping ());
-			OrmMain.ClassMappingList.AddRange (QSContactsMain.GetModuleMaping ());
 
-			//Настройка ParentReference
-			ParentReferenceConfig.AddActions (new ParentReferenceActions<Organization, QSBanks.Account> {
-				AddNewChild = (o, a) => o.AddAccount (a)
-			});
-			ParentReferenceConfig.AddActions (new ParentReferenceActions<Counterparty, QSBanks.Account> {
-				AddNewChild = (c, a) => c.AddAccount (a)
-			});
-			ParentReferenceConfig.AddActions (new ParentReferenceActions<Employee, QSBanks.Account> {
-				AddNewChild = (c, a) => c.AddAccount (a)
-			}); */
 		}
 	}
 }

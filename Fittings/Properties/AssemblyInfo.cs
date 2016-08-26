@@ -8,6 +8,7 @@ using QSProjectsLib;
 [assembly: AssemblyTitle ("QS: Рассчет арматуры")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
+[assembly: AssemblyEdition ("com")]
 [assembly: AssemblyCompany ("Quality Solution")]
 [assembly: AssemblyProduct ("")]
 [assembly: AssemblyCopyright ("Quality Solution 2016")]

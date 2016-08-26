@@ -11,7 +11,7 @@ public partial class MainWindow
 	
 	private global::Gtk.Action quitAction;
 	
-	private global::Gtk.Action Action4;
+	private global::Gtk.Action UsersAction;
 	
 	private global::Gtk.Action Action5;
 	
@@ -20,6 +20,10 @@ public partial class MainWindow
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.MenuBar menubar1;
+	
+	private global::Gtk.Statusbar statusbar1;
+	
+	private global::Gtk.Label labelStatus;
 
 	protected virtual void Build ()
 	{
@@ -36,9 +40,9 @@ public partial class MainWindow
 		this.quitAction = new global::Gtk.Action ("quitAction", global::Mono.Unix.Catalog.GetString ("Выход"), null, "gtk-quit");
 		this.quitAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Выход");
 		w1.Add (this.quitAction, null);
-		this.Action4 = new global::Gtk.Action ("Action4", global::Mono.Unix.Catalog.GetString ("Пользователи"), null, null);
-		this.Action4.ShortLabel = global::Mono.Unix.Catalog.GetString ("Пользователи");
-		w1.Add (this.Action4, null);
+		this.UsersAction = new global::Gtk.Action ("UsersAction", global::Mono.Unix.Catalog.GetString ("Пользователи"), null, null);
+		this.UsersAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Пользователи");
+		w1.Add (this.UsersAction, null);
 		this.Action5 = new global::Gtk.Action ("Action5", global::Mono.Unix.Catalog.GetString ("Справка"), null, null);
 		this.Action5.ShortLabel = global::Mono.Unix.Catalog.GetString ("Справка");
 		w1.Add (this.Action5, null);
@@ -55,7 +59,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='Action6' action='Action6'/><menuitem name='Action4' action='Action4'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action5' action='Action5'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='Action6' action='Action6'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action5' action='Action5'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -63,6 +67,24 @@ public partial class MainWindow
 		w2.Position = 0;
 		w2.Expand = false;
 		w2.Fill = false;
+		// Container child vbox1.Gtk.Box+BoxChild
+		this.statusbar1 = new global::Gtk.Statusbar ();
+		this.statusbar1.Name = "statusbar1";
+		this.statusbar1.Spacing = 6;
+		// Container child statusbar1.Gtk.Box+BoxChild
+		this.labelStatus = new global::Gtk.Label ();
+		this.labelStatus.Name = "labelStatus";
+		this.labelStatus.LabelProp = global::Mono.Unix.Catalog.GetString ("label1");
+		this.statusbar1.Add (this.labelStatus);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.labelStatus]));
+		w3.Position = 2;
+		w3.Expand = false;
+		w3.Fill = false;
+		this.vbox1.Add (this.statusbar1);
+		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
+		w4.Position = 2;
+		w4.Expand = false;
+		w4.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
