@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Fittings.Domain
 {
 	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Masculine,
-		NominativePlural = "пользователи",
-		Nominative = "пользователь")]
+		NominativePlural = "прайс листы",
+		Nominative = "прайс лист")]
 	public class Price: PropertyChangedBase, IDomainObject
 	{
 		#region Свойства

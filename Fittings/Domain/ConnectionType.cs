@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Fittings.Domain
 {
 	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Masculine,
-		NominativePlural = "пользователи",
-		Nominative = "пользователь")]
+		NominativePlural = "типы соединений",
+		Nominative = "тип соединений")]
 	public class ConnectionType: MultiLanguageReferenceBase
 	{
 		public ConnectionType ()

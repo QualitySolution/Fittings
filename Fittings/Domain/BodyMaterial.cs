@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Fittings.Domain
 {
 	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Masculine,
-		NominativePlural = "пользователи",
-		Nominative = "пользователь")]
+		NominativePlural = "материалы корпусов",
+		Nominative = "материал корпуса")]
 	public class BodyMaterial: MultiLanguageReferenceBase
 	{
 		public BodyMaterial ()
