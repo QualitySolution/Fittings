@@ -32,6 +32,7 @@ namespace Fittings
 			OrmMain.ClassMappingList = new List<IOrmObjectMapping> {
 				//Простые справочники
 				OrmObjectMapping<User>.Create().DefaultTableView().SearchColumn("Название", x => x.Name).End(),
+				OrmObjectMapping<Provider>.Create().DefaultTableView().SearchColumn("Название", x => x.Name).End(),
 
 			};
 

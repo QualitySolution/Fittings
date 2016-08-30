@@ -11,7 +11,7 @@
     <widget-library name="../../../QSProjects/QSSupportLib/bin/Debug/QSSupportLib.dll" />
     <widget-library name="../bin/Debug/Fittings.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="506 300">
+  <widget class="Gtk.Window" id="MainWindow" design-size="576 300">
     <action-group name="Default">
       <action id="Action">
         <property name="Type">Action</property>
@@ -37,7 +37,7 @@
         <property name="ShortLabel" translatable="yes">Пользователи</property>
         <signal name="Activated" handler="OnUsersActionActivated" />
       </action>
-      <action id="Action5">
+      <action id="Action1">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Справка</property>
         <property name="ShortLabel" translatable="yes">Справка</property>
@@ -48,6 +48,52 @@
         <property name="ShortLabel" translatable="yes">_О программе</property>
         <property name="StockId">gtk-about</property>
         <signal name="Activated" handler="OnAboutActionActivated" />
+      </action>
+      <action id="Action2">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Справочники</property>
+        <property name="ShortLabel" translatable="yes">Справочники</property>
+      </action>
+      <action id="Action3">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Арматура</property>
+        <property name="ShortLabel" translatable="yes">Арматура</property>
+      </action>
+      <action id="ActionProvider">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Поставщики</property>
+        <property name="ShortLabel" translatable="yes">Поставщики</property>
+        <signal name="Activated" handler="OnActionProviderActivated" />
+      </action>
+      <action id="Action5">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Виды арматуры</property>
+        <property name="ShortLabel" translatable="yes">Виды арматуры</property>
+      </action>
+      <action id="Action6">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Материал корпуса</property>
+        <property name="ShortLabel" translatable="yes">Материал корпуса</property>
+      </action>
+      <action id="Action7">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Виды соединений</property>
+        <property name="ShortLabel" translatable="yes">Виды соединений</property>
+      </action>
+      <action id="Action8">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Проводимая среда</property>
+        <property name="ShortLabel" translatable="yes">Проводимая среда</property>
+      </action>
+      <action id="Action9">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Давление</property>
+        <property name="ShortLabel" translatable="yes">Давление</property>
+      </action>
+      <action id="Action10">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Диаметр</property>
+        <property name="ShortLabel" translatable="yes">Диаметр</property>
       </action>
     </action-group>
     <property name="MemberName" />
@@ -68,7 +114,19 @@
                 <node type="Separator" />
                 <node type="Menuitem" action="quitAction" />
               </node>
-              <node type="Menu" action="Action5">
+              <node type="Menu" action="Action2">
+                <node type="Menuitem" action="Action3" />
+                <node type="Menuitem" action="ActionProvider" />
+                <node type="Separator" />
+                <node type="Menuitem" action="Action5" />
+                <node type="Menuitem" action="Action6" />
+                <node type="Menuitem" action="Action7" />
+                <node type="Menuitem" action="Action8" />
+                <node type="Separator" />
+                <node type="Menuitem" action="Action9" />
+                <node type="Menuitem" action="Action10" />
+              </node>
+              <node type="Menu" action="Action1">
                 <node type="Menuitem" action="aboutAction" />
               </node>
             </node>

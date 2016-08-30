@@ -2,6 +2,8 @@
 using Gtk;
 using QSProjectsLib;
 using QSSupportLib;
+using QSOrmProject;
+using Fittings.Domain;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -65,4 +67,11 @@ public partial class MainWindow: Gtk.Window
 		QSMain.RunAboutDialog ();
 	}
 
+	protected void OnActionProviderActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Provider>(),
+			() => new OrmReference(typeof(Provider))
+		);
+	}
 }
