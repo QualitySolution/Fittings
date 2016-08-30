@@ -57,6 +57,9 @@
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\QSProjects\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\QSProjects\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -74,6 +77,34 @@
     <Compile Include="ConfigureDeletion.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="HibernateMapping\UserMap.cs" />
+    <Compile Include="Domain\BodyMaterial.cs" />
+    <Compile Include="HibernateMapping\BodyMaterialMap.cs" />
+    <Compile Include="Domain\ConnectionType.cs" />
+    <Compile Include="HibernateMapping\ConnectionTypeMap.cs" />
+    <Compile Include="HibernateMapping\Diameter.cs" />
+    <Compile Include="Domain\Pressure.cs" />
+    <Compile Include="HibernateMapping\PressureMap.cs" />
+    <Compile Include="Domain\Provider.cs" />
+    <Compile Include="HibernateMapping\ProviderMap.cs" />
+    <Compile Include="Domain\IMultiLanguageReference.cs" />
+    <Compile Include="Domain\MultiLanguageReferenceBase.cs" />
+    <Compile Include="Domain\Diameter.cs" />
+    <Compile Include="Domain\AttachedFile.cs" />
+    <Compile Include="Domain\Conductor.cs" />
+    <Compile Include="HibernateMapping\ConductorMap.cs" />
+    <Compile Include="HibernateMapping\FittingsMap.cs" />
+    <Compile Include="Domain\Fitting.cs" />
+    <Compile Include="HibernateMapping\AttachedFilesMap.cs" />
+    <Compile Include="Domain\FittingType.cs" />
+    <Compile Include="Domain\Price.cs" />
+    <Compile Include="HibernateMapping\PriceMap.cs" />
+    <Compile Include="Domain\PriceItems.cs" />
+    <Compile Include="HibernateMapping\PriceItemsMap.cs" />
+    <Compile Include="Domain\Project.cs" />
+    <Compile Include="HibernateMapping\ProjectMap.cs" />
+    <Compile Include="Domain\ProjectItems.cs" />
+    <Compile Include="HibernateMapping\ProjectItemsMap.cs" />
+    <Compile Include="HibernateMapping\FittingTypeMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,0 +1,19 @@
+﻿using FluentNHibernate.Mapping;
+using Fittings.Domain;
+
+namespace Fittings.HMap
+{
+	public class PriceItemsMap : ClassMap<PriceItems>
+	{
+		public PriceItemsMap ()
+		{
+			Table ("price_items");
+
+			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
+			Map (x => x.Fitting).Column ("fitting_id");
+			References (x => x.Price).Column ("price_id");
+			Map (x => x.Currency).Column ("price_units");
+			Map (x => x.Cost).Column ("cost");
+		}
+	}
+}
