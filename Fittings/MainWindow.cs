@@ -74,4 +74,13 @@ public partial class MainWindow: Gtk.Window
 			() => new OrmReference(typeof(Provider))
 		);
 	}
+
+	protected void OnActionBodyMaterialActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<BodyMaterial>(),
+			() => new OrmReference(typeof(BodyMaterial))
+		);
+	}
+		
 }

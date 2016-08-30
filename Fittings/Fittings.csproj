@@ -105,6 +105,8 @@
     <Compile Include="Domain\ProjectItems.cs" />
     <Compile Include="HibernateMapping\ProjectItemsMap.cs" />
     <Compile Include="HibernateMapping\FittingTypeMap.cs" />
+    <Compile Include="Dialogs\BodyMaterialDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.BodyMaterialDlg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -124,9 +126,18 @@
       <Project>{9DF71899-3CE4-48F4-B3C3-0B21B15037B1}</Project>
       <Name>QSSupportLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GammaBinding\GammaBinding\GammaBinding.csproj">
+      <Project>{190CEA0D-EA23-4C91-8030-203A5AFED7B7}</Project>
+      <Name>GammaBinding</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\QSValidation\QSValidation.csproj">
+      <Project>{CE5179E8-3172-4C08-9FE3-9C48C58A3831}</Project>
+      <Name>QSValidation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
+    <Folder Include="Dialogs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
