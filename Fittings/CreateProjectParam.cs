@@ -37,6 +37,8 @@ namespace Fittings
 				OrmObjectMapping<Conductor>.Create().Dialog<ConductorDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
 				OrmObjectMapping<Fittings.Domain.ConnectionType>.Create().Dialog<ConnectionTypeDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
 				OrmObjectMapping<FittingType>.Create().Dialog<FittingTypeDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
+				OrmObjectMapping<Pressure>.Create().Dialog<PressureDlg>().DefaultTableView().SearchColumn("PN", x => x.Pn).SearchColumn("class", x => x.Pclass).End(),
+				OrmObjectMapping<Diameter>.Create().Dialog<DiameterDlg>().DefaultTableView().SearchColumn("Дюймы", x => x.Inch).SearchColumn("Миллиметры", x => x.Mm).End(),
 			};
 
 		}

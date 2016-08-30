@@ -107,4 +107,20 @@ public partial class MainWindow: Gtk.Window
 		);
 	}
 
+	protected void OnActionPressureActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Pressure>(),
+			() => new OrmReference(typeof(Pressure))
+		);
+	}
+
+	protected void OnActionDiameterActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Diameter>(),
+			() => new OrmReference(typeof(Diameter))
+		);
+	}
+
 }

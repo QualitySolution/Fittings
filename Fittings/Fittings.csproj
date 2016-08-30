@@ -81,7 +81,6 @@
     <Compile Include="HibernateMapping\BodyMaterialMap.cs" />
     <Compile Include="Domain\ConnectionType.cs" />
     <Compile Include="HibernateMapping\ConnectionTypeMap.cs" />
-    <Compile Include="HibernateMapping\Diameter.cs" />
     <Compile Include="Domain\Pressure.cs" />
     <Compile Include="HibernateMapping\PressureMap.cs" />
     <Compile Include="Domain\Provider.cs" />
@@ -113,6 +112,11 @@
     <Compile Include="Dialogs\FittingTypeDlg.cs" />
     <Compile Include="gtk-gui\Fittings.FittingTypeDlg.cs" />
     <Compile Include="HibernateMapping\FittingsMap.cs" />
+    <Compile Include="Dialogs\PressureDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.PressureDlg.cs" />
+    <Compile Include="Dialogs\DiameterDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.DiameterDlg.cs" />
+    <Compile Include="HibernateMapping\DiameterMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

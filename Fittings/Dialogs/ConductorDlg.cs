@@ -27,8 +27,8 @@ namespace Fittings
 
 		private void ConfigureDlg ()
 		{
-			rusNameEntry.Binding.AddBinding (Entity, e => e.NameRus, w => w.Text).InitializeFromSource(); 
-			engNameEntry.Binding.AddBinding (Entity, e => e.NameEng, w => w.Text).InitializeFromSource();
+			pnEntry.Binding.AddBinding (Entity, e => e.NameRus, w => w.Text).InitializeFromSource(); 
+			pclassEntry.Binding.AddBinding (Entity, e => e.NameEng, w => w.Text).InitializeFromSource();
 		}
 
 		public override bool Save ()
