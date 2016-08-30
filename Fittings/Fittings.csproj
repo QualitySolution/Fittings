@@ -92,7 +92,6 @@
     <Compile Include="Domain\AttachedFile.cs" />
     <Compile Include="Domain\Conductor.cs" />
     <Compile Include="HibernateMapping\ConductorMap.cs" />
-    <Compile Include="HibernateMapping\FittingsMap.cs" />
     <Compile Include="Domain\Fitting.cs" />
     <Compile Include="HibernateMapping\AttachedFilesMap.cs" />
     <Compile Include="Domain\FittingType.cs" />
@@ -107,6 +106,13 @@
     <Compile Include="HibernateMapping\FittingTypeMap.cs" />
     <Compile Include="Dialogs\BodyMaterialDlg.cs" />
     <Compile Include="gtk-gui\Fittings.BodyMaterialDlg.cs" />
+    <Compile Include="Dialogs\ConductorDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.ConductorDlg.cs" />
+    <Compile Include="Dialogs\ConnectionTypeDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.ConnectionTypeDlg.cs" />
+    <Compile Include="Dialogs\FittingTypeDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.FittingTypeDlg.cs" />
+    <Compile Include="HibernateMapping\FittingsMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

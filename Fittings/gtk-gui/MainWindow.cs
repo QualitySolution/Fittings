@@ -23,13 +23,13 @@ public partial class MainWindow
 	
 	private global::Gtk.Action ActionProvider;
 	
-	private global::Gtk.Action Action5;
+	private global::Gtk.Action ActionFittingType;
 	
 	private global::Gtk.Action ActionBodyMaterial;
 	
-	private global::Gtk.Action Action7;
+	private global::Gtk.Action ActionConnectionType;
 	
-	private global::Gtk.Action Action8;
+	private global::Gtk.Action ActionConductor;
 	
 	private global::Gtk.Action Action9;
 	
@@ -78,18 +78,18 @@ public partial class MainWindow
 		this.ActionProvider = new global::Gtk.Action ("ActionProvider", global::Mono.Unix.Catalog.GetString ("Поставщики"), null, null);
 		this.ActionProvider.ShortLabel = global::Mono.Unix.Catalog.GetString ("Поставщики");
 		w1.Add (this.ActionProvider, null);
-		this.Action5 = new global::Gtk.Action ("Action5", global::Mono.Unix.Catalog.GetString ("Виды арматуры"), null, null);
-		this.Action5.ShortLabel = global::Mono.Unix.Catalog.GetString ("Виды арматуры");
-		w1.Add (this.Action5, null);
+		this.ActionFittingType = new global::Gtk.Action ("ActionFittingType", global::Mono.Unix.Catalog.GetString ("Виды арматуры"), null, null);
+		this.ActionFittingType.ShortLabel = global::Mono.Unix.Catalog.GetString ("Виды арматуры");
+		w1.Add (this.ActionFittingType, null);
 		this.ActionBodyMaterial = new global::Gtk.Action ("ActionBodyMaterial", global::Mono.Unix.Catalog.GetString ("Материал корпуса"), null, null);
 		this.ActionBodyMaterial.ShortLabel = global::Mono.Unix.Catalog.GetString ("Материал корпуса");
 		w1.Add (this.ActionBodyMaterial, null);
-		this.Action7 = new global::Gtk.Action ("Action7", global::Mono.Unix.Catalog.GetString ("Виды соединений"), null, null);
-		this.Action7.ShortLabel = global::Mono.Unix.Catalog.GetString ("Виды соединений");
-		w1.Add (this.Action7, null);
-		this.Action8 = new global::Gtk.Action ("Action8", global::Mono.Unix.Catalog.GetString ("Проводимая среда"), null, null);
-		this.Action8.ShortLabel = global::Mono.Unix.Catalog.GetString ("Проводимая среда");
-		w1.Add (this.Action8, null);
+		this.ActionConnectionType = new global::Gtk.Action ("ActionConnectionType", global::Mono.Unix.Catalog.GetString ("Виды соединений"), null, null);
+		this.ActionConnectionType.ShortLabel = global::Mono.Unix.Catalog.GetString ("Виды соединений");
+		w1.Add (this.ActionConnectionType, null);
+		this.ActionConductor = new global::Gtk.Action ("ActionConductor", global::Mono.Unix.Catalog.GetString ("Проводимая среда"), null, null);
+		this.ActionConductor.ShortLabel = global::Mono.Unix.Catalog.GetString ("Проводимая среда");
+		w1.Add (this.ActionConductor, null);
 		this.Action9 = new global::Gtk.Action ("Action9", global::Mono.Unix.Catalog.GetString ("Давление"), null, null);
 		this.Action9.ShortLabel = global::Mono.Unix.Catalog.GetString ("Давление");
 		w1.Add (this.Action9, null);
@@ -106,7 +106,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='Action3' action='Action3'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='Action5' action='Action5'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='Action7' action='Action7'/><menuitem name='Action8' action='Action8'/><separator/><menuitem name='Action9' action='Action9'/><menuitem name='Action10' action='Action10'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='Action3' action='Action3'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='Action9' action='Action9'/><menuitem name='Action10' action='Action10'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -153,6 +153,9 @@ public partial class MainWindow
 		this.UsersAction.Activated += new global::System.EventHandler (this.OnUsersActionActivated);
 		this.aboutAction.Activated += new global::System.EventHandler (this.OnAboutActionActivated);
 		this.ActionProvider.Activated += new global::System.EventHandler (this.OnActionProviderActivated);
+		this.ActionFittingType.Activated += new global::System.EventHandler (this.OnActionFittingTypeActivated);
 		this.ActionBodyMaterial.Activated += new global::System.EventHandler (this.OnActionBodyMaterialActivated);
+		this.ActionConnectionType.Activated += new global::System.EventHandler (this.OnActionConnectionTypeActivated);
+		this.ActionConductor.Activated += new global::System.EventHandler (this.OnActionConductorActivated);
 	}
 }

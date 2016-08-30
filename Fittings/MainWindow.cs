@@ -82,5 +82,29 @@ public partial class MainWindow: Gtk.Window
 			() => new OrmReference(typeof(BodyMaterial))
 		);
 	}
-		
+
+	protected void OnActionConductorActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Conductor>(),
+			() => new OrmReference(typeof(Conductor))
+		);
+	}
+
+	protected void OnActionConnectionTypeActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Fittings.Domain.ConnectionType>(),
+			() => new OrmReference(typeof(Fittings.Domain.ConnectionType))
+		);
+	}
+
+	protected void OnActionFittingTypeActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<FittingType>(),
+			() => new OrmReference(typeof(FittingType))
+		);
+	}
+
 }
