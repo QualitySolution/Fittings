@@ -14,13 +14,13 @@ namespace Fittings
 		
 		private global::Gtk.Table table1;
 		
+		private global::Gamma.GtkWidgets.yEntry engNameEntry;
+		
 		private global::Gtk.Label label1;
 		
 		private global::Gtk.Label label2;
 		
-		private global::Gamma.GtkWidgets.yEntry pclassEntry;
-		
-		private global::Gamma.GtkWidgets.yEntry pnEntry;
+		private global::Gamma.GtkWidgets.yEntry rusNameEntry;
 
 		protected virtual void Build ()
 		{
@@ -69,47 +69,47 @@ namespace Fittings
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(6));
 			// Container child table1.Gtk.Table+TableChild
+			this.engNameEntry = new global::Gamma.GtkWidgets.yEntry ();
+			this.engNameEntry.CanFocus = true;
+			this.engNameEntry.Name = "engNameEntry";
+			this.engNameEntry.IsEditable = true;
+			this.engNameEntry.InvisibleChar = '●';
+			this.table1.Add (this.engNameEntry);
+			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table1 [this.engNameEntry]));
+			w4.TopAttach = ((uint)(1));
+			w4.BottomAttach = ((uint)(2));
+			w4.LeftAttach = ((uint)(1));
+			w4.RightAttach = ((uint)(2));
+			w4.XOptions = ((global::Gtk.AttachOptions)(4));
+			w4.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
 			this.label1 = new global::Gtk.Label ();
 			this.label1.Name = "label1";
 			this.label1.Xalign = 1F;
-			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("PN:");
+			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Русское название:");
 			this.table1.Add (this.label1);
-			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table1 [this.label1]));
-			w4.XOptions = ((global::Gtk.AttachOptions)(4));
-			w4.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1 [this.label1]));
+			w5.XOptions = ((global::Gtk.AttachOptions)(4));
+			w5.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.label2 = new global::Gtk.Label ();
 			this.label2.Name = "label2";
 			this.label2.Xalign = 1F;
-			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("Class:");
+			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("Английское название:");
 			this.table1.Add (this.label2);
-			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1 [this.label2]));
-			w5.TopAttach = ((uint)(1));
-			w5.BottomAttach = ((uint)(2));
-			w5.XOptions = ((global::Gtk.AttachOptions)(4));
-			w5.YOptions = ((global::Gtk.AttachOptions)(4));
-			// Container child table1.Gtk.Table+TableChild
-			this.pclassEntry = new global::Gamma.GtkWidgets.yEntry ();
-			this.pclassEntry.CanFocus = true;
-			this.pclassEntry.Name = "pclassEntry";
-			this.pclassEntry.IsEditable = true;
-			this.pclassEntry.InvisibleChar = '●';
-			this.table1.Add (this.pclassEntry);
-			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table1 [this.pclassEntry]));
+			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table1 [this.label2]));
 			w6.TopAttach = ((uint)(1));
 			w6.BottomAttach = ((uint)(2));
-			w6.LeftAttach = ((uint)(1));
-			w6.RightAttach = ((uint)(2));
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.pnEntry = new global::Gamma.GtkWidgets.yEntry ();
-			this.pnEntry.CanFocus = true;
-			this.pnEntry.Name = "pnEntry";
-			this.pnEntry.IsEditable = true;
-			this.pnEntry.InvisibleChar = '●';
-			this.table1.Add (this.pnEntry);
-			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.pnEntry]));
+			this.rusNameEntry = new global::Gamma.GtkWidgets.yEntry ();
+			this.rusNameEntry.CanFocus = true;
+			this.rusNameEntry.Name = "rusNameEntry";
+			this.rusNameEntry.IsEditable = true;
+			this.rusNameEntry.InvisibleChar = '●';
+			this.table1.Add (this.rusNameEntry);
+			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.rusNameEntry]));
 			w7.LeftAttach = ((uint)(1));
 			w7.RightAttach = ((uint)(2));
 			w7.YOptions = ((global::Gtk.AttachOptions)(4));

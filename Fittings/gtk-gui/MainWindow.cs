@@ -19,7 +19,7 @@ public partial class MainWindow
 	
 	private global::Gtk.Action Action2;
 	
-	private global::Gtk.Action Action3;
+	private global::Gtk.Action ActionFittings;
 	
 	private global::Gtk.Action ActionProvider;
 	
@@ -72,9 +72,9 @@ public partial class MainWindow
 		this.Action2 = new global::Gtk.Action ("Action2", global::Mono.Unix.Catalog.GetString ("Справочники"), null, null);
 		this.Action2.ShortLabel = global::Mono.Unix.Catalog.GetString ("Справочники");
 		w1.Add (this.Action2, null);
-		this.Action3 = new global::Gtk.Action ("Action3", global::Mono.Unix.Catalog.GetString ("Арматура"), null, null);
-		this.Action3.ShortLabel = global::Mono.Unix.Catalog.GetString ("Арматура");
-		w1.Add (this.Action3, null);
+		this.ActionFittings = new global::Gtk.Action ("ActionFittings", global::Mono.Unix.Catalog.GetString ("Арматура"), null, null);
+		this.ActionFittings.ShortLabel = global::Mono.Unix.Catalog.GetString ("Арматура");
+		w1.Add (this.ActionFittings, null);
 		this.ActionProvider = new global::Gtk.Action ("ActionProvider", global::Mono.Unix.Catalog.GetString ("Поставщики"), null, null);
 		this.ActionProvider.ShortLabel = global::Mono.Unix.Catalog.GetString ("Поставщики");
 		w1.Add (this.ActionProvider, null);
@@ -106,7 +106,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='Action3' action='Action3'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='ActionPressure' action='ActionPressure'/><menuitem name='ActionDiameter' action='ActionDiameter'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='ActionFittings' action='ActionFittings'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='ActionPressure' action='ActionPressure'/><menuitem name='ActionDiameter' action='ActionDiameter'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -152,6 +152,7 @@ public partial class MainWindow
 		this.quitAction.Activated += new global::System.EventHandler (this.OnQuitActionActivated);
 		this.UsersAction.Activated += new global::System.EventHandler (this.OnUsersActionActivated);
 		this.aboutAction.Activated += new global::System.EventHandler (this.OnAboutActionActivated);
+		this.ActionFittings.Activated += new global::System.EventHandler (this.OnActionFittingsActivated);
 		this.ActionProvider.Activated += new global::System.EventHandler (this.OnActionProviderActivated);
 		this.ActionFittingType.Activated += new global::System.EventHandler (this.OnActionFittingTypeActivated);
 		this.ActionBodyMaterial.Activated += new global::System.EventHandler (this.OnActionBodyMaterialActivated);

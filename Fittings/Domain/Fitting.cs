@@ -15,13 +15,14 @@ namespace Fittings.Domain
 
 		FittingType name;
 
+		[Required(ErrorMessage="Тип не заполнен")]
 		public virtual FittingType Name {
 			get { return name; }
 			set { SetField (ref name, value, () => Name); }
 		}
 
 		Diameter diameter;
-
+		[Required(ErrorMessage="Диаметр не выбран")]
 		public virtual Diameter Diameter {
 			get { return diameter; }
 			set { SetField (ref diameter, value, () => Diameter); }
@@ -35,7 +36,7 @@ namespace Fittings.Domain
 		}
 
 		Pressure pressure;
-
+		[Required(ErrorMessage="Давление не выбрано")]
 		public virtual Pressure Pressure {
 			get { return pressure; }
 			set { SetField (ref pressure, value, () => Pressure); }
@@ -49,21 +50,21 @@ namespace Fittings.Domain
 		}
 
 		ConnectionType connectionType;
-
+		[Required(ErrorMessage="Тип соединения не выбран")]
 		public virtual ConnectionType ConnectionType {
 			get { return connectionType; }
 			set { SetField (ref connectionType, value, () => ConnectionType); }
 		}
 
 		BodyMaterial bodyMaterial;
-
+		[Required(ErrorMessage="Материал корпуса не выбран")]
 		public virtual BodyMaterial BodyMaterial {
 			get { return bodyMaterial; }
 			set { SetField (ref bodyMaterial, value, () => BodyMaterial); }
 		}
 
 		string code;
-
+		[Required(ErrorMessage="Артикул не заполнен")]
 		public virtual string Code {
 			get { return code; }
 			set { SetField (ref code, value, () => Code); }

@@ -121,6 +121,8 @@ namespace Fittings
 				this.Child.ShowAll ();
 			}
 			this.Hide ();
+			this.buttonSave.Clicked += new global::System.EventHandler (this.OnButtonSaveClicked);
+			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelClicked);
 		}
 	}
 }

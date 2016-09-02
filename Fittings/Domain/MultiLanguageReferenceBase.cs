@@ -21,6 +21,11 @@ namespace Fittings.Domain
 			set { SetField (ref name_eng, value, () => NameEng); }
 		}
 
+		public virtual string Title {
+			get{ 
+				return String.Format ("{0}/{1}", NameRus, NameEng);
+			}
+		}
 
 		public MultiLanguageReferenceBase ()
 		{

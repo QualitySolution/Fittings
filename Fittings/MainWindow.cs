@@ -123,4 +123,12 @@ public partial class MainWindow: Gtk.Window
 		);
 	}
 
+	protected void OnActionFittingsActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Fitting>(),
+			() => new OrmReference(typeof(Fitting))
+		);
+	}
+
 }

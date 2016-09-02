@@ -117,6 +117,8 @@
     <Compile Include="Dialogs\DiameterDlg.cs" />
     <Compile Include="gtk-gui\Fittings.DiameterDlg.cs" />
     <Compile Include="HibernateMapping\DiameterMap.cs" />
+    <Compile Include="Dialogs\FittingDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.FittingDlg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
