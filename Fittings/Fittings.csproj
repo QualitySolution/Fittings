@@ -119,6 +119,10 @@
     <Compile Include="HibernateMapping\DiameterMap.cs" />
     <Compile Include="Dialogs\FittingDlg.cs" />
     <Compile Include="gtk-gui\Fittings.FittingDlg.cs" />
+    <Compile Include="Dialogs\ProjectDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.ProjectDlg.cs" />
+    <Compile Include="Dialogs\PriceDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.PriceDlg.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -150,10 +154,12 @@
   <ItemGroup>
     <Folder Include="Domain\" />
     <Folder Include="Dialogs\" />
+    <Folder Include="Representation\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Representation\FittingsVM.cs" />
   </ItemGroup>
 </Project>

@@ -35,6 +35,12 @@ public partial class MainWindow
 	
 	private global::Gtk.Action ActionDiameter;
 	
+	private global::Gtk.Action Action3;
+	
+	private global::Gtk.Action ActionProject;
+	
+	private global::Gtk.Action ActionPrice;
+	
 	private global::Gtk.VBox vbox1;
 	
 	private global::Gtk.MenuBar menubar1;
@@ -96,6 +102,15 @@ public partial class MainWindow
 		this.ActionDiameter = new global::Gtk.Action ("ActionDiameter", global::Mono.Unix.Catalog.GetString ("Диаметр"), null, null);
 		this.ActionDiameter.ShortLabel = global::Mono.Unix.Catalog.GetString ("Диаметр");
 		w1.Add (this.ActionDiameter, null);
+		this.Action3 = new global::Gtk.Action ("Action3", global::Mono.Unix.Catalog.GetString ("Дополнительно"), null, null);
+		this.Action3.ShortLabel = global::Mono.Unix.Catalog.GetString ("Дополнительно");
+		w1.Add (this.Action3, null);
+		this.ActionProject = new global::Gtk.Action ("ActionProject", global::Mono.Unix.Catalog.GetString ("Проекты"), null, null);
+		this.ActionProject.ShortLabel = global::Mono.Unix.Catalog.GetString ("Проекты");
+		w1.Add (this.ActionProject, null);
+		this.ActionPrice = new global::Gtk.Action ("ActionPrice", global::Mono.Unix.Catalog.GetString ("Прайс"), null, null);
+		this.ActionPrice.ShortLabel = global::Mono.Unix.Catalog.GetString ("Прайс");
+		w1.Add (this.ActionPrice, null);
 		this.UIManager.InsertActionGroup (w1, 0);
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
@@ -106,7 +121,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='ActionFittings' action='ActionFittings'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='ActionPressure' action='ActionPressure'/><menuitem name='ActionDiameter' action='ActionDiameter'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='ActionFittings' action='ActionFittings'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='ActionPressure' action='ActionPressure'/><menuitem name='ActionDiameter' action='ActionDiameter'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu><menu name='Action3' action='Action3'><menuitem name='ActionProject' action='ActionProject'/><menuitem name='ActionPrice' action='ActionPrice'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -144,7 +159,7 @@ public partial class MainWindow
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 576;
+		this.DefaultWidth = 678;
 		this.DefaultHeight = 300;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
@@ -160,5 +175,7 @@ public partial class MainWindow
 		this.ActionConductor.Activated += new global::System.EventHandler (this.OnActionConductorActivated);
 		this.ActionPressure.Activated += new global::System.EventHandler (this.OnActionPressureActivated);
 		this.ActionDiameter.Activated += new global::System.EventHandler (this.OnActionDiameterActivated);
+		this.ActionProject.Activated += new global::System.EventHandler (this.OnActionProjectActivated);
+		this.ActionPrice.Activated += new global::System.EventHandler (this.OnActionPriceActivated);
 	}
 }

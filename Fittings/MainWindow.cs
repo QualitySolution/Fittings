@@ -131,4 +131,18 @@ public partial class MainWindow: Gtk.Window
 		);
 	}
 
+	protected void OnActionProjectActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Project>(),
+			() => new OrmReference(typeof(Project))
+		);
+	}
+	protected void OnActionPriceActivated (object sender, EventArgs e)
+	{
+		tdiMain.OpenTab(
+			OrmReference.GenerateHashName<Price>(),
+			() => new OrmReference(typeof(Price))
+		);
+	}
 }

@@ -7,7 +7,7 @@ namespace Fittings.HMap
 	{
 		public PriceMap ()
 		{
-			Table ("provider");
+			Table ("price");
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.Date).Column ("date");
