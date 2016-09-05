@@ -124,6 +124,8 @@
     <Compile Include="Dialogs\PriceDlg.cs" />
     <Compile Include="gtk-gui\Fittings.PriceDlg.cs" />
     <Compile Include="Representation\FittingsVM.cs" />
+    <Compile Include="JournalFilters\FittingsFlt.cs" />
+    <Compile Include="gtk-gui\Fittings.FittingsFlt.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -160,6 +162,7 @@
     <Folder Include="Domain\" />
     <Folder Include="Dialogs\" />
     <Folder Include="Representation\" />
+    <Folder Include="JournalFilters\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

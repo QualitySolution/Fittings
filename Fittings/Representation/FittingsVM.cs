@@ -6,11 +6,21 @@ using NHibernate.Transform;
 using QSOrmProject;
 using QSOrmProject.RepresentationModel;
 using Fittings.Domain;
+using Fittings;
 
 namespace Fittings.ViewModel
 {
 	public class FittingsVM : RepresentationModelEntityBase<Fitting, FittingVMNode>
 	{
+		public FittingsFlt Filter {
+			get {
+				return RepresentationFilter as FittingsFlt;
+			}
+			set {
+				RepresentationFilter = value as IRepresentationFilter;
+			}
+		}
+
 		#region IRepresentationModel implementation
 
 		public override void UpdateNodes ()
@@ -22,16 +32,30 @@ namespace Fittings.ViewModel
 			Pressure pressureAlias = null;
 			ConnectionType connectionTypeAlias = null;
 			BodyMaterial bodyMaterialAlias = null;
-			Fitting codeAlias = null;
-			Fitting noteAlias = null;
 
-			var proxieslist = UoW.Session.QueryOver<Fitting> (() => fittingAlias)
+			var proxiesQuery = UoW.Session.QueryOver<Fitting> (() => fittingAlias)
 				.JoinAlias (c => c.Name, () => typeAlias)
 				.JoinAlias (c => c.Diameter, () => diameterAlias)
 				.JoinAlias (c => c.Pressure, () => pressureAlias)
 				.JoinAlias (c => c.ConnectionType, () => connectionTypeAlias)
-				.JoinAlias (c => c.BodyMaterial, () => bodyMaterialAlias)
-				.SelectList(list => list
+				.JoinAlias (c => c.BodyMaterial, () => bodyMaterialAlias);
+
+			if (Filter.RestrictFittingType != null)
+				proxiesQuery.Where (() => fittingAlias.Name.Id == Filter.RestrictFittingType.Id);
+
+			if (Filter.RestrictBodyMaterial != null)
+				proxiesQuery.Where (() => fittingAlias.BodyMaterial.Id == Filter.RestrictBodyMaterial.Id);
+
+			if (Filter.RestrictConnectionType != null)
+				proxiesQuery.Where (() => fittingAlias.ConnectionType.Id == Filter.RestrictConnectionType.Id);
+
+			if (Filter.RestrictDiameter != null)
+				proxiesQuery.Where (() => fittingAlias.Diameter.Id == Filter.RestrictDiameter.Id);
+
+			if (Filter.RestrictPressure != null)
+				proxiesQuery.Where (() => fittingAlias.Pressure.Id == Filter.RestrictPressure.Id);
+			
+			var proxieslist =	proxiesQuery.SelectList(list => list
 					.Select(() => fittingAlias.Id).WithAlias(() => resultAlias.Id)
 					.Select(() => typeAlias.NameRus).WithAlias(() => resultAlias.Name)
 
@@ -75,7 +99,16 @@ namespace Fittings.ViewModel
 			return true;
 		}
 
-		public FittingsVM () : this(UnitOfWorkFactory.CreateWithoutRoot()) {}
+		public FittingsVM (FittingsFlt filter) : this (filter.UoW)
+		{
+			Filter = filter;
+		}
+
+		public FittingsVM ()
+			: this (UnitOfWorkFactory.CreateWithoutRoot ())
+		{
+			CreateRepresentationFilter = () => new FittingsFlt (UoW);
+		}
 
 		public FittingsVM (IUnitOfWork uow)
 		{
