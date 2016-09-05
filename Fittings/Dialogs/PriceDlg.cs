@@ -31,6 +31,7 @@ namespace Fittings
 			providerReference.SubjectType = typeof(Provider);
 			providerReference.Binding.AddBinding (Entity, e => e.Provider, w => w. Subject).InitializeFromSource(); 
 			commentTextview.Binding.AddBinding (Entity, e => e.Comment, w => w.Buffer.Text).InitializeFromSource();
+			datepicker.Binding.AddBinding (Entity, e => e.Date, w => w.Date).InitializeFromSource();
 		}
 
 		public override bool Save ()
