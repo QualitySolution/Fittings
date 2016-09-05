@@ -14,7 +14,7 @@
     <widget-library name="../bin/Debug/Fittings.exe" internal="true" />
     <widget-library name="../../../QSProjects/QSWidgetLib/bin/Debug/QSWidgetLib.dll" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="678 300">
+  <widget class="Gtk.Window" id="MainWindow" design-size="799 300">
     <action-group name="Default">
       <action id="Action">
         <property name="Type">Action</property>
@@ -141,6 +141,10 @@
                 <node type="Separator" />
                 <node type="Menuitem" action="quitAction" />
               </node>
+              <node type="Menu" action="Action3">
+                <node type="Menuitem" action="ActionProject" />
+                <node type="Menuitem" action="ActionPrice" />
+              </node>
               <node type="Menu" action="Action2">
                 <node type="Menuitem" action="ActionFittings" />
                 <node type="Menuitem" action="ActionProvider" />
@@ -155,10 +159,6 @@
               </node>
               <node type="Menu" action="Action1">
                 <node type="Menuitem" action="aboutAction" />
-              </node>
-              <node type="Menu" action="Action3">
-                <node type="Menuitem" action="ActionProject" />
-                <node type="Menuitem" action="ActionPrice" />
               </node>
             </node>
           </widget>

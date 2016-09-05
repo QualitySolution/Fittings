@@ -4,6 +4,8 @@ using QSProjectsLib;
 using QSSupportLib;
 using QSOrmProject;
 using Fittings.Domain;
+using Fittings;
+using Fittings.ViewModel;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -126,8 +128,8 @@ public partial class MainWindow: Gtk.Window
 	protected void OnActionFittingsActivated (object sender, EventArgs e)
 	{
 		tdiMain.OpenTab(
-			OrmReference.GenerateHashName<Fitting>(),
-			() => new OrmReference(typeof(Fitting))
+			ReferenceRepresentation.GenerateHashName<FittingsVM>(),
+			() => new ReferenceRepresentation(new FittingsVM())
 		);
 	}
 

@@ -18,19 +18,35 @@ namespace Fittings.ViewModel
 			Fitting fittingAlias = null;
 			FittingType typeAlias = null;
 			FittingVMNode resultAlias = null;
-			Person personAlias = null;
+			Diameter diameterAlias = null;
+			Pressure pressureAlias = null;
+			ConnectionType connectionTypeAlias = null;
+			BodyMaterial bodyMaterialAlias = null;
+			Fitting codeAlias = null;
+			Fitting noteAlias = null;
 
 			var proxieslist = UoW.Session.QueryOver<Fitting> (() => fittingAlias)
 				.JoinAlias (c => c.Name, () => typeAlias)
-				.JoinAlias (c => c., () => personAlias)
-				.Where (() => typeAlias.Id == CounterpartyUoW.Root.Id)
+				.JoinAlias (c => c.Diameter, () => diameterAlias)
+				.JoinAlias (c => c.Pressure, () => pressureAlias)
+				.JoinAlias (c => c.ConnectionType, () => connectionTypeAlias)
+				.JoinAlias (c => c.BodyMaterial, () => bodyMaterialAlias)
 				.SelectList(list => list
 					.Select(() => fittingAlias.Id).WithAlias(() => resultAlias.Id)
 					.Select(() => typeAlias.NameRus).WithAlias(() => resultAlias.Name)
-					.Select(() => fittingAlias.IssueDate).WithAlias(() => resultAlias.IssueDate)
-					.Select(() => fittingAlias.StartDate).WithAlias(() => resultAlias.StartDate)
-					.Select(() => fittingAlias.ExpirationDate).WithAlias(() => resultAlias.EndDate)
-					.SelectCount(() => personAlias.Id ).WithAlias(() => resultAlias.PeopleCount)
+
+					.Select(() => diameterAlias.Inch).WithAlias(() => resultAlias.DiameterInch)
+					.Select(() => diameterAlias.Mm).WithAlias(() => resultAlias.DiameterMm)
+					.Select(() => fittingAlias.DiameterUnits).WithAlias(() => resultAlias.DiameterUnits)
+
+					.Select(() => pressureAlias.Pn).WithAlias(() => resultAlias.PressurePn)
+					.Select(() => pressureAlias.Pclass).WithAlias(() => resultAlias.PressurePclass)
+					.Select(() => fittingAlias.PressureUnits).WithAlias(() => resultAlias.PressureUnits)
+
+					.Select(() => connectionTypeAlias.NameRus).WithAlias(() => resultAlias.ConnectionType)
+					.Select(() => bodyMaterialAlias.NameRus).WithAlias(() => resultAlias.BodyMaterial)
+					.Select(() => fittingAlias.Code).WithAlias(() => resultAlias.Code)
+					.Select(() => fittingAlias.Note).WithAlias(() => resultAlias.Note)
 				)
 				.TransformUsing(Transformers.AliasToBean<FittingVMNode>())
 				.List<FittingVMNode>();
@@ -59,6 +75,8 @@ namespace Fittings.ViewModel
 			return true;
 		}
 
+		public FittingsVM () : this(UnitOfWorkFactory.CreateWithoutRoot()) {}
+
 		public FittingsVM (IUnitOfWork uow)
 		{
 			this.UoW = uow;
@@ -71,9 +89,15 @@ namespace Fittings.ViewModel
 
 		public string Name{ get; set;}
 
-		public string Diameter{ get; set;}
+		public string DiameterMm{ get; set;}
+		public string DiameterInch{ get; set;}
+		public DiameterUnits DiameterUnits{ get; set;}
+		public string Diameter{ get{return DiameterUnits == DiameterUnits.inch ? DiameterInch : DiameterMm;}}
 
-		public string Pressure{ get; set;}
+		public string PressurePn{ get; set;}
+		public string PressurePclass{ get; set;}
+		public PressureUnits PressureUnits{ get; set;}
+		public string Pressure{ get{return PressureUnits == PressureUnits.PN ? PressurePn : PressurePclass;}}
 
 		public string ConnectionType{ get; set;}
 

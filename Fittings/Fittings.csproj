@@ -123,6 +123,7 @@
     <Compile Include="gtk-gui\Fittings.ProjectDlg.cs" />
     <Compile Include="Dialogs\PriceDlg.cs" />
     <Compile Include="gtk-gui\Fittings.PriceDlg.cs" />
+    <Compile Include="Representation\FittingsVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -164,6 +165,5 @@
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Representation\FittingsVM.cs" />
   </ItemGroup>
 </Project>

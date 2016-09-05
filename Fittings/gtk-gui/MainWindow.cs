@@ -121,7 +121,7 @@ public partial class MainWindow
 		this.vbox1.Name = "vbox1";
 		this.vbox1.Spacing = 6;
 		// Container child vbox1.Gtk.Box+BoxChild
-		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action2' action='Action2'><menuitem name='ActionFittings' action='ActionFittings'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='ActionPressure' action='ActionPressure'/><menuitem name='ActionDiameter' action='ActionDiameter'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu><menu name='Action3' action='Action3'><menuitem name='ActionProject' action='ActionProject'/><menuitem name='ActionPrice' action='ActionPrice'/></menu></menubar></ui>");
+		this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='Action' action='Action'><menuitem name='ActionPasswordChange' action='ActionPasswordChange'/><menuitem name='UsersAction' action='UsersAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='Action3' action='Action3'><menuitem name='ActionProject' action='ActionProject'/><menuitem name='ActionPrice' action='ActionPrice'/></menu><menu name='Action2' action='Action2'><menuitem name='ActionFittings' action='ActionFittings'/><menuitem name='ActionProvider' action='ActionProvider'/><separator/><menuitem name='ActionFittingType' action='ActionFittingType'/><menuitem name='ActionBodyMaterial' action='ActionBodyMaterial'/><menuitem name='ActionConnectionType' action='ActionConnectionType'/><menuitem name='ActionConductor' action='ActionConductor'/><separator/><menuitem name='ActionPressure' action='ActionPressure'/><menuitem name='ActionDiameter' action='ActionDiameter'/></menu><menu name='Action1' action='Action1'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 		this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 		this.menubar1.Name = "menubar1";
 		this.vbox1.Add (this.menubar1);
@@ -159,7 +159,7 @@ public partial class MainWindow
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 678;
+		this.DefaultWidth = 799;
 		this.DefaultHeight = 300;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
