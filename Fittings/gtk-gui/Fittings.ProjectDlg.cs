@@ -18,7 +18,7 @@ namespace Fittings
 		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		
-		private global::Gamma.GtkWidgets.yTreeView ytreeview1;
+		private global::Gamma.GtkWidgets.yTreeView projectTreeView;
 		
 		private global::Gtk.Label label11;
 		
@@ -88,10 +88,10 @@ namespace Fittings
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
-			this.ytreeview1 = new global::Gamma.GtkWidgets.yTreeView ();
-			this.ytreeview1.CanFocus = true;
-			this.ytreeview1.Name = "ytreeview1";
-			this.GtkScrolledWindow.Add (this.ytreeview1);
+			this.projectTreeView = new global::Gamma.GtkWidgets.yTreeView ();
+			this.projectTreeView.CanFocus = true;
+			this.projectTreeView.Name = "projectTreeView";
+			this.GtkScrolledWindow.Add (this.projectTreeView);
 			this.table2.Add (this.GtkScrolledWindow);
 			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table2 [this.GtkScrolledWindow]));
 			w6.TopAttach = ((uint)(2));

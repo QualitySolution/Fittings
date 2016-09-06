@@ -3,7 +3,7 @@ using Fittings.Domain;
 
 namespace Fittings.HMap
 {
-	public class ProjectItemsMap : ClassMap<ProjectItems>
+	public class ProjectItemsMap : ClassMap<ProjectItem>
 	{
 		public ProjectItemsMap ()
 		{
