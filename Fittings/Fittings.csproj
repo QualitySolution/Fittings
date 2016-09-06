@@ -96,7 +96,6 @@
     <Compile Include="Domain\FittingType.cs" />
     <Compile Include="Domain\Price.cs" />
     <Compile Include="HibernateMapping\PriceMap.cs" />
-    <Compile Include="Domain\PriceItems.cs" />
     <Compile Include="HibernateMapping\PriceItemsMap.cs" />
     <Compile Include="Domain\Project.cs" />
     <Compile Include="HibernateMapping\ProjectMap.cs" />
@@ -126,6 +125,8 @@
     <Compile Include="Representation\FittingsVM.cs" />
     <Compile Include="JournalFilters\FittingsFlt.cs" />
     <Compile Include="gtk-gui\Fittings.FittingsFlt.cs" />
+    <Compile Include="Domain\PriceItem.cs" />
+    <Compile Include="gtk-gui\Fittings.PriceVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -156,6 +157,10 @@
     <ProjectReference Include="..\..\QSProjects\QSWidgetLib\QSWidgetLib.csproj">
       <Project>{5A2BB01E-E124-432E-8099-D1343D3897B9}</Project>
       <Name>QSWidgetLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Gtk.DataBindings\System.Data.Bindings\System.Data.Bindings.csproj">
+      <Project>{54F958F5-7E58-4C89-9A04-8835E63B97C3}</Project>
+      <Name>System.Data.Bindings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

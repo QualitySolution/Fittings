@@ -7,7 +7,7 @@ namespace Fittings.Domain
 	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Masculine,
 		NominativePlural = "строки прайса",
 		Nominative = "строка прайса")]
-	public class PriceItems: PropertyChangedBase, IDomainObject
+	public class PriceItem: PropertyChangedBase, IDomainObject
 	{
 		#region Свойства
 
@@ -43,7 +43,7 @@ namespace Fittings.Domain
 
 		#endregion
 
-		public PriceItems ()
+		public PriceItem ()
 		{
 
 		}
