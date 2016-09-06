@@ -7,7 +7,7 @@ namespace Fittings.Domain
 	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Masculine,
 		NominativePlural = "элементы проекта",
 		Nominative = "элемент проекта")]
-	public class ProjectItems: PropertyChangedBase, IDomainObject
+	public class ProjectItem: PropertyChangedBase, IDomainObject
 	{
 		#region Свойства
 
@@ -134,7 +134,7 @@ namespace Fittings.Domain
 
 		#endregion
 
-		public ProjectItems ()
+		public ProjectItem ()
 		{
 			
 		}

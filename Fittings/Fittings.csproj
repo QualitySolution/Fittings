@@ -99,7 +99,6 @@
     <Compile Include="HibernateMapping\PriceItemsMap.cs" />
     <Compile Include="Domain\Project.cs" />
     <Compile Include="HibernateMapping\ProjectMap.cs" />
-    <Compile Include="Domain\ProjectItems.cs" />
     <Compile Include="HibernateMapping\ProjectItemsMap.cs" />
     <Compile Include="HibernateMapping\FittingTypeMap.cs" />
     <Compile Include="Dialogs\BodyMaterialDlg.cs" />
@@ -127,6 +126,7 @@
     <Compile Include="gtk-gui\Fittings.FittingsFlt.cs" />
     <Compile Include="Domain\PriceItem.cs" />
     <Compile Include="gtk-gui\Fittings.PriceVM.cs" />
+    <Compile Include="Domain\ProjectItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

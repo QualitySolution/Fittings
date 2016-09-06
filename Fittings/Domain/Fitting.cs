@@ -1,6 +1,8 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Data.Bindings.Collections.Generic;
 
 namespace Fittings.Domain
 {
@@ -78,6 +80,15 @@ namespace Fittings.Domain
 		}
 
 		#endregion
+
+		public virtual string PressureText{ get{
+				if (Pressure == null)
+					return String.Empty;
+				return PressureUnits == PressureUnits.PN ? Pressure.Pn : Pressure.Pclass;}}
+		public virtual string DiameterText{ get{
+				if (Diameter == null)
+					return String.Empty;
+				return DiameterUnits == DiameterUnits.inch ? Diameter.Inch : Diameter.Mm;}}
 
 		public Fitting ()
 		{
