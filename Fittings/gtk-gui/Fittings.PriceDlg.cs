@@ -30,7 +30,7 @@ namespace Fittings
 		
 		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
 		
-		private global::Gamma.GtkWidgets.yTreeView ytreeview2;
+		private global::Gamma.GtkWidgets.yTreeView pricesTreeView;
 
 		protected virtual void Build ()
 		{
@@ -158,10 +158,10 @@ namespace Fittings
 			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
 			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
-			this.ytreeview2 = new global::Gamma.GtkWidgets.yTreeView ();
-			this.ytreeview2.CanFocus = true;
-			this.ytreeview2.Name = "ytreeview2";
-			this.GtkScrolledWindow1.Add (this.ytreeview2);
+			this.pricesTreeView = new global::Gamma.GtkWidgets.yTreeView ();
+			this.pricesTreeView.CanFocus = true;
+			this.pricesTreeView.Name = "pricesTreeView";
+			this.GtkScrolledWindow1.Add (this.pricesTreeView);
 			this.vbox3.Add (this.GtkScrolledWindow1);
 			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.GtkScrolledWindow1]));
 			w13.Position = 2;

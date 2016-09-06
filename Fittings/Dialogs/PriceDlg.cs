@@ -2,6 +2,7 @@
 using QSOrmProject;
 using Fittings.Domain;
 using System.Linq;
+using Gamma.GtkWidgets;
 
 namespace Fittings
 {
@@ -32,6 +33,19 @@ namespace Fittings
 			providerReference.Binding.AddBinding (Entity, e => e.Provider, w => w. Subject).InitializeFromSource(); 
 			commentTextview.Binding.AddBinding (Entity, e => e.Comment, w => w.Buffer.Text).InitializeFromSource();
 			datepicker.Binding.AddBinding (Entity, e => e.Date, w => w.Date).InitializeFromSource();
+			pricesTreeView.ColumnsConfig = ColumnsConfigFactory.Create <PriceItem> ()
+				.AddColumn ("Арматура")
+					.AddTextRenderer (x => x.Fitting.Name.NameRus)
+				.AddColumn ("Диаметр")
+					.AddTextRenderer (x => x.Fitting.DiameterText)
+				.AddColumn ("Давление")
+					.AddTextRenderer (x => x.Fitting.PressureText)
+				.AddColumn ("Цена")
+				.AddEnumRenderer (x => x.Currency).Editing()
+				.AddNumericRenderer (x => x.Cost).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
+				.Finish();
+
+			pricesTreeView.ItemsDataSource = Entity.ObservablePrices;
 		}
 
 		public override bool Save ()

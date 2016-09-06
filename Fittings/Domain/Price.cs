@@ -1,6 +1,8 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Bindings.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Fittings.Domain
 {
@@ -34,7 +36,26 @@ namespace Fittings.Domain
 			set { SetField (ref comment, value, () => Comment); }
 		}
 
+		IList<PriceItem> prices = new List<PriceItem> ();
+
+		[Display (Name = "Прайс")]
+		public virtual IList<PriceItem> Prices {
+			get { return prices; }
+			set { SetField (ref prices, value, () => Prices); }
+		}
+			
+		GenericObservableList<PriceItem> observablePrices;
+		//FIXME Костыль пока не разберемся как научить hibernate работать с обновляемыми списками.
+		public virtual GenericObservableList<PriceItem> ObservablePrices {
+			get {
+				if (observablePrices == null)
+					observablePrices = new GenericObservableList<PriceItem> (Prices);
+				return observablePrices;
+			}
+		}
+
 		#endregion
+
 
 		public Price ()
 		{

@@ -13,6 +13,8 @@ namespace Fittings.HMap
 			Map (x => x.Date).Column ("date");
 			References (x => x.Provider).Column ("provider_id");
 			Map (x => x.Comment).Column ("comment");
+
+			HasMany(x => x.Prices).KeyColumn("price_id").Inverse().Cascade.AllDeleteOrphan().LazyLoad();
 		}
 	}
 }
