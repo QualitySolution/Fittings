@@ -25,6 +25,14 @@ namespace Fittings
 		private global::Gtk.Label label12;
 		
 		private global::Gamma.GtkWidgets.yEntry projectNameEntry;
+		
+		private global::Gtk.HBox hbox2;
+		
+		private global::Gtk.Button buttonAdd;
+		
+		private global::Gtk.Button buttonEdit1;
+		
+		private global::Gtk.Button buttonRemove;
 
 		protected virtual void Build ()
 		{
@@ -134,6 +142,42 @@ namespace Fittings
 			this.vbox2.Add (this.table2);
 			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.table2]));
 			w10.Position = 1;
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2.Name = "hbox2";
+			this.hbox2.Spacing = 6;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.buttonAdd = new global::Gtk.Button ();
+			this.buttonAdd.CanFocus = true;
+			this.buttonAdd.Name = "buttonAdd";
+			this.buttonAdd.UseUnderline = true;
+			this.buttonAdd.Label = global::Mono.Unix.Catalog.GetString ("Добавить");
+			this.hbox2.Add (this.buttonAdd);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonAdd]));
+			w11.Position = 0;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.buttonEdit1 = new global::Gtk.Button ();
+			this.buttonEdit1.CanFocus = true;
+			this.buttonEdit1.Name = "buttonEdit1";
+			this.buttonEdit1.UseUnderline = true;
+			this.buttonEdit1.Label = global::Mono.Unix.Catalog.GetString ("Изменить");
+			this.hbox2.Add (this.buttonEdit1);
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonEdit1]));
+			w12.Position = 1;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.buttonRemove = new global::Gtk.Button ();
+			this.buttonRemove.CanFocus = true;
+			this.buttonRemove.Name = "buttonRemove";
+			this.buttonRemove.UseUnderline = true;
+			this.buttonRemove.Label = global::Mono.Unix.Catalog.GetString ("Удалить");
+			this.hbox2.Add (this.buttonRemove);
+			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonRemove]));
+			w13.Position = 2;
+			this.vbox2.Add (this.hbox2);
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
+			w14.Position = 2;
+			w14.Expand = false;
+			w14.Fill = false;
 			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
@@ -141,6 +185,9 @@ namespace Fittings
 			this.Hide ();
 			this.buttonSave.Clicked += new global::System.EventHandler (this.OnButtonSaveClicked);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelClicked);
+			this.buttonAdd.Clicked += new global::System.EventHandler (this.OnButtonAddClicked);
+			this.buttonEdit1.Clicked += new global::System.EventHandler (this.OnButtonEdit1Clicked);
+			this.buttonRemove.Clicked += new global::System.EventHandler (this.OnButtonRemoveClicked);
 		}
 	}
 }

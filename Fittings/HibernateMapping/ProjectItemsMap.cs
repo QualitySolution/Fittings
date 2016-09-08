@@ -21,7 +21,7 @@ namespace Fittings.HMap
 			Map (x => x.PressureUnits).Column ("pressure_units").CustomType<PressureUnitsStringType>();
 			References (x => x.ConnectionType).Column ("connection_type_id");
 			References (x => x.Conductor).Column ("conductor_id");
-			Map (x => x.Group).Column ("group");
+			Map (x => x.PrGroup).Column ("pr_group");
 			Map (x => x.Location).Column ("location");
 			Map (x => x.TemperatureMin).Column ("temperature_min");
 			Map (x => x.TemperatureMax).Column ("temperature_max");

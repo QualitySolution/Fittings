@@ -90,11 +90,11 @@ namespace Fittings.Domain
 			set { SetField (ref conductor, value, () => Conductor); }
 		}
 
-		string group;
+		string prGroup;
 
-		public virtual string Group {
-			get { return group; }
-			set { SetField (ref group, value, () => Group); }
+		public virtual string PrGroup {
+			get { return prGroup; }
+			set { SetField (ref prGroup, value, () => PrGroup); }
 		}
 
 		string location;

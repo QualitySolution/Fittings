@@ -29,21 +29,21 @@ namespace Fittings.Domain
 			set { SetField (ref projectName, value, () => ProjectName); }
 		}
 
-		IList<ProjectItem> projects = new List<ProjectItem> ();
+		IList<ProjectItem> projectRows = new List<ProjectItem> ();
 
 		[Display (Name = "Проекты")]
-		public virtual IList<ProjectItem> Projects {
-			get { return projects; }
-			set { SetField (ref projects, value, () => Projects); }
+		public virtual IList<ProjectItem> ProjectRows {
+			get { return projectRows; }
+			set { SetField (ref projectRows, value, () => ProjectRows); }
 		}
 
-		GenericObservableList<ProjectItem> observableProjects;
+		GenericObservableList<ProjectItem> observableProjectRows;
 		//FIXME Кослыль пока не разберемся как научить hibernate работать с обновляемыми списками.
-		public virtual GenericObservableList<ProjectItem> ObservableProjects {
+		public virtual GenericObservableList<ProjectItem> ObservableProjectRows {
 			get {
-				if (observableProjects == null)
-					observableProjects = new GenericObservableList<ProjectItem> (Projects);
-				return observableProjects;
+				if (observableProjectRows == null)
+					observableProjectRows = new GenericObservableList<ProjectItem> (ProjectRows);
+				return observableProjectRows;
 			}
 		}
 
@@ -52,6 +52,13 @@ namespace Fittings.Domain
 		public Project ()
 		{
 			
+		}
+
+		public virtual void AddItem(FittingType name){
+			var item = new ProjectItem {
+				Name = name
+			};
+			ObservableProjectRows.Add (item);
 		}
 	}
 }
