@@ -1825,7 +1825,7 @@
                 <property name="MemberName" />
                 <property name="ShadowType">In</property>
                 <child>
-                  <widget class="Gamma.GtkWidgets.yTreeView" id="ytreeview1">
+                  <widget class="Gamma.GtkWidgets.yTreeView" id="projectTreeView">
                     <property name="MemberName" />
                     <property name="CanFocus">True</property>
                     <property name="ShowScrollbars">True</property>
@@ -2116,7 +2116,7 @@
             <property name="MemberName" />
             <property name="ShadowType">In</property>
             <child>
-              <widget class="Gamma.GtkWidgets.yTreeView" id="ytreeview2">
+              <widget class="Gamma.GtkWidgets.yTreeView" id="pricesTreeView">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>

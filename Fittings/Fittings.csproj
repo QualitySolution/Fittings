@@ -125,7 +125,6 @@
     <Compile Include="JournalFilters\FittingsFlt.cs" />
     <Compile Include="gtk-gui\Fittings.FittingsFlt.cs" />
     <Compile Include="Domain\PriceItem.cs" />
-    <Compile Include="gtk-gui\Fittings.PriceVM.cs" />
     <Compile Include="Domain\ProjectItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
