@@ -61,6 +61,16 @@ namespace Fittings.Domain
 		{
 
 		}
+
+		public virtual void AddItem(Fitting fitting, PriceСurrency currency , decimal cost = 0){
+			var item = new PriceItem {
+				Price = this,
+				Fitting = fitting,
+				Currency = currency,
+				Cost = cost 
+			};
+			ObservablePrices.Add (item);
+		}
 	}
 }
 
