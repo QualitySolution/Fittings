@@ -40,7 +40,7 @@ namespace Fittings
 				OrmObjectMapping<Pressure>.Create().Dialog<PressureDlg>().DefaultTableView().SearchColumn("PN", x => x.Pn).SearchColumn("class", x => x.Pclass).End(),
 				OrmObjectMapping<Diameter>.Create().Dialog<DiameterDlg>().DefaultTableView().SearchColumn("Дюймы", x => x.Inch).SearchColumn("Миллиметры", x => x.Mm).End(),
 				OrmObjectMapping<Fitting>.Create().Dialog<FittingDlg>().DefaultTableView().SearchColumn("Код", x => x.Id.ToString()).SearchColumn("Артикул", x => x.Code).End(),
-				OrmObjectMapping<Project>.Create().Dialog<ProjectDlg>().DefaultTableView().SearchColumn("Заказчик", x => x.Customer).SearchColumn("Название проекта", x => x.ProjectName).End(),
+				OrmObjectMapping<Project>.Create().Dialog<ProjectDlg>().UseSlider(false).DefaultTableView().SearchColumn("Заказчик", x => x.Customer).SearchColumn("Название проекта", x => x.ProjectName).End(),
 				OrmObjectMapping<Price>.Create().Dialog<PriceDlg>().DefaultTableView().SearchColumn("Дата", x => x.Date.ToString("d")).SearchColumn("Комментарий", x => x.Comment).SearchColumn("Поставщик", x => x.Provider.Name).End(),
 			};
 
