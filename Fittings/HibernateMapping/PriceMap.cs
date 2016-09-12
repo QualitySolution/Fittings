@@ -10,7 +10,7 @@ namespace Fittings.HMap
 			Table ("price");
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
-			Map (x => x.Date).Column ("date");
+			Map (x => x.Date).Column ("price_date");
 			References (x => x.Provider).Column ("provider_id");
 			Map (x => x.Comment).Column ("comment");
 

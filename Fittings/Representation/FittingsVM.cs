@@ -7,6 +7,7 @@ using QSOrmProject;
 using QSOrmProject.RepresentationModel;
 using Fittings.Domain;
 using Fittings;
+using NHibernate.Criterion;
 
 namespace Fittings.ViewModel
 {
@@ -33,7 +34,34 @@ namespace Fittings.ViewModel
 			ConnectionType connectionTypeAlias = null;
 			BodyMaterial bodyMaterialAlias = null;
 
-			var proxiesQuery = UoW.Session.QueryOver<Fitting> (() => fittingAlias)
+			PriceItem pricePriceItemAlias = null;
+			PriceItem datePriceItemAlias = null;
+			PriceItem currencyPriceItemAlias = null;
+			Price pricePriceAlias = null;
+			Price datePriceAlias = null;
+			Price currencyPriceAlias = null;
+
+
+			var priceSubQuery = QueryOver.Of<PriceItem> (() => pricePriceItemAlias)
+				.JoinAlias (c => c.Price, () => pricePriceAlias)
+				.Where (() => pricePriceItemAlias.Fitting.Id == fittingAlias.Id)
+				.Select(x => x.Cost)
+				.OrderBy(() => pricePriceAlias.Date).Desc()
+				.Take(1);
+
+			var currencySubQuery = QueryOver.Of<PriceItem> (() => currencyPriceItemAlias)
+				.JoinAlias (c => c.Price, () => currencyPriceAlias)
+				.Where (() => currencyPriceItemAlias.Fitting.Id == fittingAlias.Id)
+				.Select(x => x.Currency)
+				.OrderBy(() => currencyPriceAlias.Date).Desc
+				.Take(1);
+			
+			var dateSubQuery = QueryOver.Of<PriceItem> (() => datePriceItemAlias)
+				.JoinAlias (c => c.Price, () => datePriceAlias)
+				.Where (() => datePriceItemAlias.Fitting.Id == fittingAlias.Id)
+				.SelectList(list => list.SelectMax(() => datePriceAlias.Date)).Take(1);
+
+			var fittingQuery = UoW.Session.QueryOver<Fitting> (() => fittingAlias)
 				.JoinAlias (c => c.Name, () => typeAlias)
 				.JoinAlias (c => c.Diameter, () => diameterAlias)
 				.JoinAlias (c => c.Pressure, () => pressureAlias)
@@ -41,21 +69,21 @@ namespace Fittings.ViewModel
 				.JoinAlias (c => c.BodyMaterial, () => bodyMaterialAlias);
 
 			if (Filter.RestrictFittingType != null)
-				proxiesQuery.Where (() => fittingAlias.Name.Id == Filter.RestrictFittingType.Id);
+				fittingQuery.Where (() => fittingAlias.Name.Id == Filter.RestrictFittingType.Id);
 
 			if (Filter.RestrictBodyMaterial != null)
-				proxiesQuery.Where (() => fittingAlias.BodyMaterial.Id == Filter.RestrictBodyMaterial.Id);
+				fittingQuery.Where (() => fittingAlias.BodyMaterial.Id == Filter.RestrictBodyMaterial.Id);
 
 			if (Filter.RestrictConnectionType != null)
-				proxiesQuery.Where (() => fittingAlias.ConnectionType.Id == Filter.RestrictConnectionType.Id);
+				fittingQuery.Where (() => fittingAlias.ConnectionType.Id == Filter.RestrictConnectionType.Id);
 
 			if (Filter.RestrictDiameter != null)
-				proxiesQuery.Where (() => fittingAlias.Diameter.Id == Filter.RestrictDiameter.Id);
+				fittingQuery.Where (() => fittingAlias.Diameter.Id == Filter.RestrictDiameter.Id);
 
 			if (Filter.RestrictPressure != null)
-				proxiesQuery.Where (() => fittingAlias.Pressure.Id == Filter.RestrictPressure.Id);
+				fittingQuery.Where (() => fittingAlias.Pressure.Id == Filter.RestrictPressure.Id);
 			
-			var proxieslist =	proxiesQuery.SelectList(list => list
+			var fittinglist =	fittingQuery.SelectList(list => list
 					.Select(() => fittingAlias.Id).WithAlias(() => resultAlias.Id)
 					.Select(() => typeAlias.NameRus).WithAlias(() => resultAlias.Name)
 
@@ -71,11 +99,15 @@ namespace Fittings.ViewModel
 					.Select(() => bodyMaterialAlias.NameRus).WithAlias(() => resultAlias.BodyMaterial)
 					.Select(() => fittingAlias.Code).WithAlias(() => resultAlias.Code)
 					.Select(() => fittingAlias.Note).WithAlias(() => resultAlias.Note)
+
+					.SelectSubQuery(priceSubQuery).WithAlias(() => resultAlias.Price)
+					.SelectSubQuery(currencySubQuery).WithAlias(() => resultAlias.PriceСurrency)
+					.SelectSubQuery(dateSubQuery).WithAlias(() => resultAlias.PriceDate)
 				)
 				.TransformUsing(Transformers.AliasToBean<FittingVMNode>())
 				.List<FittingVMNode>();
 
-			SetItemsSource (proxieslist);
+			SetItemsSource (fittinglist);
 		}
 
 		IColumnsConfig columnsConfig = FluentColumnsConfig <FittingVMNode>.Create ()
@@ -85,6 +117,8 @@ namespace Fittings.ViewModel
 			.AddColumn ("Тип соединения").SetDataProperty (node => node.ConnectionType)
 			.AddColumn ("Материал корпуса").SetDataProperty (node => node.BodyMaterial)
 			.AddColumn ("Артикул").SetDataProperty (node => node.Code)
+			.AddColumn ("Стоимость").SetDataProperty(node => node.PriceText)
+			.AddColumn ("Прайс").AddTextRenderer(node => node.PriceDate.HasValue ? node.PriceDate.Value.ToString("d") : String.Empty)
 			.AddColumn ("Комментарий").SetDataProperty (node => node.Note)
 			.Finish ();
 
@@ -136,9 +170,22 @@ namespace Fittings.ViewModel
 
 		public string BodyMaterial{ get; set;}
 
+		public decimal? Price{ get; set;}
+
+		public PriceСurrency? PriceСurrency{ get; set;}
+
+		public DateTime? PriceDate{ get; set;}
+
 		public string Code{ get; set;}
 
 		public string Note{ get; set;}
+
+		public string PriceText { get { 
+				if (Price.HasValue && PriceСurrency.HasValue)
+					return string.Format ("{0} {1}", Price.Value, PriceСurrency.Value);
+				else
+					return String.Empty;
+		}}
 	}
 }
 
