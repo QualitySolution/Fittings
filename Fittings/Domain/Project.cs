@@ -25,6 +25,7 @@ namespace Fittings.Domain
 
 		string projectName;
 
+		[PropertyChangedAlso("Title")]
 		public virtual string ProjectName {
 			get { return projectName; }
 			set { SetField (ref projectName, value, () => ProjectName); }
@@ -49,6 +50,12 @@ namespace Fittings.Domain
 		}
 
 		#endregion
+
+		public virtual string Title {
+			get{
+				return ProjectName;
+			}
+		}
 
 		public Project ()
 		{
