@@ -94,8 +94,7 @@ namespace Fittings
 
 		void Dlg_EditObjectSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
 		{
-			var fitting = UoW.GetById<Fitting> (e.ObjectId);
-			editingItem.Fitting = fitting;
+			editingItem.Fitting = UoW.GetById<Fitting> (e.ObjectId);
 		}
 
 		protected void OnButtonEdit1Clicked (object sender, EventArgs e)

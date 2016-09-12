@@ -3,6 +3,7 @@ using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Bindings.Collections.Generic;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Fittings.Domain
 {
@@ -53,10 +54,15 @@ namespace Fittings.Domain
 		{
 			
 		}
-
-		public virtual void AddItem(FittingType name){
+			
+		public virtual void AddItem(Fitting fitting){
+			int seq = 0;
+			if (ProjectRows.Count > 0)
+				seq = ProjectRows.Max (x => x.SequenceNumber)+1;
 			var item = new ProjectItem {
-				Name = name
+				Project = this,
+				Fitting = fitting,
+				SequenceNumber = seq
 			};
 			ObservableProjectRows.Add (item);
 		}

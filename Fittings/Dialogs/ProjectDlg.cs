@@ -33,21 +33,25 @@ namespace Fittings
 		{
 			customerEntry.Binding.AddBinding (Entity, e => e.Customer, w => w.Text).InitializeFromSource(); 
 			projectNameEntry.Binding.AddBinding (Entity, e => e.ProjectName, w => w.Text).InitializeFromSource();
+
+			var ConductorItemsList = UoW.GetAll<Conductor> ().ToList();
+
 			projectTreeView.ColumnsConfig = ColumnsConfigFactory.Create <ProjectItem> ()
-				.AddColumn ("Номер").AddTextRenderer (x => x.SequenceNumber.ToString())
+				.AddColumn ("Номер").AddTextRenderer (x => x.SequenceNumber.ToString()).Editable()
 				.AddColumn ("Позиция ТРП").AddTextRenderer (x => x.TrpPositions).Editable()
-				.AddColumn ("Тип").AddTextRenderer (x => x.Name.NameRus)
+				.AddColumn ("Тип").AddTextRenderer (x => x.Fitting.Name.NameRus)
 				.AddColumn ("Кол-во").AddNumericRenderer (x => x.Amount).Editing (new Gtk.Adjustment(0, 0, 10000000, 1, 100, 100))
 				.AddColumn ("Диаметр").AddTextRenderer (x => x.Fitting.DiameterText) 
 				.AddColumn ("Давление").AddTextRenderer (x => x.Fitting.PressureText) 
-				.AddColumn ("Тип соединения").AddTextRenderer (x => x.ConnectionType.NameRus)
-				.AddColumn ("Проводимая среда").AddTextRenderer (x => x.Conductor.NameRus)
-				.AddColumn ("Группа").AddTextRenderer (x => x.PrGroup).Editable()
+				.AddColumn ("Тип соединения").AddTextRenderer (x => x.Fitting.ConnectionType.NameRus)
+				.AddColumn ("Проводимая среда").AddComboRenderer (x => x.Conductor)
+				.SetDisplayFunc(x => (x as Conductor).NameRus).FillItems<Conductor>(ConductorItemsList).Editing()
+				.AddColumn ("Группа").AddTextRenderer (x => x.PrGroup).Editable() 
 				.AddColumn ("Расположение").AddTextRenderer (x => x.Location).Editable()
 				.AddColumn ("Температура")
-					.AddNumericRenderer (x => x.TemperatureMin).Editing (new Gtk.Adjustment(0, 0, 10000000, 1, 100, 100))
-					.AddTextRenderer (x =>(" - "))
-					.AddNumericRenderer (x => x.TemperatureMax).Editing (new Gtk.Adjustment(0, 0, 10000000, 1, 100, 100))
+				.AddNumericRenderer (x => x.TemperatureMin).Editing (new Gtk.Adjustment(0, -273, 2000, 1, 100, 100)).WidthChars(5)
+					.AddTextRenderer (x =>("—"))
+				.AddNumericRenderer (x => x.TemperatureMax).Editing (new Gtk.Adjustment(0, -273, 2000, 1, 100, 100)).WidthChars(5)
 				.AddColumn ("Комментарий").AddTextRenderer (x => x.Comment).Editable()
 				.Finish();
 				
@@ -74,10 +78,18 @@ namespace Fittings
 
 		protected void OnButtonAddClicked (object sender, EventArgs e)
 		{
-			var dlg = new OrmReference(typeof(FittingType));
+			var dlg = new ReferenceRepresentation (new FittingsVM ());
 			dlg.Mode = OrmReferenceMode.MultiSelect;
-			dlg.ObjectSelected += Dlg_ObjectSelected;
+			dlg.ObjectSelected += Dlg_ObjectSelected1;
 			TabParent.AddSlaveTab(this, dlg);
+		}
+
+		void Dlg_ObjectSelected1 (object sender, ReferenceRepresentationSelectedEventArgs e)
+		{
+			var fittings = UoW.GetById<Fitting> (e.GetNodes<FittingVMNode> ().Select (x => x.Id).ToArray());
+			foreach (var item in e.GetNodes<FittingVMNode>()) {
+				Entity.AddItem (fittings.First (x => x.Id == item.Id));
+			}
 		}
 
 		protected void OnButtonEdit1Clicked (object sender, EventArgs e)
@@ -89,15 +101,9 @@ namespace Fittings
 			TabParent.AddSlaveTab(this, dlg);
 		}
 
-		void Dlg_ObjectSelected (object sender, OrmReferenceObjectSectedEventArgs e)
-		{
-			Entity.AddItem (e.Subject as FittingType);
-		}
-
 		void Dlg_EditObjectSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
 		{
-			var fitting = UoW.GetById<Fitting> (e.ObjectId);
-			editingItem.Fitting = fitting;
+			editingItem.Fitting = UoW.GetById<Fitting> (e.ObjectId);
 		}
 
 		protected void OnButtonRemoveClicked (object sender, EventArgs e)
