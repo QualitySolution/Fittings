@@ -127,6 +127,7 @@
     <Compile Include="Domain\PriceItem.cs" />
     <Compile Include="Domain\ProjectItem.cs" />
     <Compile Include="Representation\FittingPricesVM.cs" />
+    <Compile Include="Repository\PriceRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -172,6 +173,7 @@
     <Folder Include="Dialogs\" />
     <Folder Include="Representation\" />
     <Folder Include="JournalFilters\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">

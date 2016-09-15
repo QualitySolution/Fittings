@@ -1,9 +1,11 @@
 ﻿using System;
-using QSOrmProject;
-using Fittings.Domain;
-using Gamma.GtkWidgets;
-using Fittings.ViewModel;
+using System.Collections.Generic;
 using System.Linq;
+using Fittings.Domain;
+using Fittings.ViewModel;
+using Gamma.GtkWidgets;
+using QSOrmProject;
+using QSProjectsLib;
 
 namespace Fittings
 {
@@ -137,6 +139,43 @@ namespace Fittings
 			priceEditingItem.FittingPrice = priceItem.Cost;
 			priceEditingItem.PriceCurrency = priceItem.Currency;
 			priceEditingItem.SelectedPriceItem = priceItem;
+		}
+
+		protected void OnButtonUpdatePricesClicked(object sender, EventArgs e)
+		{
+			var newPricesList = new Dictionary<Price, int>();
+			int effectedRows = 0;
+
+			foreach(var item in Entity.ProjectRows)
+			{
+				PriceItem newPriceItem = Repository.PriceRepository.GetLastPriceItem(UoW, item.Fitting, item.SelectedPriceItem?.Price.Provider);
+				if (newPriceItem == null)
+					continue;
+				if(!DomainHelper.EqualDomainObjects(newPriceItem, item.SelectedPriceItem))
+				{
+					effectedRows++;
+					item.SelectedPriceItem = newPriceItem;
+					item.FittingPrice = newPriceItem.Cost;
+					item.PriceCurrency = newPriceItem.Currency;
+					if (newPricesList.ContainsKey(newPriceItem.Price))
+						newPricesList[newPriceItem.Price]++;
+					else
+						newPricesList.Add(newPriceItem.Price, 1);
+				}
+			}
+
+			if(effectedRows == 0)
+				MessageDialogWorks.RunInfoDialog("Новые цены не найдены!");
+			else
+				MessageDialogWorks.RunInfoDialog(String.Format("Были обновлены цены в {0}.\n" +
+					"Новые цены были получены из {1}:\n" +
+					"{2}",
+					RusNumber.FormatCase(effectedRows, "{0} строке", "{0} строках", "{0} строках"),
+					RusNumber.FormatCase(newPricesList.Count, "{0} прайса", "{0} прайсов", "{0} прайсов"),
+					String.Join("\n", newPricesList.Select(x => 
+						String.Format("{0} ({1:d}) - {2}", x.Key.Provider.Name, x.Key.Date, x.Value)
+					))
+				));
 		}
 	}
 }
