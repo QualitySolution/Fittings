@@ -93,6 +93,7 @@ namespace Fittings
 			this.pclassEntry.CanFocus = true;
 			this.pclassEntry.Name = "pclassEntry";
 			this.pclassEntry.IsEditable = true;
+			this.pclassEntry.MaxLength = 10;
 			this.pclassEntry.InvisibleChar = '●';
 			this.table1.Add (this.pclassEntry);
 			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table1 [this.pclassEntry]));
@@ -107,6 +108,7 @@ namespace Fittings
 			this.pnEntry.CanFocus = true;
 			this.pnEntry.Name = "pnEntry";
 			this.pnEntry.IsEditable = true;
+			this.pnEntry.MaxLength = 10;
 			this.pnEntry.InvisibleChar = '●';
 			this.table1.Add (this.pnEntry);
 			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.pnEntry]));

@@ -1105,6 +1105,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">10</property>
                 <property name="InvisibleChar">●</property>
               </widget>
               <packing>
@@ -1128,6 +1129,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
+                <property name="MaxLength">10</property>
                 <property name="InvisibleChar">●</property>
               </widget>
               <packing>
@@ -1634,7 +1636,7 @@
                   <widget class="Gtk.Label" id="label4">
                     <property name="MemberName" />
                     <property name="Xalign">1</property>
-                    <property name="LabelProp" translatable="yes">Вид соединения:</property>
+                    <property name="LabelProp" translatable="yes">Тип соединения:</property>
                   </widget>
                   <packing>
                     <property name="TopAttach">4</property>

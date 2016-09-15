@@ -15,6 +15,7 @@ namespace Fittings.Domain
 
 		string pn;
 
+		[Required(ErrorMessage = "PN должен быть заполнен")]
 		public virtual string Pn {
 			get { return pn; }
 			set { SetField (ref pn, value, () => Pn); }
@@ -22,6 +23,7 @@ namespace Fittings.Domain
 
 		string pclass;
 
+		[Required(ErrorMessage = "Класс должен быть заполнен")]
 		public virtual string Pclass {
 			get { return pclass; }
 			set { SetField (ref pclass, value, () => Pclass); }

@@ -268,7 +268,7 @@ namespace Fittings
 			this.label4 = new global::Gtk.Label ();
 			this.label4.Name = "label4";
 			this.label4.Xalign = 1F;
-			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Вид соединения:");
+			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Тип соединения:");
 			this.table1.Add (this.label4);
 			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.table1 [this.label4]));
 			w18.TopAttach = ((uint)(4));
