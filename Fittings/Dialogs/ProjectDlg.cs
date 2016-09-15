@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Fittings.Domain;
 using Fittings.ViewModel;
 using Gamma.GtkWidgets;
+using QSCurrency.CBR;
 using QSOrmProject;
 using QSProjectsLib;
 
@@ -63,9 +65,11 @@ namespace Fittings
 				.AddColumn("Сумма").AddTextRenderer(x => (x.Amount * x.FittingPrice).ToString())
 				.AddColumn ("Комментарий").AddTextRenderer (x => x.Comment).Editable()
 				.Finish();
-				
+
 			projectTreeView.Selection.Changed += ProjectTreeView_Selection_Changed;
 			projectTreeView.ItemsDataSource = Entity.ObservableProjectRows;
+
+			comboCurrencyMode.ItemsEnum = typeof(CurrencyMode);
 		}
 
 		void ProjectTreeView_Selection_Changed (object sender, EventArgs e)
@@ -176,6 +180,45 @@ namespace Fittings
 						String.Format("{0} ({1:d}) - {2}", x.Key.Provider.Name, x.Key.Date, x.Value)
 					))
 				));
+		}
+
+		protected void OnComboCurrencyModeChanged(object sender, EventArgs e)
+		{
+			switch((CurrencyMode)comboCurrencyMode.SelectedItem)
+			{
+				case CurrencyMode.Edit:
+					labelCurrencyInfo.LabelProp = String.Empty;
+					break;
+				case CurrencyMode.InEUR:
+					labelCurrencyInfo.LabelProp = String.Format("1 EUR = {0:N2} USD\n1 EUR = {1:N2} RUB",
+						CurrencyConverter.Convert(1, "EUR", "USD"),
+						CurrencyConverter.Convert(1, "EUR", "RUB")
+					);
+					break;
+				case CurrencyMode.InRUB:
+					labelCurrencyInfo.LabelProp = String.Format("100 RUB = {0:N2} USD\n100 RUB = {1:N2} EUR",
+						CurrencyConverter.Convert(100, "RUB", "USD"),
+						CurrencyConverter.Convert(100, "RUB", "EUR")
+					);
+					break;
+				case CurrencyMode.InUSD:
+					labelCurrencyInfo.LabelProp = String.Format("1 USD = {0:N2} EUR\n1 USD = {1:N2} RUB",
+						CurrencyConverter.Convert(1, "USD", "EUR"),
+						CurrencyConverter.Convert(1, "USD", "RUB")
+					);
+					break;
+			}
+		}
+
+		enum CurrencyMode {
+			[Display(Name = "Как в прайсе")]
+			Edit,
+			[Display(Name = "В долларах")]
+			InUSD,
+			[Display(Name = "В рублях")]
+			InRUB,
+			[Display(Name = "В евро")]
+			InEUR
 		}
 	}
 }

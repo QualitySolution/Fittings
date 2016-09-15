@@ -14,11 +14,15 @@ namespace Fittings
 		
 		private global::Gtk.Table table2;
 		
+		private global::Gtk.Button buttonUpdatePrices;
+		
 		private global::Gamma.GtkWidgets.yEntry customerEntry;
 		
 		private global::Gtk.HBox hbox1;
 		
-		private global::Gtk.Button buttonUpdatePrices;
+		private global::Gamma.Widgets.yEnumComboBox comboCurrencyMode;
+		
+		private global::Gtk.Label labelCurrencyInfo;
 		
 		private global::Gtk.Label label11;
 		
@@ -89,58 +93,81 @@ namespace Fittings
 			this.table2.RowSpacing = ((uint)(6));
 			this.table2.ColumnSpacing = ((uint)(6));
 			// Container child table2.Gtk.Table+TableChild
+			this.buttonUpdatePrices = new global::Gtk.Button ();
+			this.buttonUpdatePrices.CanFocus = true;
+			this.buttonUpdatePrices.Name = "buttonUpdatePrices";
+			this.buttonUpdatePrices.UseUnderline = true;
+			this.buttonUpdatePrices.Label = global::Mono.Unix.Catalog.GetString ("Обновить цены");
+			this.table2.Add (this.buttonUpdatePrices);
+			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2 [this.buttonUpdatePrices]));
+			w4.LeftAttach = ((uint)(2));
+			w4.RightAttach = ((uint)(3));
+			w4.XOptions = ((global::Gtk.AttachOptions)(4));
+			w4.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table2.Gtk.Table+TableChild
 			this.customerEntry = new global::Gamma.GtkWidgets.yEntry ();
 			this.customerEntry.CanFocus = true;
 			this.customerEntry.Name = "customerEntry";
 			this.customerEntry.IsEditable = true;
 			this.customerEntry.InvisibleChar = '●';
 			this.table2.Add (this.customerEntry);
-			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2 [this.customerEntry]));
-			w4.LeftAttach = ((uint)(1));
-			w4.RightAttach = ((uint)(2));
-			w4.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table2 [this.customerEntry]));
+			w5.LeftAttach = ((uint)(1));
+			w5.RightAttach = ((uint)(2));
+			w5.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
 			this.hbox1 = new global::Gtk.HBox ();
 			this.hbox1.Name = "hbox1";
 			this.hbox1.Spacing = 6;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.buttonUpdatePrices = new global::Gtk.Button ();
-			this.buttonUpdatePrices.CanFocus = true;
-			this.buttonUpdatePrices.Name = "buttonUpdatePrices";
-			this.buttonUpdatePrices.UseUnderline = true;
-			this.buttonUpdatePrices.Label = global::Mono.Unix.Catalog.GetString ("Обновить цены");
-			this.hbox1.Add (this.buttonUpdatePrices);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonUpdatePrices]));
-			w5.Position = 2;
-			w5.Expand = false;
-			w5.Fill = false;
+			this.comboCurrencyMode = new global::Gamma.Widgets.yEnumComboBox ();
+			this.comboCurrencyMode.Name = "comboCurrencyMode";
+			this.comboCurrencyMode.ShowSpecialStateAll = false;
+			this.comboCurrencyMode.ShowSpecialStateNot = false;
+			this.comboCurrencyMode.UseShortTitle = false;
+			this.comboCurrencyMode.DefaultFirst = true;
+			this.hbox1.Add (this.comboCurrencyMode);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.comboCurrencyMode]));
+			w6.Position = 0;
+			w6.Expand = false;
+			w6.Fill = false;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.labelCurrencyInfo = new global::Gtk.Label ();
+			this.labelCurrencyInfo.Name = "labelCurrencyInfo";
+			this.labelCurrencyInfo.LabelProp = global::Mono.Unix.Catalog.GetString ("label1");
+			this.hbox1.Add (this.labelCurrencyInfo);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.labelCurrencyInfo]));
+			w7.Position = 1;
+			w7.Expand = false;
+			w7.Fill = false;
 			this.table2.Add (this.hbox1);
-			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table2 [this.hbox1]));
-			w6.TopAttach = ((uint)(1));
-			w6.BottomAttach = ((uint)(2));
-			w6.LeftAttach = ((uint)(2));
-			w6.RightAttach = ((uint)(3));
-			w6.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.hbox1]));
+			w8.TopAttach = ((uint)(1));
+			w8.BottomAttach = ((uint)(2));
+			w8.LeftAttach = ((uint)(2));
+			w8.RightAttach = ((uint)(3));
+			w8.XOptions = ((global::Gtk.AttachOptions)(4));
+			w8.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
 			this.label11 = new global::Gtk.Label ();
 			this.label11.Name = "label11";
 			this.label11.Xalign = 1F;
 			this.label11.LabelProp = global::Mono.Unix.Catalog.GetString ("Заказчик:");
 			this.table2.Add (this.label11);
-			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.label11]));
-			w7.XOptions = ((global::Gtk.AttachOptions)(4));
-			w7.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table2 [this.label11]));
+			w9.XOptions = ((global::Gtk.AttachOptions)(4));
+			w9.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
 			this.label12 = new global::Gtk.Label ();
 			this.label12.Name = "label12";
 			this.label12.Xalign = 1F;
 			this.label12.LabelProp = global::Mono.Unix.Catalog.GetString ("Название проекта:");
 			this.table2.Add (this.label12);
-			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.label12]));
-			w8.TopAttach = ((uint)(1));
-			w8.BottomAttach = ((uint)(2));
-			w8.XOptions = ((global::Gtk.AttachOptions)(4));
-			w8.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table2 [this.label12]));
+			w10.TopAttach = ((uint)(1));
+			w10.BottomAttach = ((uint)(2));
+			w10.XOptions = ((global::Gtk.AttachOptions)(4));
+			w10.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table2.Gtk.Table+TableChild
 			this.projectNameEntry = new global::Gamma.GtkWidgets.yEntry ();
 			this.projectNameEntry.CanFocus = true;
@@ -148,17 +175,16 @@ namespace Fittings
 			this.projectNameEntry.IsEditable = true;
 			this.projectNameEntry.InvisibleChar = '●';
 			this.table2.Add (this.projectNameEntry);
-			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table2 [this.projectNameEntry]));
-			w9.TopAttach = ((uint)(1));
-			w9.BottomAttach = ((uint)(2));
-			w9.LeftAttach = ((uint)(1));
-			w9.RightAttach = ((uint)(2));
-			w9.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.table2 [this.projectNameEntry]));
+			w11.TopAttach = ((uint)(1));
+			w11.BottomAttach = ((uint)(2));
+			w11.LeftAttach = ((uint)(1));
+			w11.RightAttach = ((uint)(2));
+			w11.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.vbox2.Add (this.table2);
-			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.table2]));
-			w10.Position = 1;
-			w10.Expand = false;
-			w10.Fill = false;
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.table2]));
+			w12.Position = 1;
+			w12.Expand = false;
 			// Container child vbox2.Gtk.Box+BoxChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
@@ -169,8 +195,8 @@ namespace Fittings
 			this.projectTreeView.Name = "projectTreeView";
 			this.GtkScrolledWindow.Add (this.projectTreeView);
 			this.vbox2.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
-			w12.Position = 2;
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
+			w14.Position = 2;
 			// Container child vbox2.Gtk.Box+BoxChild
 			this.hbox2 = new global::Gtk.HBox ();
 			this.hbox2.Name = "hbox2";
@@ -182,8 +208,8 @@ namespace Fittings
 			this.buttonAdd.UseUnderline = true;
 			this.buttonAdd.Label = global::Mono.Unix.Catalog.GetString ("Добавить");
 			this.hbox2.Add (this.buttonAdd);
-			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonAdd]));
-			w13.Position = 0;
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonAdd]));
+			w15.Position = 0;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.buttonEdit1 = new global::Gtk.Button ();
 			this.buttonEdit1.CanFocus = true;
@@ -191,8 +217,8 @@ namespace Fittings
 			this.buttonEdit1.UseUnderline = true;
 			this.buttonEdit1.Label = global::Mono.Unix.Catalog.GetString ("Изменить арматуру");
 			this.hbox2.Add (this.buttonEdit1);
-			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonEdit1]));
-			w14.Position = 1;
+			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonEdit1]));
+			w16.Position = 1;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.buttonRemove = new global::Gtk.Button ();
 			this.buttonRemove.CanFocus = true;
@@ -200,16 +226,16 @@ namespace Fittings
 			this.buttonRemove.UseUnderline = true;
 			this.buttonRemove.Label = global::Mono.Unix.Catalog.GetString ("Удалить");
 			this.hbox2.Add (this.buttonRemove);
-			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonRemove]));
-			w15.Position = 2;
+			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonRemove]));
+			w17.Position = 2;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.vseparator1 = new global::Gtk.VSeparator ();
 			this.vseparator1.Name = "vseparator1";
 			this.hbox2.Add (this.vseparator1);
-			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.vseparator1]));
-			w16.Position = 3;
-			w16.Expand = false;
-			w16.Fill = false;
+			global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.vseparator1]));
+			w18.Position = 3;
+			w18.Expand = false;
+			w18.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.buttonSelectPrice = new global::Gtk.Button ();
 			this.buttonSelectPrice.CanFocus = true;
@@ -217,13 +243,13 @@ namespace Fittings
 			this.buttonSelectPrice.UseUnderline = true;
 			this.buttonSelectPrice.Label = global::Mono.Unix.Catalog.GetString ("Выбрать стоимость");
 			this.hbox2.Add (this.buttonSelectPrice);
-			global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonSelectPrice]));
-			w17.Position = 4;
+			global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonSelectPrice]));
+			w19.Position = 4;
 			this.vbox2.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
-			w18.Position = 3;
-			w18.Expand = false;
-			w18.Fill = false;
+			global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbox2]));
+			w20.Position = 3;
+			w20.Expand = false;
+			w20.Fill = false;
 			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
@@ -231,6 +257,7 @@ namespace Fittings
 			this.Hide ();
 			this.buttonSave.Clicked += new global::System.EventHandler (this.OnButtonSaveClicked);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelClicked);
+			this.comboCurrencyMode.Changed += new global::System.EventHandler (this.OnComboCurrencyModeChanged);
 			this.buttonUpdatePrices.Clicked += new global::System.EventHandler (this.OnButtonUpdatePricesClicked);
 			this.buttonAdd.Clicked += new global::System.EventHandler (this.OnButtonAddClicked);
 			this.buttonEdit1.Clicked += new global::System.EventHandler (this.OnButtonEdit1Clicked);

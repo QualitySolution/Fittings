@@ -167,6 +167,10 @@
       <Project>{1BF2A638-420D-456C-96A7-36873A0FB894}</Project>
       <Name>GammaUtil</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\Modules\QSCurrency\QSCurrency.csproj">
+      <Project>{EB71A9A6-2A91-49B5-B8E1-B4B7049B039D}</Project>
+      <Name>QSCurrency</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
