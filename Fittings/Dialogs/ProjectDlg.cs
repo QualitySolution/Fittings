@@ -53,6 +53,12 @@ namespace Fittings
 				.AddNumericRenderer (x => x.TemperatureMin).Editing (new Gtk.Adjustment(0, -273, 2000, 1, 100, 100)).WidthChars(5)
 					.AddTextRenderer (x =>("—"))
 				.AddNumericRenderer (x => x.TemperatureMax).Editing (new Gtk.Adjustment(0, -273, 2000, 1, 100, 100)).WidthChars(5)
+				.AddColumn("Цена")
+				.AddNumericRenderer (x => x.FittingPrice).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
+				.AddEnumRenderer (x => x.PriceCurrency).Editing()
+				.AddColumn("Поставщик").AddTextRenderer(x => x.SelectedPriceItem != null ? x.SelectedPriceItem.Price.Provider.Name : String.Empty)
+				.AddColumn("Из прайса").AddTextRenderer(x => x.SelectedPriceItem != null ? x.SelectedPriceItem.Price.Date.ToShortDateString() : String.Empty)
+				.AddColumn("Сумма").AddTextRenderer(x => (x.Amount * x.FittingPrice).ToString())
 				.AddColumn ("Комментарий").AddTextRenderer (x => x.Comment).Editable()
 				.Finish();
 				

@@ -34,13 +34,6 @@ namespace Fittings.Domain
 			set { SetField (ref trpPositions, value, () => TrpPositions); }
 		}
 
-		FittingType name;
-
-		public virtual FittingType Name {
-			get { return name; }
-			set { SetField (ref name, value, () => Name); }
-		}
-
 		int amount;
 
 		public virtual int Amount {
@@ -48,39 +41,26 @@ namespace Fittings.Domain
 			set { SetField (ref amount, value, () => Amount); }
 		}
 
-		Diameter diameter;
 
-		public virtual Diameter Diameter {
-			get { return diameter; }
-			set { SetField (ref diameter, value, () => Diameter); }
+		decimal fittingPrice;
+
+		public virtual decimal FittingPrice {
+			get { return fittingPrice; }
+			set { SetField (ref fittingPrice, value, () => FittingPrice); }
 		}
 
-		DiameterUnits diameterUnits;
+		PriceСurrency priceCurrency;
 
-		public virtual DiameterUnits DiameterUnits {
-			get { return diameterUnits; }
-			set { SetField (ref diameterUnits, value, () => DiameterUnits); }
+		public virtual PriceСurrency PriceCurrency {
+			get { return priceCurrency; }
+			set { SetField (ref priceCurrency, value, () => PriceCurrency); }
 		}
 
-		Pressure pressure;
+		PriceItem selectedPriceItem;
 
-		public virtual Pressure Pressure {
-			get { return pressure; }
-			set { SetField (ref pressure, value, () => Pressure); }
-		}
-
-		PressureUnits pressureUnits;
-
-		public virtual PressureUnits PressureUnits {
-			get { return pressureUnits; }
-			set { SetField (ref pressureUnits, value, () => PressureUnits); }
-		}
-
-		ConnectionType connectionType;
-
-		public virtual ConnectionType ConnectionType {
-			get { return connectionType; }
-			set { SetField (ref connectionType, value, () => ConnectionType); }
+		public virtual PriceItem SelectedPriceItem {
+			get { return selectedPriceItem; }
+			set { SetField (ref selectedPriceItem, value, () => SelectedPriceItem); }
 		}
 
 		Conductor conductor;
