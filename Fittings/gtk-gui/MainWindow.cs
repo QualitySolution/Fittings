@@ -102,7 +102,7 @@ public partial class MainWindow
 		this.ActionDiameter = new global::Gtk.Action ("ActionDiameter", global::Mono.Unix.Catalog.GetString ("Диаметр"), null, null);
 		this.ActionDiameter.ShortLabel = global::Mono.Unix.Catalog.GetString ("Диаметр");
 		w1.Add (this.ActionDiameter, null);
-		this.Action3 = new global::Gtk.Action ("Action3", global::Mono.Unix.Catalog.GetString ("Дополнительно"), null, null);
+		this.Action3 = new global::Gtk.Action ("Action3", global::Mono.Unix.Catalog.GetString ("Основные данные"), null, null);
 		this.Action3.ShortLabel = global::Mono.Unix.Catalog.GetString ("Дополнительно");
 		w1.Add (this.Action3, null);
 		this.ActionProject = new global::Gtk.Action ("ActionProject", global::Mono.Unix.Catalog.GetString ("Проекты"), null, null);

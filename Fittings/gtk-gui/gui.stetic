@@ -107,7 +107,7 @@
       </action>
       <action id="Action3">
         <property name="Type">Action</property>
-        <property name="Label" translatable="yes">Дополнительно</property>
+        <property name="Label" translatable="yes">Основные данные</property>
         <property name="ShortLabel" translatable="yes">Дополнительно</property>
       </action>
       <action id="ActionProject">
@@ -1985,7 +1985,7 @@
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="Type">TextOnly</property>
-                <property name="Label" translatable="yes">Изменить</property>
+                <property name="Label" translatable="yes">Изменить арматуру</property>
                 <property name="UseUnderline">True</property>
                 <signal name="Clicked" handler="OnButtonEdit1Clicked" />
               </widget>

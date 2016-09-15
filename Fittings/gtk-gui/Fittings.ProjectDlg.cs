@@ -160,7 +160,7 @@ namespace Fittings
 			this.buttonEdit1.CanFocus = true;
 			this.buttonEdit1.Name = "buttonEdit1";
 			this.buttonEdit1.UseUnderline = true;
-			this.buttonEdit1.Label = global::Mono.Unix.Catalog.GetString ("Изменить");
+			this.buttonEdit1.Label = global::Mono.Unix.Catalog.GetString ("Изменить арматуру");
 			this.hbox2.Add (this.buttonEdit1);
 			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.buttonEdit1]));
 			w12.Position = 1;
