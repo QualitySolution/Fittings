@@ -59,7 +59,7 @@ namespace Fittings.Domain
 		}
 
 		BodyMaterial bodyMaterial;
-		[Required(ErrorMessage="Материал корпуса не выбран")]
+		//[Required(ErrorMessage="Материал корпуса не выбран")]
 		public virtual BodyMaterial BodyMaterial {
 			get { return bodyMaterial; }
 			set { SetField (ref bodyMaterial, value, () => BodyMaterial); }
