@@ -66,6 +66,7 @@
       <LogicalName>gui.stetic</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="icons\flow_logo.png" />
+    <EmbeddedResource Include="SqlScripts\new-0.1.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />

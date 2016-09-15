@@ -14,6 +14,13 @@ namespace Fittings
 		static void CreateProjectParam ()
 		{
 			QSMain.ProjectPermission = new Dictionary<string, UserPermission> ();
+
+			//Скрипты создания базы
+			DBCreator.AddBaseScript (
+				new Version(0, 1),
+				"База с первоначальным заполением",
+				"Fittings.SqlScripts.new-0.1.sql"
+			);
 		}
 
 		static void CreateBaseConfig ()
