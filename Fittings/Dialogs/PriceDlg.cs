@@ -42,9 +42,13 @@ namespace Fittings
 					.AddTextRenderer (x => x.Fitting.DiameterText)
 				.AddColumn ("Давление")
 					.AddTextRenderer (x => x.Fitting.PressureText)
+				.AddColumn ("Соединение")
+					.AddTextRenderer (x => x.Fitting.ConnectionType.NameRus)
+				.AddColumn ("Материал")
+					.AddTextRenderer (x => x.Fitting.BodyMaterial.NameRus)
 				.AddColumn ("Цена")
-				.AddEnumRenderer (x => x.Currency).Editing()
 				.AddNumericRenderer (x => x.Cost).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
+				.AddEnumRenderer (x => x.Currency).Editing()
 				.Finish();
 
 			pricesTreeView.Selection.Changed += PricesTreeView_Selection_Changed;
