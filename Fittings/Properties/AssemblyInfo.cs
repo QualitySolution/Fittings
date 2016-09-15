@@ -18,6 +18,7 @@ using QSProjectsLib;
 [assembly: AssemblySupport ("",true, "MySQL")]
 [assembly: AssemblyAppWebsite ("htttp://develop.qsolution.ru/")]
 
+[assembly: AssemblyAuthor ("Ганьков Андрей <gav@qsolution.ru>")]
 [assembly: AssemblyAuthor ("Яковлева Алина <lin@qsolution.ru>")]
 
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
