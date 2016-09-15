@@ -3,19 +3,20 @@ using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Bindings.Collections.Generic;
 using System.Collections.Generic;
+using Gamma.Utilities;
 
 namespace Fittings.Domain
 {
 	[OrmSubject (Gender = QSProjectsLib.GrammaticalGender.Masculine,
 		NominativePlural = "прайс листы",
 		Nominative = "прайс лист")]
-	public class Price: PropertyChangedBase, IDomainObject
+	public class Price: PropertyChangedBase, IDomainObject, IValidatableObject
 	{
 		#region Свойства
 
 		public virtual int Id { get; set; }
 
-		DateTime date;
+		DateTime date = DateTime.Today;
 
 		public virtual DateTime Date {
 			get { return date; }
@@ -23,7 +24,7 @@ namespace Fittings.Domain
 		}
 
 		Provider provider;
-
+		[Required(ErrorMessage = "Поставщик должен быть указан.")]
 		public virtual Provider Provider {
 			get { return provider; }
 			set { SetField (ref provider, value, () => Provider); }
@@ -61,6 +62,17 @@ namespace Fittings.Domain
 		{
 
 		}
+
+		#region IValidatableObject implementation
+
+		public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+		{
+			if (Date == default(DateTime))
+				yield return new ValidationResult ("Дата прайса должна быть указана.",
+					new[] { this.GetPropertyName (o => o.Date) });
+		}
+
+		#endregion
 
 		public virtual void AddItem(Fitting fitting, PriceСurrency currency , decimal cost = 0){
 			var item = new PriceItem {
