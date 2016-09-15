@@ -16,6 +16,8 @@ namespace Fittings
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 		ProjectItem editingItem;
 
+		CurrencyMode currencyMode;
+
 		public ProjectDlg ()
 		{
 			this.Build ();
@@ -60,9 +62,10 @@ namespace Fittings
 				.AddColumn("Цена")
 				.AddNumericRenderer (x => x.FittingPrice).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
 				.AddEnumRenderer (x => x.PriceCurrency).Editing()
+				.AddColumn("Цена в валюте").AddTextRenderer(x => MoneyToCurrency(x.PriceCurrency, x.FittingPrice))//.Background("White Smoke")
 				.AddColumn("Поставщик").AddTextRenderer(x => x.SelectedPriceItem != null ? x.SelectedPriceItem.Price.Provider.Name : String.Empty)
 				.AddColumn("Из прайса").AddTextRenderer(x => x.SelectedPriceItem != null ? x.SelectedPriceItem.Price.Date.ToShortDateString() : String.Empty)
-				.AddColumn("Сумма").AddTextRenderer(x => (x.Amount * x.FittingPrice).ToString())
+				.AddColumn("Сумма").AddTextRenderer(x => MoneyToCurrency(x.PriceCurrency, x.Amount * x.FittingPrice))
 				.AddColumn ("Комментарий").AddTextRenderer (x => x.Comment).Editable()
 				.Finish();
 
@@ -182,43 +185,80 @@ namespace Fittings
 				));
 		}
 
+		string MoneyToCurrency(PriceСurrency currency, decimal money)
+		{
+			if (money == 0)
+				return String.Empty;
+
+			string toCurrency;
+			string fromCurrency = currency.ToString();
+			if (currencyMode == CurrencyMode.Edit)
+				toCurrency = currency.ToString();
+			else
+				toCurrency = currencyMode.ToString();
+
+			if (fromCurrency.CompareTo(toCurrency) != 0)
+			{
+				var converted = CurrencyConverter.Convert(money, fromCurrency, toCurrency);
+				if (converted == null)
+					return String.Empty;
+				money = converted.Value;
+			}
+
+			return String.Format("{0:N2} {1}",
+				money, toCurrency);
+		}
+
 		protected void OnComboCurrencyModeChanged(object sender, EventArgs e)
 		{
-			switch((CurrencyMode)comboCurrencyMode.SelectedItem)
+			currencyMode = (CurrencyMode)comboCurrencyMode.SelectedItem;
+			var priceEditColumn = projectTreeView.Columns.First(x => x.Title == "Цена");
+			var priceColumn = projectTreeView.Columns.First(x => x.Title == "Цена в валюте");
+
+			switch(currencyMode)
 			{
 				case CurrencyMode.Edit:
 					labelCurrencyInfo.LabelProp = String.Empty;
+					priceEditColumn.Visible = true;
+					priceColumn.Visible = false;
 					break;
-				case CurrencyMode.InEUR:
+				case CurrencyMode.EUR:
 					labelCurrencyInfo.LabelProp = String.Format("1 EUR = {0:N2} USD\n1 EUR = {1:N2} RUB",
 						CurrencyConverter.Convert(1, "EUR", "USD"),
 						CurrencyConverter.Convert(1, "EUR", "RUB")
 					);
+					priceEditColumn.Visible = false;
+					priceColumn.Visible = true;
 					break;
-				case CurrencyMode.InRUB:
+				case CurrencyMode.RUB:
 					labelCurrencyInfo.LabelProp = String.Format("100 RUB = {0:N2} USD\n100 RUB = {1:N2} EUR",
 						CurrencyConverter.Convert(100, "RUB", "USD"),
 						CurrencyConverter.Convert(100, "RUB", "EUR")
 					);
+					priceEditColumn.Visible = false;
+					priceColumn.Visible = true;
 					break;
-				case CurrencyMode.InUSD:
+				case CurrencyMode.USD:
 					labelCurrencyInfo.LabelProp = String.Format("1 USD = {0:N2} EUR\n1 USD = {1:N2} RUB",
 						CurrencyConverter.Convert(1, "USD", "EUR"),
 						CurrencyConverter.Convert(1, "USD", "RUB")
 					);
+					priceEditColumn.Visible = false;
+					priceColumn.Visible = true;
 					break;
 			}
+			projectTreeView.QueueDraw();
 		}
 
 		enum CurrencyMode {
 			[Display(Name = "Как в прайсе")]
 			Edit,
 			[Display(Name = "В долларах")]
-			InUSD,
+			USD,
 			[Display(Name = "В рублях")]
-			InRUB,
+			RUB,
 			[Display(Name = "В евро")]
-			InEUR
+			EUR
 		}
 	}
 }
