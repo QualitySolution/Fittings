@@ -68,7 +68,8 @@ namespace Fittings
 
 		void ProjectTreeView_Selection_Changed (object sender, EventArgs e)
 		{
-			buttonEdit1.Sensitive = buttonRemove.Sensitive = projectTreeView.Selection.CountSelectedRows() > 0 ;
+			buttonEdit1.Sensitive = buttonRemove.Sensitive = buttonSelectPrice.Sensitive 
+				= projectTreeView.Selection.CountSelectedRows() > 0 ;
 		}
 
 		public override bool Save ()
@@ -116,6 +117,26 @@ namespace Fittings
 		protected void OnButtonRemoveClicked (object sender, EventArgs e)
 		{
 			Entity.ObservableProjectRows.Remove (projectTreeView.GetSelectedObject<ProjectItem> ());
+		}
+
+		protected void OnButtonSelectPriceClicked(object sender, EventArgs e)
+		{
+			var priceEditingItem = projectTreeView.GetSelectedObject<ProjectItem> ();
+			var dlg = new ReferenceRepresentation (new FittingPricesVM (priceEditingItem.Fitting));
+			dlg.Tag = priceEditingItem;
+			dlg.Mode = OrmReferenceMode.Select;
+			dlg.ObjectSelected += Dlg_ItemPriceSelected;;
+			TabParent.AddSlaveTab(this, dlg);
+		}
+
+		void Dlg_ItemPriceSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
+		{
+			var dlg = sender as ReferenceRepresentation;
+			var priceEditingItem = dlg.Tag as ProjectItem;
+			var priceItem = UoW.GetById<PriceItem>(e.ObjectId);
+			priceEditingItem.FittingPrice = priceItem.Cost;
+			priceEditingItem.PriceCurrency = priceItem.Currency;
+			priceEditingItem.SelectedPriceItem = priceItem;
 		}
 	}
 }
