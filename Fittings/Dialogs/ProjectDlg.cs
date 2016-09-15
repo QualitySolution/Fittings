@@ -8,6 +8,7 @@ using Gamma.GtkWidgets;
 using QSCurrency.CBR;
 using QSOrmProject;
 using QSProjectsLib;
+using Gtk;
 
 namespace Fittings
 {
@@ -54,13 +55,13 @@ namespace Fittings
 				.AddColumn ("Проводимая среда").AddComboRenderer (x => x.Conductor)
 				.SetDisplayFunc(x => (x as Conductor).NameRus).FillItems<Conductor>(ConductorItemsList).Editing()
 				//.AddColumn ("Группа").AddTextRenderer (x => x.PrGroup).Editable() 
-				.AddColumn ("Расположение").AddTextRenderer (x => x.Location).Editable()
+				.AddColumn ("Расположение").AddTextRenderer (x => x.Location).Editable().EditingStartedEvent(OnLocationEditingStarted)
 				.AddColumn ("Температура")
 				.AddNumericRenderer (x => x.TemperatureMin).Editing (new Gtk.Adjustment(0, -273, 2000, 1, 100, 100)).WidthChars(5)
 					.AddTextRenderer (x =>("—"))
 				.AddNumericRenderer (x => x.TemperatureMax).Editing (new Gtk.Adjustment(0, -273, 2000, 1, 100, 100)).WidthChars(5)
 				.AddColumn("Цена")
-				.AddNumericRenderer (x => x.FittingPrice).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
+				.AddNumericRenderer (x => x.FittingPrice).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2).WidthChars(10)
 				.AddEnumRenderer (x => x.PriceCurrency).Editing()
 				.AddColumn("Цена в валюте").AddTextRenderer(x => MoneyToCurrency(x.PriceCurrency, x.FittingPrice))//.Background("White Smoke")
 				.AddColumn("Поставщик").AddTextRenderer(x => x.SelectedPriceItem != null ? x.SelectedPriceItem.Price.Provider.Name : String.Empty)
@@ -73,6 +74,23 @@ namespace Fittings
 			projectTreeView.ItemsDataSource = Entity.ObservableProjectRows;
 
 			comboCurrencyMode.ItemsEnum = typeof(CurrencyMode);
+		}
+
+		void OnLocationEditingStarted(object sender, Gtk.EditingStartedArgs args)
+		{
+			if (Entity.ProjectRows.Count == 0)
+				return;
+			
+			var entry = args.Editable as Entry;
+			var completion = new EntryCompletion();
+			var list = new ListStore(typeof(string));
+			foreach(var txt in Entity.ProjectRows.Where(x => !String.IsNullOrWhiteSpace(x.Location)).Select(x => x.Location.Trim()).Distinct())
+			{
+				list.AppendValues(txt);
+			}
+			completion.Model = list;
+			completion.TextColumn = 0;
+			entry.Completion = completion;
 		}
 
 		void ProjectTreeView_Selection_Changed (object sender, EventArgs e)
