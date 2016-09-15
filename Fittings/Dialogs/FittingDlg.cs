@@ -49,6 +49,14 @@ namespace Fittings
 
 			codeEntry.Binding.AddBinding (Entity, e => e.Code, w => w.Text).InitializeFromSource();
 			commentTextview.Binding.AddBinding (Entity, e => e.Note, w => w.Buffer.Text).InitializeFromSource();
+
+			vboxPrice.Visible = !UoW.IsNew;
+
+			if(!UoW.IsNew)
+			{
+				treeviewPrice.RepresentationModel = new ViewModel.FittingPricesVM(Entity);
+			}
+
 		}
 
 		public override bool Save ()
@@ -86,8 +94,6 @@ namespace Fittings
 				break;
 			}
 		}
-
-
 	}
 }
 

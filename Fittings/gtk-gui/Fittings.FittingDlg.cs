@@ -12,6 +12,8 @@ namespace Fittings
 		
 		private global::Gtk.Button buttonCancel;
 		
+		private global::Gtk.Notebook notebook1;
+		
 		private global::Gtk.Table table1;
 		
 		private global::Gamma.Widgets.yEntryReference bodyMaterialReference;
@@ -51,6 +53,16 @@ namespace Fittings
 		private global::Gtk.Label label9;
 		
 		private global::Gtk.Label Давление;
+		
+		private global::Gtk.Label label1;
+		
+		private global::Gtk.VBox vboxPrice;
+		
+		private global::Gtk.ScrolledWindow GtkScrolledWindow1;
+		
+		private global::QSOrmProject.RepresentationTreeView treeviewPrice;
+		
+		private global::Gtk.Label label3;
 
 		protected virtual void Build ()
 		{
@@ -94,6 +106,11 @@ namespace Fittings
 			w3.Expand = false;
 			w3.Fill = false;
 			// Container child vbox1.Gtk.Box+BoxChild
+			this.notebook1 = new global::Gtk.Notebook ();
+			this.notebook1.CanFocus = true;
+			this.notebook1.Name = "notebook1";
+			this.notebook1.CurrentPage = 0;
+			// Container child notebook1.Gtk.Notebook+NotebookChild
 			this.table1 = new global::Gtk.Table (((uint)(7)), ((uint)(2)), false);
 			this.table1.Name = "table1";
 			this.table1.RowSpacing = ((uint)(6));
@@ -104,8 +121,8 @@ namespace Fittings
 			this.bodyMaterialReference.Name = "bodyMaterialReference";
 			this.table1.Add (this.bodyMaterialReference);
 			global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table1 [this.bodyMaterialReference]));
-			w4.TopAttach = ((uint)(4));
-			w4.BottomAttach = ((uint)(5));
+			w4.TopAttach = ((uint)(5));
+			w4.BottomAttach = ((uint)(6));
 			w4.LeftAttach = ((uint)(1));
 			w4.RightAttach = ((uint)(2));
 			w4.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -118,8 +135,6 @@ namespace Fittings
 			this.codeEntry.InvisibleChar = '●';
 			this.table1.Add (this.codeEntry);
 			global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table1 [this.codeEntry]));
-			w5.TopAttach = ((uint)(5));
-			w5.BottomAttach = ((uint)(6));
 			w5.LeftAttach = ((uint)(1));
 			w5.RightAttach = ((uint)(2));
 			w5.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -130,8 +145,8 @@ namespace Fittings
 			this.connectionTypeRreference.Name = "connectionTypeRreference";
 			this.table1.Add (this.connectionTypeRreference);
 			global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table1 [this.connectionTypeRreference]));
-			w6.TopAttach = ((uint)(3));
-			w6.BottomAttach = ((uint)(4));
+			w6.TopAttach = ((uint)(4));
+			w6.BottomAttach = ((uint)(5));
 			w6.LeftAttach = ((uint)(1));
 			w6.RightAttach = ((uint)(2));
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -142,6 +157,8 @@ namespace Fittings
 			this.fittingTypeReference.Name = "fittingTypeReference";
 			this.table1.Add (this.fittingTypeReference);
 			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.fittingTypeReference]));
+			w7.TopAttach = ((uint)(1));
+			w7.BottomAttach = ((uint)(2));
 			w7.LeftAttach = ((uint)(1));
 			w7.RightAttach = ((uint)(2));
 			w7.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -161,8 +178,6 @@ namespace Fittings
 			w9.BottomAttach = ((uint)(7));
 			w9.LeftAttach = ((uint)(1));
 			w9.RightAttach = ((uint)(2));
-			w9.XOptions = ((global::Gtk.AttachOptions)(4));
-			w9.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.hbox4 = new global::Gtk.HBox ();
 			this.hbox4.Name = "hbox4";
@@ -189,8 +204,8 @@ namespace Fittings
 			w11.Position = 1;
 			this.table1.Add (this.hbox4);
 			global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.table1 [this.hbox4]));
-			w12.TopAttach = ((uint)(1));
-			w12.BottomAttach = ((uint)(2));
+			w12.TopAttach = ((uint)(2));
+			w12.BottomAttach = ((uint)(3));
 			w12.LeftAttach = ((uint)(1));
 			w12.RightAttach = ((uint)(2));
 			w12.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -221,8 +236,8 @@ namespace Fittings
 			w14.Position = 1;
 			this.table1.Add (this.hbox5);
 			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.table1 [this.hbox5]));
-			w15.TopAttach = ((uint)(2));
-			w15.BottomAttach = ((uint)(3));
+			w15.TopAttach = ((uint)(3));
+			w15.BottomAttach = ((uint)(4));
 			w15.LeftAttach = ((uint)(1));
 			w15.RightAttach = ((uint)(2));
 			w15.XOptions = ((global::Gtk.AttachOptions)(4));
@@ -234,6 +249,8 @@ namespace Fittings
 			this.label10.LabelProp = global::Mono.Unix.Catalog.GetString ("Тип арматуры:");
 			this.table1.Add (this.label10);
 			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.table1 [this.label10]));
+			w16.TopAttach = ((uint)(1));
+			w16.BottomAttach = ((uint)(2));
 			w16.XOptions = ((global::Gtk.AttachOptions)(4));
 			w16.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
@@ -243,8 +260,8 @@ namespace Fittings
 			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("Диаметр:");
 			this.table1.Add (this.label2);
 			global::Gtk.Table.TableChild w17 = ((global::Gtk.Table.TableChild)(this.table1 [this.label2]));
-			w17.TopAttach = ((uint)(1));
-			w17.BottomAttach = ((uint)(2));
+			w17.TopAttach = ((uint)(2));
+			w17.BottomAttach = ((uint)(3));
 			w17.XOptions = ((global::Gtk.AttachOptions)(4));
 			w17.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
@@ -254,8 +271,8 @@ namespace Fittings
 			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Вид соединения:");
 			this.table1.Add (this.label4);
 			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.table1 [this.label4]));
-			w18.TopAttach = ((uint)(3));
-			w18.BottomAttach = ((uint)(4));
+			w18.TopAttach = ((uint)(4));
+			w18.BottomAttach = ((uint)(5));
 			w18.XOptions = ((global::Gtk.AttachOptions)(4));
 			w18.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
@@ -265,8 +282,8 @@ namespace Fittings
 			this.label7.LabelProp = global::Mono.Unix.Catalog.GetString ("Материал корпуса:");
 			this.table1.Add (this.label7);
 			global::Gtk.Table.TableChild w19 = ((global::Gtk.Table.TableChild)(this.table1 [this.label7]));
-			w19.TopAttach = ((uint)(4));
-			w19.BottomAttach = ((uint)(5));
+			w19.TopAttach = ((uint)(5));
+			w19.BottomAttach = ((uint)(6));
 			w19.XOptions = ((global::Gtk.AttachOptions)(4));
 			w19.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
@@ -276,8 +293,6 @@ namespace Fittings
 			this.label8.LabelProp = global::Mono.Unix.Catalog.GetString ("Артикул:");
 			this.table1.Add (this.label8);
 			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.table1 [this.label8]));
-			w20.TopAttach = ((uint)(5));
-			w20.BottomAttach = ((uint)(6));
 			w20.XOptions = ((global::Gtk.AttachOptions)(4));
 			w20.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
@@ -298,15 +313,45 @@ namespace Fittings
 			this.Давление.LabelProp = global::Mono.Unix.Catalog.GetString ("Давление:");
 			this.table1.Add (this.Давление);
 			global::Gtk.Table.TableChild w22 = ((global::Gtk.Table.TableChild)(this.table1 [this.Давление]));
-			w22.TopAttach = ((uint)(2));
-			w22.BottomAttach = ((uint)(3));
+			w22.TopAttach = ((uint)(3));
+			w22.BottomAttach = ((uint)(4));
 			w22.XOptions = ((global::Gtk.AttachOptions)(4));
 			w22.YOptions = ((global::Gtk.AttachOptions)(4));
-			this.vbox1.Add (this.table1);
-			global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.table1]));
-			w23.Position = 1;
-			w23.Expand = false;
-			w23.Fill = false;
+			this.notebook1.Add (this.table1);
+			// Notebook tab
+			this.label1 = new global::Gtk.Label ();
+			this.label1.Name = "label1";
+			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Основное");
+			this.notebook1.SetTabLabel (this.table1, this.label1);
+			this.label1.ShowAll ();
+			// Container child notebook1.Gtk.Notebook+NotebookChild
+			this.vboxPrice = new global::Gtk.VBox ();
+			this.vboxPrice.Name = "vboxPrice";
+			this.vboxPrice.Spacing = 6;
+			// Container child vboxPrice.Gtk.Box+BoxChild
+			this.GtkScrolledWindow1 = new global::Gtk.ScrolledWindow ();
+			this.GtkScrolledWindow1.Name = "GtkScrolledWindow1";
+			this.GtkScrolledWindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+			// Container child GtkScrolledWindow1.Gtk.Container+ContainerChild
+			this.treeviewPrice = new global::QSOrmProject.RepresentationTreeView ();
+			this.treeviewPrice.CanFocus = true;
+			this.treeviewPrice.Name = "treeviewPrice";
+			this.GtkScrolledWindow1.Add (this.treeviewPrice);
+			this.vboxPrice.Add (this.GtkScrolledWindow1);
+			global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.vboxPrice [this.GtkScrolledWindow1]));
+			w25.Position = 1;
+			this.notebook1.Add (this.vboxPrice);
+			global::Gtk.Notebook.NotebookChild w26 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1 [this.vboxPrice]));
+			w26.Position = 1;
+			// Notebook tab
+			this.label3 = new global::Gtk.Label ();
+			this.label3.Name = "label3";
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Цены");
+			this.notebook1.SetTabLabel (this.vboxPrice, this.label3);
+			this.label3.ShowAll ();
+			this.vbox1.Add (this.notebook1);
+			global::Gtk.Box.BoxChild w27 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.notebook1]));
+			w27.Position = 1;
 			this.Add (this.vbox1);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

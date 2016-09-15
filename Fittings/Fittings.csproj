@@ -126,6 +126,7 @@
     <Compile Include="gtk-gui\Fittings.FittingsFlt.cs" />
     <Compile Include="Domain\PriceItem.cs" />
     <Compile Include="Domain\ProjectItem.cs" />
+    <Compile Include="Representation\FittingPricesVM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
