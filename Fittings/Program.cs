@@ -14,6 +14,7 @@ namespace Fittings
 			Application.Init ();
 			QSMain.SubscribeToUnhadledExceptions ();
 			QSMain.GuiThread = System.Threading.Thread.CurrentThread;
+			QSSupportLib.MainSupport.Init();
 			CreateProjectParam ();
 			// Создаем окно входа
 			Login LoginDialog = new Login ();
