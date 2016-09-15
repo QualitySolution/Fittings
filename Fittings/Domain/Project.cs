@@ -61,9 +61,11 @@ namespace Fittings.Domain
 		{
 			
 		}
-			
+
+		#region Функции
+
 		public virtual void AddItem(Fitting fitting){
-			int seq = 0;
+			int seq = 1;
 			if (ProjectRows.Count > 0)
 				seq = ProjectRows.Max (x => x.SequenceNumber)+1;
 			var item = new ProjectItem {
@@ -73,6 +75,8 @@ namespace Fittings.Domain
 			};
 			ObservableProjectRows.Add (item);
 		}
+
+		#endregion
 	}
 }
 
