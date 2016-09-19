@@ -29,6 +29,7 @@ namespace Fittings
 		{
 			rusNameEntry.Binding.AddBinding (Entity, e => e.NameRus, w => w.Text).InitializeFromSource(); 
 			engNameEntry.Binding.AddBinding (Entity, e => e.NameEng, w => w.Text).InitializeFromSource();
+			yentryModelCode.Binding.AddBinding (Entity, e => e.ModelCode, w => w.Text).InitializeFromSource();
 		}
 
 		public override bool Save ()

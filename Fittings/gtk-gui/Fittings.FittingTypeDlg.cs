@@ -20,7 +20,11 @@ namespace Fittings
 		
 		private global::Gtk.Label label2;
 		
+		private global::Gtk.Label label3;
+		
 		private global::Gamma.GtkWidgets.yEntry rusNameEntry;
+		
+		private global::Gamma.GtkWidgets.yEntry yentryModelCode;
 
 		protected virtual void Build ()
 		{
@@ -103,19 +107,46 @@ namespace Fittings
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
+			this.label3 = new global::Gtk.Label ();
+			this.label3.Name = "label3";
+			this.label3.Xalign = 1F;
+			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Номер в каталоге:");
+			this.table1.Add (this.label3);
+			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.label3]));
+			w7.TopAttach = ((uint)(2));
+			w7.BottomAttach = ((uint)(3));
+			w7.XOptions = ((global::Gtk.AttachOptions)(4));
+			w7.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
 			this.rusNameEntry = new global::Gamma.GtkWidgets.yEntry ();
 			this.rusNameEntry.CanFocus = true;
 			this.rusNameEntry.Name = "rusNameEntry";
 			this.rusNameEntry.IsEditable = true;
 			this.rusNameEntry.InvisibleChar = '●';
 			this.table1.Add (this.rusNameEntry);
-			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.rusNameEntry]));
-			w7.LeftAttach = ((uint)(1));
-			w7.RightAttach = ((uint)(2));
-			w7.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table1 [this.rusNameEntry]));
+			w8.LeftAttach = ((uint)(1));
+			w8.RightAttach = ((uint)(2));
+			w8.YOptions = ((global::Gtk.AttachOptions)(4));
+			// Container child table1.Gtk.Table+TableChild
+			this.yentryModelCode = new global::Gamma.GtkWidgets.yEntry ();
+			this.yentryModelCode.CanFocus = true;
+			this.yentryModelCode.Name = "yentryModelCode";
+			this.yentryModelCode.IsEditable = true;
+			this.yentryModelCode.MaxLength = 4;
+			this.yentryModelCode.InvisibleChar = '●';
+			this.table1.Add (this.yentryModelCode);
+			global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table1 [this.yentryModelCode]));
+			w9.TopAttach = ((uint)(2));
+			w9.BottomAttach = ((uint)(3));
+			w9.LeftAttach = ((uint)(1));
+			w9.RightAttach = ((uint)(2));
+			w9.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.vbox3.Add (this.table1);
-			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.table1]));
-			w8.Position = 1;
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.table1]));
+			w10.Position = 1;
+			w10.Expand = false;
+			w10.Fill = false;
 			this.Add (this.vbox3);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();

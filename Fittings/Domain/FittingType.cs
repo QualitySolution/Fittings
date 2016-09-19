@@ -13,6 +13,13 @@ namespace Fittings.Domain
 		{
 
 		}
+
+		string modelCode;
+
+		public virtual string ModelCode {
+			get { return modelCode; }
+			set { SetField (ref modelCode, value, () => ModelCode); }
+		}
 	}
 }
 

@@ -43,7 +43,7 @@ namespace Fittings
 				OrmObjectMapping<BodyMaterial>.Create().Dialog<BodyMaterialDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
 				OrmObjectMapping<Conductor>.Create().Dialog<ConductorDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
 				OrmObjectMapping<Fittings.Domain.ConnectionType>.Create().Dialog<ConnectionTypeDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
-				OrmObjectMapping<FittingType>.Create().Dialog<FittingTypeDlg>().DefaultTableView().SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
+				OrmObjectMapping<FittingType>.Create().Dialog<FittingTypeDlg>().DefaultTableView().SearchColumn("Кат. №", x => x.ModelCode).SearchColumn("Русское название", x => x.NameRus).SearchColumn("Английское название", x => x.NameEng).End(),
 				OrmObjectMapping<Pressure>.Create().Dialog<PressureDlg>().DefaultTableView().SearchColumn("PN", x => x.Pn).SearchColumn("class", x => x.Pclass).End(),
 				OrmObjectMapping<Diameter>.Create().Dialog<DiameterDlg>().DefaultTableView().SearchColumn("Дюймы", x => x.Inch).SearchColumn("Миллиметры", x => x.Mm).End(),
 				OrmObjectMapping<Fitting>.Create().Dialog<FittingDlg>().DefaultTableView().SearchColumn("Код", x => x.Id.ToString()).SearchColumn("Артикул", x => x.Code).End(),

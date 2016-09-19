@@ -12,6 +12,7 @@ namespace Fittings.HMap
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.NameRus).Column ("name_rus");
 			Map (x => x.NameEng).Column ("name_eng");
+			Map (x => x.ModelCode).Column ("model_code");
 		}
 	}
 }
