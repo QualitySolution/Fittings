@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gamma.ColumnConfig;
-using Gtk;
 using NHibernate.Transform;
 using QSOrmProject;
 using QSOrmProject.RepresentationModel;
@@ -176,8 +175,12 @@ namespace Fittings.ViewModel
 
 		public DateTime? PriceDate{ get; set;}
 
+		[UseForSearch]
+		[SearchHighlight]
 		public string Code{ get; set;}
 
+		[UseForSearch]
+		[SearchHighlight]
 		public string Note{ get; set;}
 
 		public string PriceText { get { 
