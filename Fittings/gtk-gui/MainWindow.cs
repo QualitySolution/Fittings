@@ -115,6 +115,7 @@ public partial class MainWindow
 		this.AddAccelGroup (this.UIManager.AccelGroup);
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString ("MainWindow");
+		this.Icon = global::Gdk.Pixbuf.LoadFromResource ("Fittings.icons.header-logo.ico");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		// Container child MainWindow.Gtk.Container+ContainerChild
 		this.vbox1 = new global::Gtk.VBox ();
