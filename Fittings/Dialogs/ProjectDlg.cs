@@ -72,6 +72,7 @@ namespace Fittings
 
 			projectTreeView.Selection.Changed += ProjectTreeView_Selection_Changed;
 			projectTreeView.ItemsDataSource = Entity.ObservableProjectRows;
+			projectTreeView.EnableGridLines = TreeViewGridLines.Both;
 
 			comboCurrencyMode.ItemsEnum = typeof(CurrencyMode);
 		}
