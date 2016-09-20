@@ -1,9 +1,10 @@
 ﻿using System;
-using QSOrmProject;
-using Fittings.Domain;
 using System.Linq;
-using Gamma.GtkWidgets;
+using Fittings.Domain;
 using Fittings.ViewModel;
+using Gamma.GtkWidgets;
+using Gtk;
+using QSOrmProject;
 
 namespace Fittings
 {
@@ -113,6 +114,45 @@ namespace Fittings
 		protected void OnButtonRemoveClicked (object sender, EventArgs e)
 		{
 			Entity.ObservablePrices.Remove (pricesTreeView.GetSelectedObject<PriceItem> ());
+		}
+
+		protected void OnButtonLoadFileClicked(object sender, EventArgs e)
+		{
+			using (FileChooserDialog Chooser = new FileChooserDialog("Выберите прайс для загрузки...", 
+				                                  (Window)this.Toplevel,
+				                                  FileChooserAction.Open,
+				                                  "Отмена", ResponseType.Cancel,
+				                                  "Загрузить", ResponseType.Accept))
+			{
+				FileFilter Filter = new FileFilter();
+				Filter.AddPattern("*.xls");
+				Filter.AddPattern("*.xlsx");
+				Filter.AddPattern("*.csv");
+				Filter.Name = "Все поддерживаемые";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.xls");
+				Filter.Name = "Excel 2003";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.xlsx");
+				Filter.Name = "Excel 2007";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.csv");
+				Filter.Name = "CSV";
+				Chooser.AddFilter(Filter);
+
+				if ((ResponseType)Chooser.Run() == ResponseType.Accept)
+				{
+					Chooser.Hide();
+					var dlg = new PriceLoadDlg(Chooser.Filename);
+					TabParent.AddSlaveTab(this, dlg);
+				}
+			}
 		}
 	}
 }
