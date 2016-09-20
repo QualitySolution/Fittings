@@ -13,6 +13,8 @@ namespace Fittings
 {
 	public partial class PriceLoadDlg : QSTDI.TdiTabBase
 	{
+		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
+
 		XSSFWorkbook wb;
 		XSSFSheet sh;
 		String Sheet_name;
@@ -27,6 +29,8 @@ namespace Fittings
 		public PriceLoadDlg(string filePath)
 		{
 			this.Build();
+
+			TabName = "Загрузка прайса (Шаг 1)";
 
 			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 			{
@@ -48,7 +52,7 @@ namespace Fittings
 		private void LoadSheet()
 		{
 			// get sheet
-			sh = (XSSFSheet)wb.GetSheet(Sheet_name);
+			logger.Info("Читаем лист...");
 			xlsRows = new List<ReadingXLSRow>();
 
 			int maxColumns = 0;
@@ -65,6 +69,47 @@ namespace Fittings
 			ytreeviewSetColumns.ItemsDataSource = xlsRows;
 		}
 
+		void TryGuessParameters()
+		{
+			logger.Info("Пробуем определить расположение колонок...");
+			dataColumnsMap.Clear();
+			int i = 0;
+			int skipRow = 0;
+			while (sh.GetRow(i) != null)
+			{
+				var row = sh.GetRow(i);
+				var newHeader = new Dictionary<ColumnDataType, int>();
+				for(int c = 0; c < row.Cells.Count; c++)
+				{
+					if (row.Cells[c].CellType != NPOI.SS.UserModel.CellType.String)
+						continue;
+					var value = row.Cells[c].StringCellValue.ToLower();
+					if (value.Contains("dn"))
+						newHeader[ColumnDataType.DN] = c;
+					if(value.Contains("pn"))
+						newHeader[ColumnDataType.PN] = c;
+					if(value.Contains("price"))
+						newHeader[ColumnDataType.Price] = c;
+					if(value.Contains("model"))
+						newHeader[ColumnDataType.Model] = c;
+				}
+				if(newHeader.Count > dataColumnsMap.Count)
+				{
+					dataColumnsMap = newHeader;
+					skipRow = i + 1;
+				}
+				i++;
+			}
+
+			//Здесь вызовется метод LoadSheet
+			yspinSkipRows.ValueAsInt = skipRow;
+			if (dataColumnsMap.Count > 0)
+			{
+				RefrereshColumnsTitles();
+				UpdateSetColumnStatus();
+			}
+		}
+
 		protected void OnComboSheetChanged(object sender, EventArgs e)
 		{
 			if (wb == null)
@@ -73,6 +118,8 @@ namespace Fittings
 			if(comboSheet.ActiveText != Sheet_name)
 			{
 				Sheet_name = comboSheet.ActiveText;
+				sh = (XSSFSheet)wb.GetSheet(Sheet_name);
+				TryGuessParameters();
 				LoadSheet();
 			}
 		}
