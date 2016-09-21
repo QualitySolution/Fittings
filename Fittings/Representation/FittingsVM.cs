@@ -65,7 +65,7 @@ namespace Fittings.ViewModel
 				.JoinAlias (c => c.Diameter, () => diameterAlias)
 				.JoinAlias (c => c.Pressure, () => pressureAlias)
 				.JoinAlias (c => c.ConnectionType, () => connectionTypeAlias)
-				.JoinAlias (c => c.BodyMaterial, () => bodyMaterialAlias);
+				.JoinAlias (c => c.BodyMaterial, () => bodyMaterialAlias, NHibernate.SqlCommand.JoinType.LeftOuterJoin);
 
 			if (Filter.RestrictFittingType != null)
 				fittingQuery.Where (() => fittingAlias.Name.Id == Filter.RestrictFittingType.Id);
