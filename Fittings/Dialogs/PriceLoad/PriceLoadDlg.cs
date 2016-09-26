@@ -10,6 +10,7 @@ using Gtk;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using QSOrmProject;
+using QSProjectsLib;
 using QSWidgetLib;
 
 namespace Fittings
@@ -19,6 +20,8 @@ namespace Fittings
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 
 		IUnitOfWork uow = UnitOfWorkFactory.CreateWithoutRoot();
+
+		public event EventHandler<PriceLoadCompletedEventArgs> PriceLoadCompleted;
 
 		XSSFWorkbook wb;
 		XSSFSheet sh;
@@ -358,6 +361,74 @@ namespace Fittings
 
 		#endregion
 
+		#region Шаг 3
+
+		void CalculateCompleteInfo()
+		{
+			labelTotal.LabelProp = xlsRows.Count.ToString();
+			labelFind.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.FoundModel).ToString();
+			labelManualSet.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.ManualSet).ToString();
+			labelCreate.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.WillCreated).ToString();
+			var withoutPrice = xlsRows.Count(x => x.Price == null);
+			if (withoutPrice > 0)
+				labelWithoutPrice.Markup = String.Format("<span foreground=\"red\">{0}</span>", withoutPrice);
+			else
+				labelWithoutPrice.Markup = withoutPrice.ToString();
+
+			var toAdd = xlsRows.Where(x => x.Price.HasValue).Count(x => x.Status == ReadingXlsStatus.WillCreated
+				            || x.Status == ReadingXlsStatus.ManualSet
+				            || x.Status == ReadingXlsStatus.FoundModel
+			            );
+			var skiped = xlsRows.Count - toAdd;
+			if (skiped > 0)
+				labelSkiped.Markup = String.Format("<span foreground=\"red\">{0}</span>", skiped);
+			else
+				labelSkiped.Markup = skiped.ToString();
+			labelCurrency.LabelProp = comboCurrency.ActiveText;
+
+			buttonFinish.Label = RusNumber.FormatCase(toAdd, "Добавить {0} позицию в прайс", "Добавить {0} позиции в прайс", "Добавить {0} позиций в прайс");
+			buttonFinish.Sensitive = toAdd > 0;
+		}
+
+		protected void OnButtonFinishClicked(object sender, EventArgs e)
+		{
+			progressFinal.Adjustment.Upper = 3;
+			logger.Info("Создаем новую арматуру...");
+			foreach(var row in xlsRows.Where(x => x.Status == ReadingXlsStatus.WillCreated))
+			{
+				row.Fitting = new Fitting{
+					Code = row.Code,
+					BodyMaterial = row.BodyMaterial,
+					ConnectionType = row.ConnectionType,
+					Diameter = row.Diameter,
+					DiameterUnits = row.DiameterUnits,
+					Name = row.Name,
+					Note = row.Note,
+					Pressure = row.Pressure,
+					PressureUnits = row.PressureUnits,
+				};
+				UoW.Save(row.Fitting);
+			}
+			progressFinal.Adjustment.Value++;
+			logger.Info("Записываем в базу...");
+			UoW.Commit();
+			progressFinal.Adjustment.Value++;
+			logger.Info("Передаем в диалог прайса...");
+			if(PriceLoadCompleted != null)
+			{
+				var arg = new PriceLoadCompletedEventArgs{
+					Rows = xlsRows.Where(x => x.Fitting != null && x.Price != null).ToArray(),
+					Currency = (PriceСurrency)comboCurrency.SelectedItem
+				};
+				PriceLoadCompleted(this, arg);
+			}
+			progressFinal.Adjustment.Value++;
+			logger.Info("Ок");
+			OnCloseTab(false);
+		}
+
+		#endregion
+
 		protected void OnButtonCancelClicked(object sender, EventArgs e)
 		{
 			OnCloseTab (false);
@@ -373,6 +444,13 @@ namespace Fittings
 					notebook1.NextPage();
 					PrepareData();
 					break;
+				case 1:
+					TabName = "Загрузка прайса (Шаг 3)";
+					buttonPrev.Sensitive = true;
+					buttonNext.Sensitive = false;
+					notebook1.NextPage();
+					CalculateCompleteInfo();
+					break;
 			}
 		}
 
@@ -386,9 +464,19 @@ namespace Fittings
 					buttonNext.Sensitive = true;
 					notebook1.PrevPage();
 					break;
+				case 2:
+					TabName = "Загрузка прайса (Шаг 2)";
+					buttonPrev.Sensitive = true;
+					buttonNext.Sensitive = true;
+					notebook1.PrevPage();
+					break;
 			}
 		}
+	}
 
+	public class PriceLoadCompletedEventArgs : EventArgs{
+		public ReadingXLSRow[] Rows;
+		public PriceСurrency Currency;
 	}
 }
 

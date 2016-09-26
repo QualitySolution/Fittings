@@ -46,7 +46,7 @@ namespace Fittings
 				.AddColumn ("Соединение")
 					.AddTextRenderer (x => x.Fitting.ConnectionType.NameRus)
 				.AddColumn ("Материал")
-					.AddTextRenderer (x => x.Fitting.BodyMaterial.NameRus)
+					.AddTextRenderer (x => x.Fitting.BodyMaterial != null ? x.Fitting.BodyMaterial.NameRus : String.Empty)
 				.AddColumn ("Цена")
 				.AddNumericRenderer (x => x.Cost).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
 				.AddEnumRenderer (x => x.Currency).Editing()
@@ -150,8 +150,18 @@ namespace Fittings
 				{
 					Chooser.Hide();
 					var dlg = new PriceLoadDlg(Chooser.Filename);
+					dlg.PriceLoadCompleted += Dlg_PriceLoadCompleted;
 					TabParent.AddSlaveTab(this, dlg);
 				}
+			}
+		}
+
+		void Dlg_PriceLoadCompleted (object sender, PriceLoadCompletedEventArgs e)
+		{
+			var fittings = UoW.GetById<Fitting> (e.Rows.Select (x => x.Fitting.Id).ToArray());
+
+			foreach (var item in e.Rows) {
+				Entity.AddItem(fittings.First(x => x.Id == item.Fitting.Id), e.Currency, item.Price.Value);
 			}
 		}
 	}
