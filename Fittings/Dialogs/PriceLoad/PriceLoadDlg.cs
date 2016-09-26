@@ -276,6 +276,7 @@ namespace Fittings
 				case ReadingXlsStatus.BadDiameter:
 					return "red";
 				case ReadingXlsStatus.FoundModel:
+				case ReadingXlsStatus.ManualSet:
 					return "green";
 				case ReadingXlsStatus.MultiFound:
 					return "violet";
@@ -292,6 +293,11 @@ namespace Fittings
 		{
 			var newSelected = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().Any(x => x.Fitting == null);
 			buttonMultiEdit.Sensitive = newSelected;
+
+			bool oneRowSelected = ytreeviewParsing.Selection.CountSelectedRows() == 1;
+			buttonManualSet.Sensitive = oneRowSelected;
+			var oneRow = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().FirstOrDefault();
+			buttonResolveMultiFound.Sensitive = oneRowSelected && oneRow.IsMultiFound;
 		}
 
 		protected void OnButtonMultiEditClicked(object sender, EventArgs e)
@@ -300,6 +306,55 @@ namespace Fittings
 			multiedit.StartEditing(newSelected);
 		}
 
+		protected void OnYtreeviewParsingRowActivated(object o, RowActivatedArgs args)
+		{
+			var row = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().First();
+			if (row.Status == ReadingXlsStatus.BadDiameter && row.Status == ReadingXlsStatus.NotFound && row.Status == ReadingXlsStatus.WillCreated)
+				buttonMultiEdit.Click();
+			else if (row.Status == ReadingXlsStatus.FoundModel)
+				buttonManualSet.Click();
+			else if (row.Status == ReadingXlsStatus.MultiFound)
+				buttonResolveMultiFound.Click();
+		}
+
+		protected void OnButtonResolveMultiFoundClicked(object sender, EventArgs e)
+		{
+			var editingRow = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow> ().First();
+			var filter = new FittingsFlt(UoW);
+			filter.RestrictDiameter = editingRow.Diameter;
+			filter.RestrictModel = editingRow.Code;
+			var dlg = new ReferenceRepresentation (new Fittings.ViewModel.FittingsVM(filter));
+			dlg.Tag = editingRow;
+			dlg.Mode = OrmReferenceMode.Select;
+			dlg.ObjectSelected += DlgMultiFoundResolve_ObjectSelected;
+			TabParent.AddSlaveTab(this, dlg);
+		}
+
+		void DlgMultiFoundResolve_ObjectSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
+		{
+			var dlg = sender as ReferenceRepresentation;
+			var editingRow = dlg.Tag as ReadingXLSRow;
+			editingRow.Fitting = UoW.GetById<Fitting>(e.ObjectId);
+			editingRow.Status = ReadingXlsStatus.ManualSet;
+		}
+
+		protected void OnButtonManualSetClicked(object sender, EventArgs e)
+		{
+			var editingRow = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow> ().First();
+			var dlg = new ReferenceRepresentation (new Fittings.ViewModel.FittingsVM());
+			dlg.Tag = editingRow;
+			dlg.Mode = OrmReferenceMode.Select;
+			dlg.ObjectSelected += DlgManualSet_ObjectSelected;
+			TabParent.AddSlaveTab(this, dlg);
+		}
+
+		void DlgManualSet_ObjectSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
+		{
+			var dlg = sender as ReferenceRepresentation;
+			var editingRow = dlg.Tag as ReadingXLSRow;
+			editingRow.Fitting = UoW.GetById<Fitting>(e.ObjectId);
+			editingRow.Status = ReadingXlsStatus.ManualSet;
+		}
 
 		#endregion
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using QSOrmProject;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using System.Data.Bindings.Collections.Generic;
 
 namespace Fittings.Domain
 {

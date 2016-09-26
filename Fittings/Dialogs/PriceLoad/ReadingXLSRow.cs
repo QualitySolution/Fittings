@@ -23,6 +23,8 @@ namespace Fittings
 			set	{ SetField (ref status, value, () => Status);}
 		}
 
+		public bool IsMultiFound { get; private set;}
+
 		public Fitting Fitting { get; set;}
 
 		public ReadingXLSRow(NPOI.SS.UserModel.IRow row)
@@ -73,7 +75,6 @@ namespace Fittings
 			if (Diameter == null)
 			{
 				Status = ReadingXlsStatus.BadDiameter;
-				return;
 			}
 
 			//Парсим давление если есть
@@ -96,7 +97,11 @@ namespace Fittings
 				else if(modelCell.CellType == CellType.Numeric)
 					model = modelCell.NumericCellValue.ToString();
 
-				if(model != null)
+				Code = model;
+				if (Diameter == null)
+					return;
+
+				if(!String.IsNullOrWhiteSpace(model))
 				{
 					var foundList = Repository.FittingRepository.GetFittings(wc.UoW, model, Diameter);
 					if(foundList.Count == 1)
@@ -108,13 +113,29 @@ namespace Fittings
 					else if(foundList.Count > 1)
 					{
 						Status = ReadingXlsStatus.MultiFound;
+						IsMultiFound = true;
 						return;
 					}
 				}
 				Status = ReadingXlsStatus.NotFound;
-				Code = model;
 			}
+		}
 
+		public void UpdateCreatingStatus()
+		{
+			if (Fitting != null)
+				return;
+
+			if (Status == ReadingXlsStatus.BadDiameter && Diameter == null)
+				return;
+
+			if (Status == ReadingXlsStatus.MultiFound)
+				return;
+
+			if (Diameter != null && Pressure != null && Name != null && ConnectionType != null)
+				Status = ReadingXlsStatus.WillCreated;
+			else
+				Status = ReadingXlsStatus.NotFound;
 		}
 
 		#region Поля для создания нового Fitting
@@ -277,6 +298,8 @@ namespace Fittings
 		BadDiameter,
 		[Display(Name = "Найдено")]
 		FoundModel,
+		[Display(Name = "Установлено")]
+		ManualSet,
 		[Display(Name = "Найдено несколько")]
 		MultiFound,
 		[Display(Name = "Не найдено")]

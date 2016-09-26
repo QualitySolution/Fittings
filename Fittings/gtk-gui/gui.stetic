@@ -2586,7 +2586,7 @@
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Bin" id="Fittings.PriceLoadDlg" design-size="642 407">
+  <widget class="Gtk.Bin" id="Fittings.PriceLoadDlg" design-size="919 407">
     <property name="MemberName" />
     <property name="Visible">False</property>
     <child>
@@ -2837,6 +2837,7 @@
                             <property name="MemberName" />
                             <property name="CanFocus">True</property>
                             <property name="ShowScrollbars">True</property>
+                            <signal name="RowActivated" handler="OnYtreeviewParsingRowActivated" />
                           </widget>
                         </child>
                       </widget>
@@ -2866,10 +2867,36 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder />
+                          <widget class="Gtk.Button" id="buttonManualSet">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="Type">TextOnly</property>
+                            <property name="Label" translatable="yes">Установить принудительно</property>
+                            <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnButtonManualSetClicked" />
+                          </widget>
+                          <packing>
+                            <property name="Position">1</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder />
+                          <widget class="Gtk.Button" id="buttonResolveMultiFound">
+                            <property name="MemberName" />
+                            <property name="CanFocus">True</property>
+                            <property name="Type">TextOnly</property>
+                            <property name="Label" translatable="yes">Решить конфликт</property>
+                            <property name="UseUnderline">True</property>
+                            <signal name="Clicked" handler="OnButtonResolveMultiFoundClicked" />
+                          </widget>
+                          <packing>
+                            <property name="Position">2</property>
+                            <property name="AutoSize">True</property>
+                            <property name="Expand">False</property>
+                            <property name="Fill">False</property>
+                          </packing>
                         </child>
                       </widget>
                       <packing>
@@ -2882,7 +2909,7 @@
                   </widget>
                   <packing>
                     <property name="Position">0</property>
-                    <property name="AutoSize">True</property>
+                    <property name="AutoSize">False</property>
                   </packing>
                 </child>
                 <child>
@@ -2915,7 +2942,7 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Label" id="label4">
+              <widget class="Gtk.Label" id="label6">
                 <property name="MemberName" />
                 <property name="LabelProp" translatable="yes">Шаг 2</property>
               </widget>
@@ -2930,7 +2957,7 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HBox" id="hbox1">
+          <widget class="Gtk.HBox" id="hbox9">
             <property name="MemberName" />
             <property name="Spacing">6</property>
             <child>
@@ -2965,7 +2992,7 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Button" id="buttonCancel">
+              <widget class="Gtk.Button" id="buttonCancel1">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="UseStock">True</property>

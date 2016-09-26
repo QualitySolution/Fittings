@@ -162,6 +162,8 @@ namespace Fittings
 					row.BodyMaterial = bodyMaterialReference.Subject as BodyMaterial;
 				if (checkComments.Active)
 					row.Note = commentTextview.Buffer.Text;
+
+				row.UpdateCreatingStatus();
 			}
 			Hide();
 		}

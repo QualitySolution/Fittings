@@ -109,7 +109,12 @@ namespace Fittings
 				pressureCombobox.Sensitive = false;
 			}
 		}
-			
+
+		/// <summary>
+		/// Используется только для точного указания модели из кода.
+		/// </summary>
+		public string RestrictModel { get; set;}
+
 		protected void OnFittingTypeReferenceChanged (object sender, EventArgs e)
 		{
 			OnRefiltered ();

@@ -81,6 +81,9 @@ namespace Fittings.ViewModel
 
 			if (Filter.RestrictPressure != null)
 				fittingQuery.Where (() => fittingAlias.Pressure.Id == Filter.RestrictPressure.Id);
+
+			if (!String.IsNullOrEmpty(Filter.RestrictModel))
+				fittingQuery.Where(() => fittingAlias.Code == Filter.RestrictModel);
 			
 			var fittinglist =	fittingQuery.SelectList(list => list
 					.Select(() => fittingAlias.Id).WithAlias(() => resultAlias.Id)
