@@ -36,10 +36,10 @@ namespace Fittings.Domain
 	}
 
 	public enum DiameterUnits {
+		[Display (Name = "Мм")]
+		mm,
 		[Display (Name = "Дюймы")]
 		inch,
-		[Display (Name = "Мм")]
-		mm
 	}
 
 	public class DiameterUnitsStringType : NHibernate.Type.EnumStringType
