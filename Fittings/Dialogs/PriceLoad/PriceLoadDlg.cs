@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Bindings.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Fittings.Domain;
+using Gamma.GtkWidgets;
+using Gamma.Utilities;
 using Gtk;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using QSOrmProject;
 using QSWidgetLib;
-using Gamma.Utilities;
-using System.ComponentModel.DataAnnotations;
 
 namespace Fittings
 {
@@ -15,12 +18,15 @@ namespace Fittings
 	{
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 
+		IUnitOfWork uow = UnitOfWorkFactory.CreateWithoutRoot();
+
 		XSSFWorkbook wb;
 		XSSFSheet sh;
 		String Sheet_name;
 
-		List<LoadingPriceItem> Items;
 		List<ReadingXLSRow> xlsRows;
+		GenericObservableList<ReadingXLSRow> ObservablexlsRows;
+
 		Dictionary<ColumnDataType, int> dataColumnsMap = new Dictionary<ColumnDataType, int>();
 
 		Menu SetColumnTypeMenu;
@@ -47,7 +53,32 @@ namespace Fittings
 			ytreeviewSetColumns.EnableGridLines = Gtk.TreeViewGridLines.Both;
 			ytreeviewSetColumns.HeadersClickable = true;
 			SetColumnTypeMenu = GtkMenuHelper.GenerateMenuFromEnum<ColumnDataType>(OnSetColumnHeaderMenuSelected);
+			notebook1.ShowTabs = false;
+
+			//Вкладка второго экрана
+			ytreeviewParsing.ColumnsConfig = ColumnsConfigFactory.Create<ReadingXLSRow>()
+				.AddColumn("Статус").AddTextRenderer(x => x.Status.GetEnumTitle())
+				.AddSetter((w, x) => w.Foreground = GetColorByStatus(x.Status))
+				.AddColumn ("Тип").SetDataProperty (node => node.DispalyType)
+				.AddColumn ("Диаметр").SetDataProperty (node => node.DispalyDiameter)
+				.AddColumn ("Давление").SetDataProperty (node => node.DispalyPressure)
+				.AddColumn ("Cоединения").SetDataProperty (node => node.DispalyConnection)
+				.AddColumn ("Материал").SetDataProperty (node => node.DispalyMaterial)
+				.AddColumn ("Артикул").SetDataProperty (node => node.DispalyModel)
+				.AddColumn("Цена").AddNumericRenderer(x => x.Price).Editing()
+				.AddSetter((w, x) => w.Background = x.Price.HasValue ? "white" : "red")
+				.AddColumn("DN(XLS)").AddTextRenderer(x => x.DNText).Background("White Smoke")
+				.AddColumn("PN(XLS)").AddTextRenderer(x => x.PNText).Background("White Smoke")
+				.AddColumn("Модель(XLS)").AddTextRenderer(x => x.ModelText).Background("White Smoke")
+				.AddColumn("Цена(XLS)").AddTextRenderer(x => x.PriceText).Background("White Smoke")
+				.Finish();
+			ytreeviewParsing.EnableGridLines = TreeViewGridLines.Both;
+			ytreeviewParsing.Selection.Mode = SelectionMode.Multiple;
+			ytreeviewParsing.Selection.Changed += YtreeviewParsing_Selection_Changed;
+			comboCurrency.ItemsEnum = typeof(PriceСurrency);
 		}
+			
+		#region Шаг1
 
 		private void LoadSheet()
 		{
@@ -62,11 +93,11 @@ namespace Fittings
 			{
 				xlsRows.Add(new ReadingXLSRow(sh.GetRow(i)));
 				maxColumns = Math.Max(sh.GetRow(i).Cells.Count, maxColumns);
-
 				i++;
 			}
 			RefreshReadingColumns(maxColumns);
 			ytreeviewSetColumns.ItemsDataSource = xlsRows;
+			logger.Info("Ок");
 		}
 
 		void TryGuessParameters()
@@ -129,7 +160,7 @@ namespace Fittings
 			if (ytreeviewSetColumns.Columns.Length == columnsCount)
 				return;
 
-			var config = Gamma.GtkWidgets.ColumnsConfigFactory.Create<ReadingXLSRow>();
+			var config = ColumnsConfigFactory.Create<ReadingXLSRow>();
 			for(int i = 0; i < columnsCount; i++)
 			{
 				int col = i;
@@ -187,66 +218,110 @@ namespace Fittings
 			}
 		}
 
+		protected void OnYspinSkipRowsValueChanged(object sender, EventArgs e)
+		{
+			LoadSheet();
+		}
+
+		#endregion
+
+		#region Шаг 2
+
+		void PrepareData()
+		{
+			progressParsing.Text = "Подготовка таблицы";
+			progressParsing.Adjustment.Value = 0;
+			logger.Info("Подготовка таблицы");
+			//Устанавливаем раскладку по колонкам
+			xlsRows.ForEach(x => x.ColumnsMap = dataColumnsMap);
+			ytreeviewParsing.Columns.First(x => x.Title == "DN(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.DN);
+			ytreeviewParsing.Columns.First(x => x.Title == "PN(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.PN);
+			ytreeviewParsing.Columns.First(x => x.Title == "Модель(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.Model);
+
+			ObservablexlsRows = new GenericObservableList<ReadingXLSRow>(xlsRows);
+			ytreeviewParsing.ItemsDataSource = ObservablexlsRows;
+
+			progressParsing.Text = "Формирование справочных данных";
+			logger.Info("Формирование справочных данных");
+			progressParsing.Adjustment.Value++;
+			var wc = new ReadingXLSWorkClass();
+			wc.UoW = uow;
+			wc.Diameters = uow.GetAll<Diameter>().ToList();
+			wc.Pressures = uow.GetAll<Pressure>().ToList();
+
+			progressParsing.Text = "Разбор данных";
+			progressParsing.Adjustment.Value++;
+			progressParsing.Adjustment.Upper = xlsRows.Count + 2;
+			logger.Info("Разбор данных");
+
+			foreach(var row in xlsRows)
+			{
+				row.TryParse(wc);
+				progressParsing.Adjustment.Value++;
+				QSProjectsLib.QSMain.WaitRedraw();
+			}
+			logger.Info("Ок");
+			progressParsing.Text = String.Empty;
+			progressParsing.Adjustment.Value = 0;
+		}
+
+		string GetColorByStatus(ReadingXlsStatus status)
+		{
+			switch(status)
+			{
+				case ReadingXlsStatus.BadDiameter:
+					return "red";
+				case ReadingXlsStatus.FoundModel:
+					return "green";
+				case ReadingXlsStatus.MultiFound:
+					return "violet";
+				case ReadingXlsStatus.NotFound:
+					return "blue";
+				case ReadingXlsStatus.WillCreated:
+					return "lime";
+				default:
+					return "black";
+			}
+		}
+
+		void YtreeviewParsing_Selection_Changed (object sender, EventArgs e)
+		{
+			var newSelected = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().Any(x => x.Fitting == null);
+			buttonMultiEdit.Sensitive = newSelected;
+		}
+
+
+		#endregion
+
 		protected void OnButtonCancelClicked(object sender, EventArgs e)
 		{
 			OnCloseTab (false);
 		}
 
-		protected void OnYspinSkipRowsValueChanged(object sender, EventArgs e)
+		protected void OnButtonNextClicked(object sender, EventArgs e)
 		{
-			LoadSheet();
-		}
-	}
-
-	public enum ColumnDataType{
-		DN,
-		PN,
-		[Display(Name = "Модель")]
-		Model,
-		[Display(Name = "Цена")]
-		Price
-	}
-
-	public class LoadingPriceItem
-	{
-		public string DNText { get; set;}
-		public string PNText { get; set;}
-		public string ModelText { get; set;}
-		public string PriceText { get; set;}
-	}
-
-	public class ReadingXLSRow
-	{
-		public bool IsSetupRow = false;
-
-		public NPOI.SS.UserModel.IRow XlsRow;
-
-		public ReadingXLSRow(NPOI.SS.UserModel.IRow row)
-		{
-			XlsRow = row;
-		}
-
-		public ReadingXLSRow()
-		{
-			IsSetupRow = true;
-		}
-
-		public string ToString(int column)
-		{
-			var cell = XlsRow.GetCell(column);
-
-			if (cell != null)
+			switch(notebook1.Page)
 			{
-				// TODO: you can add more cell types capatibility, e. g. formula
-				switch (cell.CellType)
-				{
-					case NPOI.SS.UserModel.CellType.Numeric:
-						return cell.NumericCellValue.ToString();
-					case NPOI.SS.UserModel.CellType.String:
-						return cell.StringCellValue;
-				}
+				case 0:
+					TabName = "Загрузка прайса (Шаг 2)";
+					buttonPrev.Sensitive = true;
+					notebook1.NextPage();
+					PrepareData();
+					break;
 			}
-			return null;
+		}
+
+		protected void OnButtonPrevClicked(object sender, EventArgs e)
+		{
+			switch(notebook1.Page)
+			{
+				case 1:
+					TabName = "Загрузка прайса (Шаг 1)";
+					buttonPrev.Sensitive = false;
+					buttonNext.Sensitive = true;
+					notebook1.PrevPage();
+					break;
+			}
 		}
 	}
 }

@@ -35,6 +35,18 @@ namespace Fittings.Domain
 		{
 			
 		}
+
+		#region Функции
+
+		public virtual bool MathPn(string pn)
+		{
+			if (String.IsNullOrWhiteSpace(Pn) || String.IsNullOrWhiteSpace(pn))
+				return false;
+			
+			return pn.Replace("PN","").Replace("pn", "") == Pn.Replace("PN","").Replace("pn", "");
+		}
+
+		#endregion
 	}
 
 	public enum PressureUnits {

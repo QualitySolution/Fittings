@@ -1,26 +1,17 @@
 ﻿using QSOrmProject;
 using Fittings.Domain;
+using System.Collections.Generic;
 
 namespace Fittings.Repository
 {
-	public static class PriceRepository
+	public static class FittingRepository
 	{
-		public static PriceItem GetLastPriceItem (IUnitOfWork uow, Fitting fitting, Provider provider)
+		public static IList<Fitting> GetFittings (IUnitOfWork uow, string model, Diameter dn)
 		{
-			PriceItem pricePriceItemAlias = null;
-			Price pricePriceAlias = null;
-
-			var query = uow.Session.QueryOver<PriceItem>(() => pricePriceItemAlias)
-				.JoinAlias(c => c.Price, () => pricePriceAlias)
-				.Where(() => pricePriceItemAlias.Fitting.Id == fitting.Id);
-			
-			if (provider != null)
-				query.Where(() => pricePriceAlias.Provider.Id == provider.Id);
-
-			return query
-				.OrderBy(() => pricePriceAlias.Date).Desc
-				.Take(1)
-				.SingleOrDefault();
+			return uow.Session.QueryOver<Fitting>()
+				.Where(f => f.Code == model)
+				.Where(f => f.Diameter == dn)
+				.List();			
 		}
 	}
 }

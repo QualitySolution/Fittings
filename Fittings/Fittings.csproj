@@ -135,8 +135,11 @@
     <Compile Include="Domain\ProjectItem.cs" />
     <Compile Include="Representation\FittingPricesVM.cs" />
     <Compile Include="Repository\PriceRepository.cs" />
-    <Compile Include="Dialogs\PriceLoadDlg.cs" />
     <Compile Include="gtk-gui\Fittings.PriceLoadDlg.cs" />
+    <Compile Include="Repository\FittingRepository.cs" />
+    <Compile Include="Dialogs\PriceLoad\PriceLoadDlg.cs" />
+    <Compile Include="Dialogs\PriceLoad\ReadingXLSRow.cs" />
+    <Compile Include="Dialogs\PriceLoad\ReadingXLSWorkClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -187,6 +190,7 @@
     <Folder Include="Representation\" />
     <Folder Include="JournalFilters\" />
     <Folder Include="Repository\" />
+    <Folder Include="Dialogs\PriceLoad\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
