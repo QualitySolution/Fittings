@@ -140,6 +140,8 @@
     <Compile Include="Dialogs\PriceLoad\PriceLoadDlg.cs" />
     <Compile Include="Dialogs\PriceLoad\ReadingXLSRow.cs" />
     <Compile Include="Dialogs\PriceLoad\ReadingXLSWorkClass.cs" />
+    <Compile Include="Dialogs\PriceLoad\MultiEditXLSRows.cs" />
+    <Compile Include="gtk-gui\Fittings.MultiEditXLSRows.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

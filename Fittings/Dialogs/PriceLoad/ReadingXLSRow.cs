@@ -112,6 +112,7 @@ namespace Fittings
 					}
 				}
 				Status = ReadingXlsStatus.NotFound;
+				Code = model;
 			}
 
 		}

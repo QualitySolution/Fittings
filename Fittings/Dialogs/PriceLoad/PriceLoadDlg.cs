@@ -14,7 +14,7 @@ using QSWidgetLib;
 
 namespace Fittings
 {
-	public partial class PriceLoadDlg : QSTDI.TdiTabBase
+	public partial class PriceLoadDlg : QSTDI.TdiTabBase, IOrmDialog
 	{
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 
@@ -31,6 +31,10 @@ namespace Fittings
 
 		Menu SetColumnTypeMenu;
 		int popupHeaderMenuColumnId;
+
+		public IUnitOfWork UoW{get{ return uow;}}
+
+		public object EntityObject{get{ return null;}}
 
 		public PriceLoadDlg(string filePath)
 		{
@@ -290,6 +294,12 @@ namespace Fittings
 			buttonMultiEdit.Sensitive = newSelected;
 		}
 
+		protected void OnButtonMultiEditClicked(object sender, EventArgs e)
+		{
+			var newSelected = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().ToList();
+			multiedit.StartEditing(newSelected);
+		}
+
 
 		#endregion
 
@@ -323,6 +333,7 @@ namespace Fittings
 					break;
 			}
 		}
+
 	}
 }
 

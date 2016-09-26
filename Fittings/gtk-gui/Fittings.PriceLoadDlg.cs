@@ -28,6 +28,8 @@ namespace Fittings
 		
 		private global::Gtk.Label label1;
 		
+		private global::Gtk.HBox hbox3;
+		
 		private global::Gtk.VBox vbox3;
 		
 		private global::Gtk.Table table2;
@@ -45,6 +47,10 @@ namespace Fittings
 		private global::Gtk.HBox hbox2;
 		
 		private global::Gtk.Button buttonMultiEdit;
+		
+		private global::Gtk.VSeparator vseparator1;
+		
+		private global::Fittings.MultiEditXLSRows multiedit;
 		
 		private global::Gtk.Label label4;
 		
@@ -160,6 +166,10 @@ namespace Fittings
 			this.notebook1.SetTabLabel (this.vbox2, this.label1);
 			this.label1.ShowAll ();
 			// Container child notebook1.Gtk.Notebook+NotebookChild
+			this.hbox3 = new global::Gtk.HBox ();
+			this.hbox3.Name = "hbox3";
+			this.hbox3.Spacing = 6;
+			// Container child hbox3.Gtk.Box+BoxChild
 			this.vbox3 = new global::Gtk.VBox ();
 			this.vbox3.Name = "vbox3";
 			this.vbox3.Spacing = 6;
@@ -234,18 +244,38 @@ namespace Fittings
 			w17.Position = 3;
 			w17.Expand = false;
 			w17.Fill = false;
-			this.notebook1.Add (this.vbox3);
-			global::Gtk.Notebook.NotebookChild w18 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1 [this.vbox3]));
-			w18.Position = 1;
+			this.hbox3.Add (this.vbox3);
+			global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.vbox3]));
+			w18.Position = 0;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.vseparator1 = new global::Gtk.VSeparator ();
+			this.vseparator1.Name = "vseparator1";
+			this.hbox3.Add (this.vseparator1);
+			global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.vseparator1]));
+			w19.Position = 1;
+			w19.Expand = false;
+			w19.Fill = false;
+			// Container child hbox3.Gtk.Box+BoxChild
+			this.multiedit = new global::Fittings.MultiEditXLSRows ();
+			this.multiedit.Events = ((global::Gdk.EventMask)(256));
+			this.multiedit.Name = "multiedit";
+			this.hbox3.Add (this.multiedit);
+			global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.multiedit]));
+			w20.Position = 2;
+			w20.Expand = false;
+			w20.Fill = false;
+			this.notebook1.Add (this.hbox3);
+			global::Gtk.Notebook.NotebookChild w21 = ((global::Gtk.Notebook.NotebookChild)(this.notebook1 [this.hbox3]));
+			w21.Position = 1;
 			// Notebook tab
 			this.label4 = new global::Gtk.Label ();
 			this.label4.Name = "label4";
 			this.label4.LabelProp = global::Mono.Unix.Catalog.GetString ("Шаг 2");
-			this.notebook1.SetTabLabel (this.vbox3, this.label4);
+			this.notebook1.SetTabLabel (this.hbox3, this.label4);
 			this.label4.ShowAll ();
 			this.vbox1.Add (this.notebook1);
-			global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.notebook1]));
-			w19.Position = 0;
+			global::Gtk.Box.BoxChild w22 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.notebook1]));
+			w22.Position = 0;
 			// Container child vbox1.Gtk.Box+BoxChild
 			this.hbox1 = new global::Gtk.HBox ();
 			this.hbox1.Name = "hbox1";
@@ -259,8 +289,8 @@ namespace Fittings
 			this.buttonPrev.UseUnderline = true;
 			this.buttonPrev.Label = "gtk-go-back";
 			this.hbox1.Add (this.buttonPrev);
-			global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonPrev]));
-			w20.Position = 0;
+			global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonPrev]));
+			w23.Position = 0;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonNext = new global::Gtk.Button ();
 			this.buttonNext.CanFocus = true;
@@ -269,8 +299,8 @@ namespace Fittings
 			this.buttonNext.UseUnderline = true;
 			this.buttonNext.Label = "gtk-go-forward";
 			this.hbox1.Add (this.buttonNext);
-			global::Gtk.Box.BoxChild w21 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonNext]));
-			w21.Position = 1;
+			global::Gtk.Box.BoxChild w24 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonNext]));
+			w24.Position = 1;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanFocus = true;
@@ -279,22 +309,24 @@ namespace Fittings
 			this.buttonCancel.UseUnderline = true;
 			this.buttonCancel.Label = "gtk-cancel";
 			this.hbox1.Add (this.buttonCancel);
-			global::Gtk.Box.BoxChild w22 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonCancel]));
-			w22.Position = 2;
-			w22.Expand = false;
-			w22.Fill = false;
+			global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.buttonCancel]));
+			w25.Position = 2;
+			w25.Expand = false;
+			w25.Fill = false;
 			this.vbox1.Add (this.hbox1);
-			global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox1]));
-			w23.Position = 1;
-			w23.Expand = false;
-			w23.Fill = false;
+			global::Gtk.Box.BoxChild w26 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox1]));
+			w26.Position = 1;
+			w26.Expand = false;
+			w26.Fill = false;
 			this.Add (this.vbox1);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
+			this.multiedit.Hide ();
 			this.Hide ();
 			this.yspinSkipRows.ValueChanged += new global::System.EventHandler (this.OnYspinSkipRowsValueChanged);
 			this.comboSheet.Changed += new global::System.EventHandler (this.OnComboSheetChanged);
+			this.buttonMultiEdit.Clicked += new global::System.EventHandler (this.OnButtonMultiEditClicked);
 			this.buttonPrev.Clicked += new global::System.EventHandler (this.OnButtonPrevClicked);
 			this.buttonNext.Clicked += new global::System.EventHandler (this.OnButtonNextClicked);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelClicked);
