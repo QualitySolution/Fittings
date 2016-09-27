@@ -72,7 +72,7 @@ namespace Fittings
 				.AddColumn ("Cоединения").SetDataProperty (node => node.DispalyConnection)
 				.AddColumn ("Материал").SetDataProperty (node => node.DispalyMaterial)
 				.AddColumn ("Артикул").SetDataProperty (node => node.DispalyModel)
-				.AddColumn("Цена").AddNumericRenderer(x => x.Price).Editing()
+				.AddColumn("Цена").AddNumericRenderer(x => x.Price)
 				.AddSetter((w, x) => w.Background = x.Price.HasValue ? "white" : "red")
 				.AddColumn("DN(XLS)").AddTextRenderer(x => x.DNText).Background("White Smoke")
 				.AddColumn("PN(XLS)").AddTextRenderer(x => x.PNText).Background("White Smoke")
