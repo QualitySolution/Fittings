@@ -312,12 +312,12 @@ namespace Fittings
 		protected void OnYtreeviewParsingRowActivated(object o, RowActivatedArgs args)
 		{
 			var row = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().First();
-			if (row.Status == ReadingXlsStatus.BadDiameter && row.Status == ReadingXlsStatus.NotFound && row.Status == ReadingXlsStatus.WillCreated)
-				buttonMultiEdit.Click();
-			else if (row.Status == ReadingXlsStatus.FoundModel)
-				buttonManualSet.Click();
-			else if (row.Status == ReadingXlsStatus.MultiFound)
+			if (row.IsMultiFound)
 				buttonResolveMultiFound.Click();
+			else if (row.Status == ReadingXlsStatus.BadDiameter || row.Status == ReadingXlsStatus.NotFound || row.Status == ReadingXlsStatus.WillCreated)
+				buttonMultiEdit.Click();
+			else if (row.Status == ReadingXlsStatus.FoundModel || row.Status == ReadingXlsStatus.ManualSet)
+				buttonManualSet.Click();
 		}
 
 		protected void OnButtonResolveMultiFoundClicked(object sender, EventArgs e)
