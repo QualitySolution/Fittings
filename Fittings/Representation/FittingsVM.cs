@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fittings;
+using Fittings.Domain;
 using Gamma.ColumnConfig;
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Dialect.Function;
 using NHibernate.Transform;
 using QSOrmProject;
 using QSOrmProject.RepresentationModel;
-using Fittings.Domain;
-using Fittings;
-using NHibernate.Criterion;
 
 namespace Fittings.ViewModel
 {
@@ -35,30 +37,51 @@ namespace Fittings.ViewModel
 
 			PriceItem pricePriceItemAlias = null;
 			PriceItem datePriceItemAlias = null;
-			PriceItem currencyPriceItemAlias = null;
 			Price pricePriceAlias = null;
 			Price datePriceAlias = null;
-			Price currencyPriceAlias = null;
+			Provider providerAlias = null;
 
-
-			var priceSubQuery = QueryOver.Of<PriceItem> (() => pricePriceItemAlias)
-				.JoinAlias (c => c.Price, () => pricePriceAlias)
-				.Where (() => pricePriceItemAlias.Fitting.Id == fittingAlias.Id)
-				.Select(x => x.Cost)
-				.OrderBy(() => pricePriceAlias.Date).Desc()
-				.Take(1);
-
-			var currencySubQuery = QueryOver.Of<PriceItem> (() => currencyPriceItemAlias)
-				.JoinAlias (c => c.Price, () => currencyPriceAlias)
-				.Where (() => currencyPriceItemAlias.Fitting.Id == fittingAlias.Id)
-				.Select(x => x.Currency)
-				.OrderBy(() => currencyPriceAlias.Date).Desc
-				.Take(1);
-			
 			var dateSubQuery = QueryOver.Of<PriceItem> (() => datePriceItemAlias)
 				.JoinAlias (c => c.Price, () => datePriceAlias)
 				.Where (() => datePriceItemAlias.Fitting.Id == fittingAlias.Id)
-				.SelectList(list => list.SelectMax(() => datePriceAlias.Date)).Take(1);
+				.Where(() => datePriceAlias.Provider.Id == pricePriceAlias.Provider.Id)
+				.Select(Projections.SqlFunction(
+					new SQLFunctionTemplate(NHibernateUtil.String, "SUBSTRING_INDEX(?1, ?2, ?3)"),
+					NHibernateUtil.Int32,
+					Projections.SqlFunction(
+						new SQLFunctionTemplate(NHibernateUtil.String, "GROUP_CONCAT( ?1 ORDER BY ?2)"),
+						NHibernateUtil.String,
+						Projections.Property(() => datePriceAlias.Id),
+						Projections.Property(() => datePriceAlias.Date)),
+					Projections.Constant (","),
+					Projections.Constant (-1)
+				));
+
+			var priceSubQuery = QueryOver.Of<PriceItem> (() => pricePriceItemAlias)
+				.JoinAlias (c => c.Price, () => pricePriceAlias)
+				.JoinAlias( () => pricePriceAlias.Provider, () => providerAlias)
+				.Where (() => pricePriceItemAlias.Fitting.Id == fittingAlias.Id)
+				.WithSubquery.WhereProperty(() => pricePriceAlias.Id).In(dateSubQuery)
+				.Select(Projections.SqlFunction (
+						new SQLFunctionTemplate (NHibernateUtil.String, "GROUP_CONCAT( ?1 SEPARATOR ?2)"),
+						NHibernateUtil.String,
+						Projections.SqlFunction("CONCAT", NHibernateUtil.String,
+							Projections.Property (() => providerAlias.Name),
+							Projections.Constant (" - "),
+							Projections.Property (() => pricePriceItemAlias.Cost),
+							Projections.Constant (" "),
+							Projections.Property (() => pricePriceItemAlias.Currency),
+							Projections.Constant (" ("),
+							Projections.SqlFunction(
+							new SQLFunctionTemplate (NHibernateUtil.String, "DATE_FORMAT( ?1, ?2)"),
+							NHibernateUtil.String,
+							Projections.Property (() => pricePriceAlias.Date),
+							Projections.Constant ("%d.%m.%Y")
+						),
+							Projections.Constant (")")
+						),
+						Projections.Constant ("\n")))
+				.Take(1);
 
 			var fittingQuery = UoW.Session.QueryOver<Fitting> (() => fittingAlias)
 				.JoinAlias (c => c.Name, () => typeAlias)
@@ -102,9 +125,7 @@ namespace Fittings.ViewModel
 					.Select(() => fittingAlias.Code).WithAlias(() => resultAlias.Code)
 					.Select(() => fittingAlias.Note).WithAlias(() => resultAlias.Note)
 
-					.SelectSubQuery(priceSubQuery).WithAlias(() => resultAlias.Price)
-					.SelectSubQuery(currencySubQuery).WithAlias(() => resultAlias.PriceСurrency)
-					.SelectSubQuery(dateSubQuery).WithAlias(() => resultAlias.PriceDate)
+					.SelectSubQuery(priceSubQuery).WithAlias(() => resultAlias.ProvidersPrice)
 				)
 				.TransformUsing(Transformers.AliasToBean<FittingVMNode>())
 				.List<FittingVMNode>();
@@ -119,8 +140,7 @@ namespace Fittings.ViewModel
 			.AddColumn ("Тип соединения").SetDataProperty (node => node.ConnectionType)
 			.AddColumn ("Материал корпуса").SetDataProperty (node => node.BodyMaterial)
 			.AddColumn ("Артикул").SetDataProperty (node => node.Code)
-			.AddColumn ("Стоимость").SetDataProperty(node => node.PriceText)
-			.AddColumn ("Прайс").AddTextRenderer(node => node.PriceDate.HasValue ? node.PriceDate.Value.ToString("d") : String.Empty)
+			.AddColumn ("Стоимость").SetDataProperty(node => node.ProvidersPrice)
 			.AddColumn ("Комментарий").SetDataProperty (node => node.Note)
 			.Finish ();
 
@@ -172,11 +192,7 @@ namespace Fittings.ViewModel
 
 		public string BodyMaterial{ get; set;}
 
-		public decimal? Price{ get; set;}
-
-		public PriceСurrency? PriceСurrency{ get; set;}
-
-		public DateTime? PriceDate{ get; set;}
+		public string ProvidersPrice{ get; set;}
 
 		[UseForSearch]
 		[SearchHighlight]
@@ -185,13 +201,6 @@ namespace Fittings.ViewModel
 		[UseForSearch]
 		[SearchHighlight]
 		public string Note{ get; set;}
-
-		public string PriceText { get { 
-				if (Price.HasValue && PriceСurrency.HasValue)
-					return string.Format ("{0} {1}", Price.Value, PriceСurrency.Value);
-				else
-					return String.Empty;
-		}}
 	}
 }
 
