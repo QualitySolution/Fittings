@@ -47,6 +47,8 @@ namespace Fittings
 					.AddTextRenderer (x => x.Fitting.ConnectionType.NameRus)
 				.AddColumn ("Материал")
 					.AddTextRenderer (x => x.Fitting.BodyMaterial != null ? x.Fitting.BodyMaterial.NameRus : String.Empty)
+				.AddColumn("Артикул")
+					.AddTextRenderer (x => x.Fitting.Code)
 				.AddColumn ("Цена")
 				.AddNumericRenderer (x => x.Cost).Editing (new Gtk.Adjustment (0, 0, 10000000, 1, 100, 100)).Digits (2)
 				.AddEnumRenderer (x => x.Currency).Editing()
