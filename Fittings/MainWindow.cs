@@ -1,11 +1,11 @@
 ﻿using System;
+using Fittings.Domain;
+using Fittings.ViewModel;
 using Gtk;
+using QSOrmProject;
 using QSProjectsLib;
 using QSSupportLib;
-using QSOrmProject;
-using Fittings.Domain;
-using Fittings;
-using Fittings.ViewModel;
+using QSUpdater;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -19,7 +19,7 @@ public partial class MainWindow: Gtk.Window
 
 		MainSupport.LoadBaseParameters ();
 
-		MainSupport.TestVersion (this); //Проверяем версию базы
+		MainUpdater.RunCheckVersion (true, true, true);
 		QSMain.CheckServer (this); // Проверяем настройки сервера
 
 		if (QSMain.User.Login == "root") {
@@ -146,5 +146,10 @@ public partial class MainWindow: Gtk.Window
 			OrmReference.GenerateHashName<Price>(),
 			() => new OrmReference(typeof(Price))
 		);
+	}
+
+	protected void OnChekUpdateActionActivated(object sender, EventArgs e)
+	{
+		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.ShowAnyway);
 	}
 }

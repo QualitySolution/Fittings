@@ -185,6 +185,10 @@
       <Project>{EB71A9A6-2A91-49B5-B8E1-B4B7049B039D}</Project>
       <Name>QSCurrency</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\QSProjects\QSUpdater\QSUpdater.csproj">
+      <Project>{6D755374-6EAF-44B6-8C6C-6FE5E5AB3432}</Project>
+      <Name>QSUpdater</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />

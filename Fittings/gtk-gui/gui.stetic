@@ -14,6 +14,7 @@
     <widget-library name="../bin/Debug/Fittings.exe" internal="true" />
     <widget-library name="../../../QSProjects/QSWidgetLib/bin/Debug/QSWidgetLib.dll" />
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <widget-library name="../../../QSProjects/QSUpdater/bin/Debug/QSUpdater.dll" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="799 300">
     <action-group name="Default">
@@ -41,7 +42,7 @@
         <property name="ShortLabel" translatable="yes">Пользователи</property>
         <signal name="Activated" handler="OnUsersActionActivated" />
       </action>
-      <action id="Action1">
+      <action id="Action4">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Справка</property>
         <property name="ShortLabel" translatable="yes">Справка</property>
@@ -123,6 +124,13 @@
         <property name="ShortLabel" translatable="yes">Прайс</property>
         <signal name="Activated" handler="OnActionPriceActivated" />
       </action>
+      <action id="ChekUpdateAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Проверить обновления...</property>
+        <property name="ShortLabel" translatable="yes">Проверить обновления...</property>
+        <property name="StockId">gtk-go-down</property>
+        <signal name="Activated" handler="OnChekUpdateActionActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -159,7 +167,9 @@
                 <node type="Menuitem" action="ActionPressure" />
                 <node type="Menuitem" action="ActionDiameter" />
               </node>
-              <node type="Menu" action="Action1">
+              <node type="Menu" action="Action4">
+                <node type="Menuitem" action="ChekUpdateAction" />
+                <node type="Separator" />
                 <node type="Menuitem" action="aboutAction" />
               </node>
             </node>
