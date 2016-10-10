@@ -15,7 +15,7 @@ using QSWidgetLib;
 
 namespace Fittings
 {
-	public partial class PriceLoadDlg : QSTDI.TdiTabBase, IOrmDialog
+	public partial class UpdatePricesDlg : QSTDI.TdiTabBase, IOrmDialog
 	{
 		private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger ();
 
@@ -30,7 +30,7 @@ namespace Fittings
 		List<ReadingXLSRow> xlsRows;
 		GenericObservableList<ReadingXLSRow> ObservablexlsRows;
 
-		Dictionary<ReadingXLSRow.ColumnType, int> dataColumnsMap = new Dictionary<ReadingXLSRow.ColumnType, int>();
+		Dictionary<ColumnDataType, int> dataColumnsMap = new Dictionary<ColumnDataType, int>();
 
 		Menu SetColumnTypeMenu;
 		int popupHeaderMenuColumnId;
@@ -59,7 +59,7 @@ namespace Fittings
 
 			ytreeviewSetColumns.EnableGridLines = Gtk.TreeViewGridLines.Both;
 			ytreeviewSetColumns.HeadersClickable = true;
-			SetColumnTypeMenu = GtkMenuHelper.GenerateMenuFromEnum<ReadingXLSRow.ColumnType>(OnSetColumnHeaderMenuSelected);
+			SetColumnTypeMenu = GtkMenuHelper.GenerateMenuFromEnum<ColumnDataType>(OnSetColumnHeaderMenuSelected);
 			notebook1.ShowTabs = false;
 
 			//Вкладка второго экрана
@@ -116,20 +116,20 @@ namespace Fittings
 			while (sh.GetRow(i) != null)
 			{
 				var row = sh.GetRow(i);
-				var newHeader = new Dictionary<ReadingXLSRow.ColumnType, int>();
+				var newHeader = new Dictionary<ColumnDataType, int>();
 				for(int c = 0; c < row.Cells.Count; c++)
 				{
 					if (row.Cells[c].CellType != NPOI.SS.UserModel.CellType.String)
 						continue;
 					var value = row.Cells[c].StringCellValue.ToLower();
 					if (value.Contains("dn"))
-						newHeader[ReadingXLSRow.ColumnType.DN] = c;
+						newHeader[ColumnDataType.DN] = c;
 					if(value.Contains("pn"))
-						newHeader[ReadingXLSRow.ColumnType.PN] = c;
+						newHeader[ColumnDataType.PN] = c;
 					if(value.Contains("price"))
-						newHeader[ReadingXLSRow.ColumnType.Price] = c;
+						newHeader[ColumnDataType.Price] = c;
 					if(value.Contains("model"))
-						newHeader[ReadingXLSRow.ColumnType.Model] = c;
+						newHeader[ColumnDataType.Model] = c;
 				}
 				if(newHeader.Count > dataColumnsMap.Count)
 				{
@@ -182,10 +182,10 @@ namespace Fittings
 		void UpdateSetColumnStatus()
 		{
 			var text = "Кликните по заголовку колонки чтобы указать ее тип.";
-			if (!dataColumnsMap.ContainsKey(ReadingXLSRow.ColumnType.Price))
+			if (!dataColumnsMap.ContainsKey(ColumnDataType.Price))
 				text += "\n<span foreground=\"red\">Клонка <b>Цена</b> должна быть указана.</span>";
 			labelSetColumnsInfo.Markup = text;
-			buttonNext.Sensitive = dataColumnsMap.ContainsKey(ReadingXLSRow.ColumnType.Price);
+			buttonNext.Sensitive = dataColumnsMap.ContainsKey(ColumnDataType.Price);
 		}
 
 		private static String getColumnNameFromIndex(int column)
@@ -208,7 +208,7 @@ namespace Fittings
 			
 		protected void OnSetColumnHeaderMenuSelected(object sender, EventArgs e)
 		{
-			var item = sender as MenuItemId<ReadingXLSRow.ColumnType>;
+			var item = sender as MenuItemId<ColumnDataType>;
 			dataColumnsMap[item.ID] = popupHeaderMenuColumnId;
 			RefrereshColumnsTitles();
 			UpdateSetColumnStatus();
@@ -241,9 +241,9 @@ namespace Fittings
 			logger.Info("Подготовка таблицы");
 			//Устанавливаем раскладку по колонкам
 			xlsRows.ForEach(x => x.ColumnsMap = dataColumnsMap);
-			ytreeviewParsing.Columns.First(x => x.Title == "DN(XLS)").Visible = dataColumnsMap.ContainsKey(ReadingXLSRow.ColumnType.DN);
-			ytreeviewParsing.Columns.First(x => x.Title == "PN(XLS)").Visible = dataColumnsMap.ContainsKey(ReadingXLSRow.ColumnType.PN);
-			ytreeviewParsing.Columns.First(x => x.Title == "Модель(XLS)").Visible = dataColumnsMap.ContainsKey(ReadingXLSRow.ColumnType.Model);
+			ytreeviewParsing.Columns.First(x => x.Title == "DN(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.DN);
+			ytreeviewParsing.Columns.First(x => x.Title == "PN(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.PN);
+			ytreeviewParsing.Columns.First(x => x.Title == "Модель(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.Model);
 
 			ObservablexlsRows = new GenericObservableList<ReadingXLSRow>(xlsRows);
 			ytreeviewParsing.ItemsDataSource = ObservablexlsRows;
@@ -272,20 +272,20 @@ namespace Fittings
 			progressParsing.Adjustment.Value = 0;
 		}
 
-		string GetColorByStatus(ReadingXLSRow.RowStatus status)
+		string GetColorByStatus(ReadingXlsStatus status)
 		{
 			switch(status)
 			{
-				case ReadingXLSRow.RowStatus.BadDiameter:
+				case ReadingXlsStatus.BadDiameter:
 					return "red";
-				case ReadingXLSRow.RowStatus.FoundModel:
-				case ReadingXLSRow.RowStatus.ManualSet:
+				case ReadingXlsStatus.FoundModel:
+				case ReadingXlsStatus.ManualSet:
 					return "green";
-				case ReadingXLSRow.RowStatus.MultiFound:
+				case ReadingXlsStatus.MultiFound:
 					return "violet";
-				case ReadingXLSRow.RowStatus.NotFound:
+				case ReadingXlsStatus.NotFound:
 					return "blue";
-				case ReadingXLSRow.RowStatus.WillCreated:
+				case ReadingXlsStatus.WillCreated:
 					return "lime";
 				default:
 					return "black";
@@ -314,9 +314,9 @@ namespace Fittings
 			var row = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().First();
 			if (row.IsMultiFound)
 				buttonResolveMultiFound.Click();
-			else if (row.Status == ReadingXLSRow.RowStatus.BadDiameter || row.Status == ReadingXLSRow.RowStatus.NotFound || row.Status == ReadingXLSRow.RowStatus.WillCreated)
+			else if (row.Status == ReadingXlsStatus.BadDiameter || row.Status == ReadingXlsStatus.NotFound || row.Status == ReadingXlsStatus.WillCreated)
 				buttonMultiEdit.Click();
-			else if (row.Status == ReadingXLSRow.RowStatus.FoundModel || row.Status == ReadingXLSRow.RowStatus.ManualSet)
+			else if (row.Status == ReadingXlsStatus.FoundModel || row.Status == ReadingXlsStatus.ManualSet)
 				buttonManualSet.Click();
 		}
 
@@ -338,7 +338,7 @@ namespace Fittings
 			var dlg = sender as ReferenceRepresentation;
 			var editingRow = dlg.Tag as ReadingXLSRow;
 			editingRow.Fitting = UoW.GetById<Fitting>(e.ObjectId);
-			editingRow.Status = ReadingXLSRow.RowStatus.ManualSet;
+			editingRow.Status = ReadingXlsStatus.ManualSet;
 		}
 
 		protected void OnButtonManualSetClicked(object sender, EventArgs e)
@@ -356,7 +356,7 @@ namespace Fittings
 			var dlg = sender as ReferenceRepresentation;
 			var editingRow = dlg.Tag as ReadingXLSRow;
 			editingRow.Fitting = UoW.GetById<Fitting>(e.ObjectId);
-			editingRow.Status = ReadingXLSRow.RowStatus.ManualSet;
+			editingRow.Status = ReadingXlsStatus.ManualSet;
 		}
 
 		#endregion
@@ -366,18 +366,18 @@ namespace Fittings
 		void CalculateCompleteInfo()
 		{
 			labelTotal.LabelProp = xlsRows.Count.ToString();
-			labelFind.LabelProp = xlsRows.Count(x => x.Status == ReadingXLSRow.RowStatus.FoundModel).ToString();
-			labelManualSet.LabelProp = xlsRows.Count(x => x.Status == ReadingXLSRow.RowStatus.ManualSet).ToString();
-			labelCreate.LabelProp = xlsRows.Count(x => x.Status == ReadingXLSRow.RowStatus.WillCreated).ToString();
+			labelFind.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.FoundModel).ToString();
+			labelManualSet.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.ManualSet).ToString();
+			labelCreate.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.WillCreated).ToString();
 			var withoutPrice = xlsRows.Count(x => x.Price == null);
 			if (withoutPrice > 0)
 				labelWithoutPrice.Markup = String.Format("<span foreground=\"red\">{0}</span>", withoutPrice);
 			else
 				labelWithoutPrice.Markup = withoutPrice.ToString();
 
-			var toAdd = xlsRows.Where(x => x.Price.HasValue).Count(x => x.Status == ReadingXLSRow.RowStatus.WillCreated
-				|| x.Status == ReadingXLSRow.RowStatus.ManualSet
-				|| x.Status == ReadingXLSRow.RowStatus.FoundModel
+			var toAdd = xlsRows.Where(x => x.Price.HasValue).Count(x => x.Status == ReadingXlsStatus.WillCreated
+				            || x.Status == ReadingXlsStatus.ManualSet
+				            || x.Status == ReadingXlsStatus.FoundModel
 			            );
 			var skiped = xlsRows.Count - toAdd;
 			if (skiped > 0)
@@ -394,7 +394,7 @@ namespace Fittings
 		{
 			progressFinal.Adjustment.Upper = 3;
 			logger.Info("Создаем новую арматуру...");
-			foreach(var row in xlsRows.Where(x => x.Status == ReadingXLSRow.RowStatus.WillCreated))
+			foreach(var row in xlsRows.Where(x => x.Status == ReadingXlsStatus.WillCreated))
 			{
 				row.Fitting = new Fitting{
 					Code = row.Code,

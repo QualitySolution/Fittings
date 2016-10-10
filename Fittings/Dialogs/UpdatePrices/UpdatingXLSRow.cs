@@ -8,16 +8,16 @@ using NPOI.SS.UserModel;
 
 namespace Fittings
 {
-	public class ReadingXLSRow : PropertyChangedBase
+	public class UpdatingXLSRow : PropertyChangedBase
 	{
 		public NPOI.SS.UserModel.IRow XlsRow;
 
-		public Dictionary<ColumnType, int> ColumnsMap;
+		public Dictionary<ColumnDataType, int> ColumnsMap;
 
 		public decimal? Price { get; set; }
 
-		RowStatus status;
-		public RowStatus Status{
+		ReadingXlsStatus status;
+		public ReadingXlsStatus Status{
 			get	{ return status;}
 			set	{ SetField (ref status, value, () => Status);}
 		}
@@ -26,7 +26,7 @@ namespace Fittings
 
 		public Fitting Fitting { get; set;}
 
-		public ReadingXLSRow(NPOI.SS.UserModel.IRow row)
+		public UpdatingXLSRow(NPOI.SS.UserModel.IRow row)
 		{
 			XlsRow = row;
 		}
@@ -52,7 +52,7 @@ namespace Fittings
 		public void TryParse(ReadingXLSWorkClass wc)
 		{
 			//Парсим цену
-			var priceCell = XlsRow.GetCell(ColumnsMap[ColumnType.Price]);
+			var priceCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.Price]);
 			if (priceCell.CellType == CellType.Numeric)
 				Price = (decimal)priceCell.NumericCellValue;
 			else if (priceCell.CellType == CellType.String)
@@ -65,7 +65,7 @@ namespace Fittings
 				Price = null;
 
 			//Парсим диаметр
-			var dnCell = XlsRow.GetCell(ColumnsMap[ColumnType.DN]);
+			var dnCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.DN]);
 			if (dnCell.CellType == CellType.Numeric)
 				wc.ParseDiameter(dnCell.NumericCellValue.ToString(), this);
 			else if (dnCell.CellType == CellType.String)
@@ -73,13 +73,13 @@ namespace Fittings
 
 			if (Diameter == null)
 			{
-				Status = RowStatus.BadDiameter;
+				Status = ReadingXlsStatus.BadDiameter;
 			}
 
 			//Парсим давление если есть
-			if(ColumnsMap.ContainsKey(ColumnType.PN))
+			if(ColumnsMap.ContainsKey(ColumnDataType.PN))
 			{
-				var pnCell = XlsRow.GetCell(ColumnsMap[ColumnType.PN]);
+				var pnCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.PN]);
 				if (pnCell.CellType == CellType.Numeric)
 					wc.ParsePressure(pnCell.NumericCellValue.ToString(), this);
 				else if (pnCell.CellType == CellType.String)
@@ -87,9 +87,9 @@ namespace Fittings
 			}
 
 			//Находим номенклатуру.
-			if(ColumnsMap.ContainsKey(ColumnType.Model))
+			if(ColumnsMap.ContainsKey(ColumnDataType.Model))
 			{
-				var modelCell = XlsRow.GetCell(ColumnsMap[ColumnType.Model]);
+				var modelCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.Model]);
 				string model = null;
 				if (modelCell.CellType == CellType.String)
 					model = modelCell.StringCellValue;
@@ -105,18 +105,18 @@ namespace Fittings
 					var foundList = Repository.FittingRepository.GetFittings(wc.UoW, model, Diameter);
 					if(foundList.Count == 1)
 					{
-						Status = RowStatus.FoundModel;
+						Status = ReadingXlsStatus.FoundModel;
 						Fitting = foundList.First();
 						return;
 					}
 					else if(foundList.Count > 1)
 					{
-						Status = RowStatus.MultiFound;
+						Status = ReadingXlsStatus.MultiFound;
 						IsMultiFound = true;
 						return;
 					}
 				}
-				Status = RowStatus.NotFound;
+				Status = ReadingXlsStatus.NotFound;
 			}
 		}
 
@@ -125,16 +125,16 @@ namespace Fittings
 			if (Fitting != null)
 				return;
 
-			if (Status == RowStatus.BadDiameter && Diameter == null)
+			if (Status == ReadingXlsStatus.BadDiameter && Diameter == null)
 				return;
 
-			if (Status == RowStatus.MultiFound)
+			if (Status == ReadingXlsStatus.MultiFound)
 				return;
 
 			if (Diameter != null && Pressure != null && Name != null && ConnectionType != null)
-				Status = RowStatus.WillCreated;
+				Status = ReadingXlsStatus.WillCreated;
 			else
-				Status = RowStatus.NotFound;
+				Status = ReadingXlsStatus.NotFound;
 		}
 
 		#region Поля для создания нового Fitting
@@ -205,7 +205,7 @@ namespace Fittings
 		{
 			get
 			{
-				return ColumnsMap.ContainsKey(ColumnType.DN) ? ToString(ColumnsMap[ColumnType.DN]) : null;
+				return ColumnsMap.ContainsKey(ColumnDataType.DN) ? ToString(ColumnsMap[ColumnDataType.DN]) : null;
 			}
 		}
 			
@@ -213,7 +213,7 @@ namespace Fittings
 		{
 			get
 			{
-				return ColumnsMap.ContainsKey(ColumnType.PN) ? ToString(ColumnsMap[ColumnType.PN]) : null;
+				return ColumnsMap.ContainsKey(ColumnDataType.PN) ? ToString(ColumnsMap[ColumnDataType.PN]) : null;
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace Fittings
 		{
 			get
 			{
-				return ColumnsMap.ContainsKey(ColumnType.Model) ? ToString(ColumnsMap[ColumnType.Model]) : null;
+				return ColumnsMap.ContainsKey(ColumnDataType.Model) ? ToString(ColumnsMap[ColumnDataType.Model]) : null;
 			}
 		}
 
@@ -229,7 +229,7 @@ namespace Fittings
 		{
 			get
 			{
-				return ColumnsMap.ContainsKey(ColumnType.Price) ? ToString(ColumnsMap[ColumnType.Price]) : null;
+				return ColumnsMap.ContainsKey(ColumnDataType.Price) ? ToString(ColumnsMap[ColumnDataType.Price]) : null;
 			}
 		}
 
@@ -279,31 +279,31 @@ namespace Fittings
 			} }
 
 		#endregion
+	}
 
-		public enum ColumnType{
-			DN,
-			PN,
-			[Display(Name = "Модель")]
-			Model,
-			[Display(Name = "Цена")]
-			Price
-		}
+	public enum ColumnDataType{
+		DN,
+		PN,
+		[Display(Name = "Модель")]
+		Model,
+		[Display(Name = "Цена")]
+		Price
+	}
 
-		public enum RowStatus{
-			[Display(Name = "Не обработано")]
-			None,
-			[Display(Name = "Не определен DN")]
-			BadDiameter,
-			[Display(Name = "Найдено")]
-			FoundModel,
-			[Display(Name = "Установлено")]
-			ManualSet,
-			[Display(Name = "Найдено несколько")]
-			MultiFound,
-			[Display(Name = "Не найдено")]
-			NotFound,
-			[Display(Name = "Новая арматура")]
-			WillCreated,
-		}
+	public enum ReadingXlsStatus{
+		[Display(Name = "Не обработано")]
+		None,
+		[Display(Name = "Не определен DN")]
+		BadDiameter,
+		[Display(Name = "Найдено")]
+		FoundModel,
+		[Display(Name = "Установлено")]
+		ManualSet,
+		[Display(Name = "Найдено несколько")]
+		MultiFound,
+		[Display(Name = "Не найдено")]
+		NotFound,
+		[Display(Name = "Новая арматура")]
+		WillCreated,
 	}
 }
