@@ -260,7 +260,7 @@ namespace Fittings
 		{
 			if (diameter == null)
 					return String.Empty;
-			return units == DiameterUnits.inch ? diameter.Inch : diameter.Mm;
+			return units == DiameterUnits.inch ? diameter.Inch : diameter.DN;
 		}
 
 		public virtual string DispalyType{ get {

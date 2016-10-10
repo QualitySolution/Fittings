@@ -83,10 +83,11 @@ namespace Fittings.Domain
 				if (Pressure == null)
 					return String.Empty;
 				return PressureUnits == PressureUnits.PN ? Pressure.Pn : Pressure.Pclass;}}
+		
 		public virtual string DiameterText{ get{
 				if (Diameter == null)
 					return String.Empty;
-				return DiameterUnits == DiameterUnits.inch ? Diameter.Inch : Diameter.Mm;}}
+				return DiameterUnits == DiameterUnits.inch ? Diameter.Inch : Diameter.DN;}}
 
 		public Fitting ()
 		{

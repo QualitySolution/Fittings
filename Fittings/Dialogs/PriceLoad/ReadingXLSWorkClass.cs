@@ -17,12 +17,16 @@ namespace Fittings
 		public void ParseDiameter(string dn, ReadingXLSRow row)
 		{
 			dn = dn.Replace("DN","").Replace("dn", "");
-			var found = Diameters.FirstOrDefault(x => x.Mm == dn);
-			if (found != null)
+			int mm;
+			if (int.TryParse(dn, out mm))
 			{
-				row.Diameter = found;
-				row.DiameterUnits = DiameterUnits.mm;
-				return;
+				var found = Diameters.FirstOrDefault(x => x.Mm == mm);
+				if (found != null)
+				{
+					row.Diameter = found;
+					row.DiameterUnits = DiameterUnits.mm;
+					return;
+				}
 			}
 
 			row.Diameter = Diameters.FirstOrDefault(x => x.Inch == dn);

@@ -20,11 +20,21 @@ namespace Fittings.Domain
 			set { SetField (ref inch, value, () => Inch); }
 		}
 
-		string mm;
+		int mm;
 
-		public virtual string Mm {
+		public virtual int Mm {
 			get { return mm; }
-			set { SetField (ref mm, value, () => Mm); }
+			set { 
+				if (SetField(ref mm, value, () => Mm))
+					DN = String.Format("DN{0}", mm);
+				}
+		}
+
+		string dn;
+
+		public virtual string DN {
+			get { return dn; }
+			set { SetField (ref dn, value, () => DN); }
 		}
 
 		#endregion

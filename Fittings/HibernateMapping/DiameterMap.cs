@@ -12,6 +12,7 @@ namespace Fittings.HMap
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.Inch).Column ("inch");
 			Map (x => x.Mm).Column ("mm");
+			Map (x => x.DN).Column ("dn");
 		}
 	}
 }

@@ -121,7 +121,7 @@ namespace Fittings
 					diameterCombobox.SetRenderTextFunc<Diameter> (x => x.Inch);
 					break;
 				case DiameterUnits.mm:
-					diameterCombobox.SetRenderTextFunc<Diameter> (x => x.Mm);
+					diameterCombobox.SetRenderTextFunc<Diameter> (x => x.DN);
 					break;
 			}
 		}

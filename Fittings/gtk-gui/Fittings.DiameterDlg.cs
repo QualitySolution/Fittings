@@ -20,7 +20,7 @@ namespace Fittings
 		
 		private global::Gtk.Label label2;
 		
-		private global::Gamma.GtkWidgets.yEntry mmEntry;
+		private global::Gamma.GtkWidgets.ySpinButton yspinMM;
 
 		protected virtual void Build ()
 		{
@@ -100,13 +100,16 @@ namespace Fittings
 			w6.XOptions = ((global::Gtk.AttachOptions)(4));
 			w6.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.mmEntry = new global::Gamma.GtkWidgets.yEntry ();
-			this.mmEntry.CanFocus = true;
-			this.mmEntry.Name = "mmEntry";
-			this.mmEntry.IsEditable = true;
-			this.mmEntry.InvisibleChar = '●';
-			this.table1.Add (this.mmEntry);
-			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.mmEntry]));
+			this.yspinMM = new global::Gamma.GtkWidgets.ySpinButton (0, 10000, 1);
+			this.yspinMM.CanFocus = true;
+			this.yspinMM.Name = "yspinMM";
+			this.yspinMM.Adjustment.PageIncrement = 10;
+			this.yspinMM.ClimbRate = 1;
+			this.yspinMM.Numeric = true;
+			this.yspinMM.ValueAsDecimal = 0m;
+			this.yspinMM.ValueAsInt = 0;
+			this.table1.Add (this.yspinMM);
+			global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table1 [this.yspinMM]));
 			w7.TopAttach = ((uint)(1));
 			w7.BottomAttach = ((uint)(2));
 			w7.LeftAttach = ((uint)(1));

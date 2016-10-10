@@ -28,7 +28,7 @@ namespace Fittings
 		private void ConfigureDlg ()
 		{
 			inchEntry.Binding.AddBinding (Entity, e => e.Inch, w => w.Text).InitializeFromSource(); 
-			mmEntry.Binding.AddBinding (Entity, e => e.Mm, w => w.Text).InitializeFromSource();
+			yspinMM.Binding.AddBinding (Entity, e => e.Mm, w => w.ValueAsInt).InitializeFromSource();
 		}
 
 		public override bool Save ()
