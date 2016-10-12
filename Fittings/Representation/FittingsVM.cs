@@ -113,7 +113,7 @@ namespace Fittings.ViewModel
 					.Select(() => typeAlias.NameRus).WithAlias(() => resultAlias.Name)
 
 					.Select(() => diameterAlias.Inch).WithAlias(() => resultAlias.DiameterInch)
-					.Select(() => diameterAlias.Mm).WithAlias(() => resultAlias.DiameterMm)
+					.Select(() => diameterAlias.DN).WithAlias(() => resultAlias.DiameterMm)
 					.Select(() => fittingAlias.DiameterUnits).WithAlias(() => resultAlias.DiameterUnits)
 
 					.Select(() => pressureAlias.Pn).WithAlias(() => resultAlias.PressurePn)
