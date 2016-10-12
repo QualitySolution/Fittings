@@ -12,19 +12,40 @@ namespace Fittings
 	{
 		public NPOI.SS.UserModel.IRow XlsRow;
 
-		public Dictionary<ColumnDataType, int> ColumnsMap;
+		public UpdatingXLSWorkClass WC;
+
+		public Dictionary<ColumnType, int> ColumnsMap;
 
 		public decimal? Price { get; set; }
 
-		ReadingXlsStatus status;
-		public ReadingXlsStatus Status{
+		bool changePrice;
+		public bool ChangePrice{
+			get	{ return changePrice;}
+			set	{ SetField (ref changePrice, value, () => ChangePrice);}
+		}
+
+		RowStatus status;
+		public RowStatus Status{
 			get	{ return status;}
 			set	{ SetField (ref status, value, () => Status);}
 		}
 
 		public bool IsMultiFound { get; private set;}
 
-		public Fitting Fitting { get; set;}
+		public List<Fitting> Fittings { get; set;}
+
+		public List<PriceItem> Prices { get; set;}
+
+		PriceItem selectedPrice;
+		public PriceItem SelectedPrice
+		{
+			get{return selectedPrice;}
+			set{
+				SetField(ref selectedPrice, value, () => SelectedPrice);
+				if (NewPrice == Price)
+					Status = RowStatus.PriceNotChanged;
+			}
+		}
 
 		public UpdatingXLSRow(NPOI.SS.UserModel.IRow row)
 		{
@@ -49,10 +70,15 @@ namespace Fittings
 			return null;
 		}
 
-		public void TryParse(ReadingXLSWorkClass wc)
+		public void TryParse()
 		{
 			//Парсим цену
-			var priceCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.Price]);
+			var priceCell = XlsRow.GetCell(ColumnsMap[ColumnType.Price]);
+			if(priceCell == null)
+			{
+				Status = RowStatus.Skiped;
+				return;
+			}
 			if (priceCell.CellType == CellType.Numeric)
 				Price = (decimal)priceCell.NumericCellValue;
 			else if (priceCell.CellType == CellType.String)
@@ -65,98 +91,87 @@ namespace Fittings
 				Price = null;
 
 			//Парсим диаметр
-			var dnCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.DN]);
+			var dnCell = XlsRow.GetCell(ColumnsMap[ColumnType.DN]);
+			if(dnCell == null)
+			{
+				Status = RowStatus.Skiped;
+				return;
+			}
+
+			string dnAsString = null;
 			if (dnCell.CellType == CellType.Numeric)
-				wc.ParseDiameter(dnCell.NumericCellValue.ToString(), this);
+				dnAsString = dnCell.NumericCellValue.ToString();
 			else if (dnCell.CellType == CellType.String)
-				wc.ParseDiameter(dnCell.StringCellValue, this);
+				dnAsString = dnCell.StringCellValue;
+
+			if(!String.IsNullOrWhiteSpace(dnAsString))
+				WC.ParseDiameter(dnAsString, this);
+			else
+			{
+				Status = RowStatus.Skiped;
+				return;
+			}
 
 			if (Diameter == null)
 			{
-				Status = ReadingXlsStatus.BadDiameter;
-			}
-
-			//Парсим давление если есть
-			if(ColumnsMap.ContainsKey(ColumnDataType.PN))
-			{
-				var pnCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.PN]);
-				if (pnCell.CellType == CellType.Numeric)
-					wc.ParsePressure(pnCell.NumericCellValue.ToString(), this);
-				else if (pnCell.CellType == CellType.String)
-					wc.ParsePressure(pnCell.StringCellValue, this);
+				Status = RowStatus.BadDiameter;
 			}
 
 			//Находим номенклатуру.
-			if(ColumnsMap.ContainsKey(ColumnDataType.Model))
+			if (ColumnsMap.ContainsKey(ColumnType.Model))
 			{
-				var modelCell = XlsRow.GetCell(ColumnsMap[ColumnDataType.Model]);
+				var modelCell = XlsRow.GetCell(ColumnsMap[ColumnType.Model]);
 				string model = null;
 				if (modelCell.CellType == CellType.String)
 					model = modelCell.StringCellValue;
-				else if(modelCell.CellType == CellType.Numeric)
+				else if (modelCell.CellType == CellType.Numeric)
 					model = modelCell.NumericCellValue.ToString();
 
 				Code = model;
 				if (Diameter == null)
 					return;
 
-				if(!String.IsNullOrWhiteSpace(model))
+				if (!String.IsNullOrWhiteSpace(model))
 				{
-					var foundList = Repository.FittingRepository.GetFittings(wc.UoW, model, Diameter);
-					if(foundList.Count == 1)
+					var foundList = Repository.FittingRepository.GetFittings(WC.UoW, model, Diameter);
+					if (foundList.Count > 0)
 					{
-						Status = ReadingXlsStatus.FoundModel;
-						Fitting = foundList.First();
-						return;
-					}
-					else if(foundList.Count > 1)
-					{
-						Status = ReadingXlsStatus.MultiFound;
-						IsMultiFound = true;
+						Status = RowStatus.OnlyModelFound;
+						Fittings = foundList.ToList();
+
+						Prices = Repository.PriceRepository.GetLastPrices(WC.UoW, Fittings.ToArray()).ToList();
+
+						if(Prices.Count == 1)
+						{
+							Status = RowStatus.AutoNewPrice;
+							SelectedPrice = Prices.First();
+							ChangePrice = CanChangePrice;
+						}
+						else if (Prices.Count > 1)
+						{
+							Status = RowStatus.MultiFound;
+							IsMultiFound = true;
+						}
 						return;
 					}
 				}
-				Status = ReadingXlsStatus.NotFound;
+				Status = RowStatus.NotFound;
 			}
-		}
-
-		public void UpdateCreatingStatus()
-		{
-			if (Fitting != null)
-				return;
-
-			if (Status == ReadingXlsStatus.BadDiameter && Diameter == null)
-				return;
-
-			if (Status == ReadingXlsStatus.MultiFound)
-				return;
-
-			if (Diameter != null && Pressure != null && Name != null && ConnectionType != null)
-				Status = ReadingXlsStatus.WillCreated;
 			else
-				Status = ReadingXlsStatus.NotFound;
+				Status = RowStatus.Skiped;
 		}
 
+		public void SetSelectedPrice(PriceItem item)
+		{
+			SelectedPrice = item;
+		}
+			
 		#region Поля для создания нового Fitting
-
-		FittingType name;
-
-		public virtual FittingType Name {
-			get { return name; }
-			set { SetField (ref name, value, () => Name); }
-		}
 
 		Diameter diameter;
 		public virtual Diameter Diameter {
 			get { return diameter; }
 			set { SetField (ref diameter, value, () => Diameter); }
-		}
-
-		DiameterUnits diameterUnits;
-
-		public virtual DiameterUnits DiameterUnits {
-			get { return diameterUnits; }
-			set { SetField (ref diameterUnits, value, () => DiameterUnits); }
 		}
 
 		Pressure pressure;
@@ -165,145 +180,95 @@ namespace Fittings
 			set { SetField (ref pressure, value, () => Pressure); }
 		}
 
-		PressureUnits pressureUnits;
-
-		public virtual PressureUnits PressureUnits {
-			get { return pressureUnits; }
-			set { SetField (ref pressureUnits, value, () => PressureUnits); }
-		}
-
-		ConnectionType connectionType;
-		public virtual ConnectionType ConnectionType {
-			get { return connectionType; }
-			set { SetField (ref connectionType, value, () => ConnectionType); }
-		}
-
-		BodyMaterial bodyMaterial;
-		public virtual BodyMaterial BodyMaterial {
-			get { return bodyMaterial; }
-			set { SetField (ref bodyMaterial, value, () => BodyMaterial); }
-		}
-
 		string code;
 		public virtual string Code {
 			get { return code; }
 			set { SetField (ref code, value, () => Code); }
 		}
 
-		string note;
-
-		public virtual string Note {
-			get { return note; }
-			set { SetField (ref note, value, () => Note); }
-		}
-
-		#endregion
-
-		#region Расчетные
-
-		public string DNText
-		{
-			get
-			{
-				return ColumnsMap.ContainsKey(ColumnDataType.DN) ? ToString(ColumnsMap[ColumnDataType.DN]) : null;
-			}
-		}
-			
-		public string PNText
-		{
-			get
-			{
-				return ColumnsMap.ContainsKey(ColumnDataType.PN) ? ToString(ColumnsMap[ColumnDataType.PN]) : null;
-			}
-		}
-
-		public string ModelText
-		{
-			get
-			{
-				return ColumnsMap.ContainsKey(ColumnDataType.Model) ? ToString(ColumnsMap[ColumnDataType.Model]) : null;
-			}
-		}
-
-		public string PriceText
-		{
-			get
-			{
-				return ColumnsMap.ContainsKey(ColumnDataType.Price) ? ToString(ColumnsMap[ColumnDataType.Price]) : null;
-			}
-		}
-
 		#endregion
 
 		#region Для отображения полей Fitting
 
-		public virtual string DispalyPressure{ get { return Fitting != null 
-					? GetPressureText(Fitting.Pressure, Fitting.PressureUnits) 
-						: GetPressureText(Pressure, PressureUnits);
-			} }
-
-		private string GetPressureText(Pressure pressure, PressureUnits units)
+		public bool CanChangePrice
 		{
-			if (pressure == null)
-				return String.Empty;
-			return units == PressureUnits.PN ? pressure.Pn : pressure.Pclass;
+			get{
+				bool priceDiff = NewPrice != Price;
+				bool orthodoxStatus = (Status == RowStatus.ManualSet || Status == RowStatus.AutoNewPrice);
+				return  priceDiff && orthodoxStatus;
+			}
 		}
 
-		public virtual string DispalyDiameter{ get {
-				return Fitting != null 
-					? GetDiameterText(Fitting.Diameter, Fitting.DiameterUnits) 
-						: GetDiameterText(Diameter, DiameterUnits);
-			} }
-
-		private string GetDiameterText(Diameter diameter, DiameterUnits units)
-		{
-			if (diameter == null)
-					return String.Empty;
-			return units == DiameterUnits.inch ? diameter.Inch : diameter.DN;
+		public decimal? NewPrice{
+			get{
+				if (SelectedPrice == null)
+					return null;
+				return Math.Round(QSCurrency.CBR.CurrencyConverter.Convert(SelectedPrice.Cost, SelectedPrice.Currency.ToString(), WC.Currency.ToString()).Value, 2);
+			}
 		}
 
-		public virtual string DispalyType{ get {
-				return Fitting != null ? Fitting.Name.NameEng : Name?.NameEng;
-			} }
+		public string DisplayNewPrice{
+			get{ 
+				if (SelectedPrice != null)
+					return String.Format("{0:N2} {1}",
+						QSCurrency.CBR.CurrencyConverter.Convert(SelectedPrice.Cost, SelectedPrice.Currency.ToString(), WC.Currency.ToString()),
+						WC.Currency
+					);
+				else if(Prices != null && Prices.Count > 0)
+				{
+					var list = Prices.Select(x => String.Format("{0:N2} {1}",
+						QSCurrency.CBR.CurrencyConverter.Convert(x.Cost, x.Currency.ToString(), WC.Currency.ToString()),
+						WC.Currency
+					));
+					return String.Join("\n", list);
+				}
+				return null;
+			}
+		}
 
-		public virtual string DispalyModel{ get {
-				return Fitting != null ? Fitting.Code : Code;
-			} }
-
-		public virtual string DispalyConnection{ get {
-				return Fitting != null ? Fitting.ConnectionType.NameEng : ConnectionType?.NameEng;
-			} }
-
-		public virtual string DispalyMaterial{ get {
-				return Fitting != null ? Fitting.BodyMaterial?.NameEng : BodyMaterial?.NameEng;
-			} }
+		public string DisplayProvider{
+			get{ 
+				if (SelectedPrice != null)
+					return SelectedPrice.Price.Provider.Name;
+				else if(Prices != null && Prices.Count > 0)
+				{
+					var list = Prices.Select(x => x.Price.Provider.Name);
+					return String.Join("\n", list);
+				}
+				return null;
+			}
+		}
 
 		#endregion
-	}
 
-	public enum ColumnDataType{
-		DN,
-		PN,
-		[Display(Name = "Модель")]
-		Model,
-		[Display(Name = "Цена")]
-		Price
-	}
+		public enum ColumnType{
+			DN,
+			PN,
+			[Display(Name = "Модель")]
+			Model,
+			[Display(Name = "Цена")]
+			Price
+		}
 
-	public enum ReadingXlsStatus{
-		[Display(Name = "Не обработано")]
-		None,
-		[Display(Name = "Не определен DN")]
-		BadDiameter,
-		[Display(Name = "Найдено")]
-		FoundModel,
-		[Display(Name = "Установлено")]
-		ManualSet,
-		[Display(Name = "Найдено несколько")]
-		MultiFound,
-		[Display(Name = "Не найдено")]
-		NotFound,
-		[Display(Name = "Новая арматура")]
-		WillCreated,
+		public enum RowStatus{
+			[Display(Name = "Не обработано")]
+			None,
+			[Display(Name = "Пропущено")]
+			Skiped,
+			[Display(Name = "Не определен DN")]
+			BadDiameter,
+			[Display(Name = "Номенклатура без цены")]
+			OnlyModelFound,
+			[Display(Name = "Выбрана цена")]
+			ManualSet,
+			[Display(Name = "Несколько поставщиков")]
+			MultiFound,
+			[Display(Name = "Не найдена арматура")]
+			NotFound,
+			[Display(Name = "Есть новая цена")]
+			AutoNewPrice,
+			[Display(Name = "Цена не изменилась")]
+			PriceNotChanged,
+		}
 	}
 }

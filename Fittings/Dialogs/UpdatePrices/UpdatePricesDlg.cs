@@ -21,16 +21,18 @@ namespace Fittings
 
 		IUnitOfWork uow = UnitOfWorkFactory.CreateWithoutRoot();
 
-		public event EventHandler<PriceLoadCompletedEventArgs> PriceLoadCompleted;
+		string filePath;
 
 		XSSFWorkbook wb;
 		XSSFSheet sh;
 		String Sheet_name;
 
-		List<ReadingXLSRow> xlsRows;
-		GenericObservableList<ReadingXLSRow> ObservablexlsRows;
+		int maxColumns;
 
-		Dictionary<ColumnDataType, int> dataColumnsMap = new Dictionary<ColumnDataType, int>();
+		List<UpdatingXLSRow> xlsRows;
+		GenericObservableList<UpdatingXLSRow> ObservablexlsRows;
+
+		Dictionary<UpdatingXLSRow.ColumnType, int> dataColumnsMap = new Dictionary<UpdatingXLSRow.ColumnType, int>();
 
 		Menu SetColumnTypeMenu;
 		int popupHeaderMenuColumnId;
@@ -39,16 +41,26 @@ namespace Fittings
 
 		public object EntityObject{get{ return null;}}
 
-		public PriceLoadDlg(string filePath)
+		public UpdatePricesDlg()
 		{
+			logger.Info("Выбор файла для обновления цен...");
+
+			if(SelectFile())
+			{
+				FailInitialize = true;
+				return;
+			}
+
 			this.Build();
 
-			TabName = "Загрузка прайса (Шаг 1)";
+			TabName = "Расположение колонок (Шаг 1)";
 
 			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 			{
 				wb = new XSSFWorkbook(fs);
 			}
+
+			comboCurrency.ItemsEnum = typeof(PriceСurrency);
 
 			var sheets = new List<string>();
 			for(int s = 0; s < wb.NumberOfSheets; s++)
@@ -59,46 +71,69 @@ namespace Fittings
 
 			ytreeviewSetColumns.EnableGridLines = Gtk.TreeViewGridLines.Both;
 			ytreeviewSetColumns.HeadersClickable = true;
-			SetColumnTypeMenu = GtkMenuHelper.GenerateMenuFromEnum<ColumnDataType>(OnSetColumnHeaderMenuSelected);
+			SetColumnTypeMenu = GtkMenuHelper.GenerateMenuFromEnum<UpdatingXLSRow.ColumnType>(OnSetColumnHeaderMenuSelected);
 			notebook1.ShowTabs = false;
 
-			//Вкладка второго экрана
-			ytreeviewParsing.ColumnsConfig = ColumnsConfigFactory.Create<ReadingXLSRow>()
-				.AddColumn("Статус").AddTextRenderer(x => x.Status.GetEnumTitle())
-				.AddSetter((w, x) => w.Foreground = GetColorByStatus(x.Status))
-				.AddColumn ("Тип").SetDataProperty (node => node.DispalyType)
-				.AddColumn ("Диаметр").SetDataProperty (node => node.DispalyDiameter)
-				.AddColumn ("Давление").SetDataProperty (node => node.DispalyPressure)
-				.AddColumn ("Cоединения").SetDataProperty (node => node.DispalyConnection)
-				.AddColumn ("Материал").SetDataProperty (node => node.DispalyMaterial)
-				.AddColumn ("Артикул").SetDataProperty (node => node.DispalyModel)
-				.AddColumn("Цена").AddNumericRenderer(x => x.Price)
-				.AddSetter((w, x) => w.Background = x.Price.HasValue ? "white" : "red")
-				.AddColumn("DN(XLS)").AddTextRenderer(x => x.DNText).Background("White Smoke")
-				.AddColumn("PN(XLS)").AddTextRenderer(x => x.PNText).Background("White Smoke")
-				.AddColumn("Модель(XLS)").AddTextRenderer(x => x.ModelText).Background("White Smoke")
-				.AddColumn("Цена(XLS)").AddTextRenderer(x => x.PriceText).Background("White Smoke")
-				.Finish();
 			ytreeviewParsing.EnableGridLines = TreeViewGridLines.Both;
 			ytreeviewParsing.Selection.Mode = SelectionMode.Multiple;
 			ytreeviewParsing.Selection.Changed += YtreeviewParsing_Selection_Changed;
-			comboCurrency.ItemsEnum = typeof(PriceСurrency);
+
+			comboProvider.SetRenderTextFunc<Provider>(x => x.Name);
 		}
-			
+
+		#region Шаг 0
+
+		/// <returns><c>true</c>, если пользователь отменил выбор файла.</returns>
+		private bool SelectFile()
+		{
+			using (FileChooserDialog Chooser = new FileChooserDialog("Выберите фаил в котором нужно обновить цены...", 
+				(Window)MainClass.MainWin.Toplevel,
+				FileChooserAction.Open,
+				"Отмена", ResponseType.Cancel,
+				"Открыть", ResponseType.Accept))
+			{
+				FileFilter Filter = new FileFilter();
+				Filter.AddPattern("*.xls");
+				Filter.AddPattern("*.xlsx");
+				Filter.Name = "Все поддерживаемые";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.xls");
+				Filter.Name = "Excel 2003";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.xlsx");
+				Filter.Name = "Excel 2007";
+				Chooser.AddFilter(Filter);
+
+				if ((ResponseType)Chooser.Run() == ResponseType.Accept)
+				{
+					filePath = Chooser.Filename;
+				}
+
+				Chooser.Destroy();
+				return String.IsNullOrEmpty(filePath);
+			}
+		}
+
+		#endregion
+
 		#region Шаг1
 
 		private void LoadSheet()
 		{
 			// get sheet
 			logger.Info("Читаем лист...");
-			xlsRows = new List<ReadingXLSRow>();
+			xlsRows = new List<UpdatingXLSRow>();
 
-			int maxColumns = 0;
+			maxColumns = 0;
 
 			int i = yspinSkipRows.ValueAsInt;
 			while (sh.GetRow(i) != null)
 			{
-				xlsRows.Add(new ReadingXLSRow(sh.GetRow(i)));
+				xlsRows.Add(new UpdatingXLSRow(sh.GetRow(i)));
 				maxColumns = Math.Max(sh.GetRow(i).Cells.Count, maxColumns);
 				i++;
 			}
@@ -111,25 +146,33 @@ namespace Fittings
 		{
 			logger.Info("Пробуем определить расположение колонок...");
 			dataColumnsMap.Clear();
-			int i = 0;
+			int i = sh.FirstRowNum;
 			int skipRow = 0;
 			while (sh.GetRow(i) != null)
 			{
 				var row = sh.GetRow(i);
-				var newHeader = new Dictionary<ColumnDataType, int>();
+				var newHeader = new Dictionary<UpdatingXLSRow.ColumnType, int>();
 				for(int c = 0; c < row.Cells.Count; c++)
 				{
 					if (row.Cells[c].CellType != NPOI.SS.UserModel.CellType.String)
 						continue;
 					var value = row.Cells[c].StringCellValue.ToLower();
 					if (value.Contains("dn"))
-						newHeader[ColumnDataType.DN] = c;
+						newHeader[UpdatingXLSRow.ColumnType.DN] = c;
 					if(value.Contains("pn"))
-						newHeader[ColumnDataType.PN] = c;
+						newHeader[UpdatingXLSRow.ColumnType.PN] = c;
 					if(value.Contains("price"))
-						newHeader[ColumnDataType.Price] = c;
-					if(value.Contains("model"))
-						newHeader[ColumnDataType.Model] = c;
+					{
+						newHeader[UpdatingXLSRow.ColumnType.Price] = c;
+						if (value.Contains("rub") && value.Contains("rus"))
+							comboCurrency.SelectedItem = PriceСurrency.RUB;
+						if (value.Contains("usd"))
+							comboCurrency.SelectedItem = PriceСurrency.USD;
+						if (value.Contains("eur"))
+							comboCurrency.SelectedItem = PriceСurrency.EUR;
+					}
+					if(value.Contains("model") || value.Contains("art."))
+						newHeader[UpdatingXLSRow.ColumnType.Model] = c;
 				}
 				if(newHeader.Count > dataColumnsMap.Count)
 				{
@@ -167,7 +210,7 @@ namespace Fittings
 			if (ytreeviewSetColumns.Columns.Length == columnsCount)
 				return;
 
-			var config = ColumnsConfigFactory.Create<ReadingXLSRow>();
+			var config = ColumnsConfigFactory.Create<UpdatingXLSRow>();
 			for(int i = 0; i < columnsCount; i++)
 			{
 				int col = i;
@@ -182,10 +225,21 @@ namespace Fittings
 		void UpdateSetColumnStatus()
 		{
 			var text = "Кликните по заголовку колонки чтобы указать ее тип.";
-			if (!dataColumnsMap.ContainsKey(ColumnDataType.Price))
-				text += "\n<span foreground=\"red\">Клонка <b>Цена</b> должна быть указана.</span>";
+			var skipedColumns = new List<string>();
+			if (!dataColumnsMap.ContainsKey(UpdatingXLSRow.ColumnType.Price))
+				skipedColumns.Add("<b>Цена</b>");
+			if (!dataColumnsMap.ContainsKey(UpdatingXLSRow.ColumnType.Model))
+				skipedColumns.Add("<b>Модель</b>");
+			if (!dataColumnsMap.ContainsKey(UpdatingXLSRow.ColumnType.DN))
+				skipedColumns.Add("<b>DN</b>");
+
+			if(skipedColumns.Count > 0)
+				text += String.Format(
+					"\n<span foreground=\"red\">Клонки: {0} должны быть указаны.</span>",
+					String.Join(", ", skipedColumns)
+				);
 			labelSetColumnsInfo.Markup = text;
-			buttonNext.Sensitive = dataColumnsMap.ContainsKey(ColumnDataType.Price);
+			buttonNext.Sensitive = skipedColumns.Count == 0;
 		}
 
 		private static String getColumnNameFromIndex(int column)
@@ -208,7 +262,7 @@ namespace Fittings
 			
 		protected void OnSetColumnHeaderMenuSelected(object sender, EventArgs e)
 		{
-			var item = sender as MenuItemId<ColumnDataType>;
+			var item = sender as MenuItemId<UpdatingXLSRow.ColumnType>;
 			dataColumnsMap[item.ID] = popupHeaderMenuColumnId;
 			RefrereshColumnsTitles();
 			UpdateSetColumnStatus();
@@ -241,20 +295,23 @@ namespace Fittings
 			logger.Info("Подготовка таблицы");
 			//Устанавливаем раскладку по колонкам
 			xlsRows.ForEach(x => x.ColumnsMap = dataColumnsMap);
-			ytreeviewParsing.Columns.First(x => x.Title == "DN(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.DN);
-			ytreeviewParsing.Columns.First(x => x.Title == "PN(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.PN);
-			ytreeviewParsing.Columns.First(x => x.Title == "Модель(XLS)").Visible = dataColumnsMap.ContainsKey(ColumnDataType.Model);
+			RefreshParsingColumns();
 
-			ObservablexlsRows = new GenericObservableList<ReadingXLSRow>(xlsRows);
-			ytreeviewParsing.ItemsDataSource = ObservablexlsRows;
+			var currency = (PriceСurrency)comboCurrency.SelectedItem;
 
 			progressParsing.Text = "Формирование справочных данных";
 			logger.Info("Формирование справочных данных");
 			progressParsing.Adjustment.Value++;
-			var wc = new ReadingXLSWorkClass();
+			var wc = new UpdatingXLSWorkClass();
 			wc.UoW = uow;
 			wc.Diameters = uow.GetAll<Diameter>().ToList();
-			wc.Pressures = uow.GetAll<Pressure>().ToList();
+			wc.Currency = currency;
+
+			xlsRows.ForEach(x => x.WC = wc);
+
+			ObservablexlsRows = new GenericObservableList<UpdatingXLSRow>(xlsRows);
+			ObservablexlsRows.ListContentChanged += ObservablexlsRows_ListContentChanged;
+			ytreeviewParsing.ItemsDataSource = ObservablexlsRows;
 
 			progressParsing.Text = "Разбор данных";
 			progressParsing.Adjustment.Value++;
@@ -263,30 +320,73 @@ namespace Fittings
 
 			foreach(var row in xlsRows)
 			{
-				row.TryParse(wc);
+				row.TryParse();
 				progressParsing.Adjustment.Value++;
-				QSProjectsLib.QSMain.WaitRedraw();
+				QSMain.WaitRedraw();
 			}
+
 			logger.Info("Ок");
 			progressParsing.Text = String.Empty;
 			progressParsing.Adjustment.Value = 0;
 		}
 
-		string GetColorByStatus(ReadingXlsStatus status)
+		void RefreshParsingColumns()
+		{
+			var config = ColumnsConfigFactory.Create<UpdatingXLSRow>();
+			for(int i = 0; i < maxColumns; i++)
+			{
+				int col = i;
+				string columnTitle;
+
+				if(dataColumnsMap[UpdatingXLSRow.ColumnType.Price] == col)
+				{
+					config.AddColumn("Статус").AddTextRenderer(x => x.Status.GetEnumTitle())
+						.AddSetter((w, x) => w.Foreground = GetColorByStatus(x.Status));
+					columnTitle = "Цена в файле";
+				}
+				else if (dataColumnsMap.ContainsValue(i))
+					columnTitle = dataColumnsMap.First(x => x.Value == i).Key.GetEnumTitle();
+				else
+					columnTitle = getColumnNameFromIndex(i);
+
+				config.AddColumn(columnTitle).HeaderAlignment(0.5f)
+					.AddTextRenderer(x => x.ToString(col));
+
+				if(dataColumnsMap[UpdatingXLSRow.ColumnType.Price] == col)
+				{
+					config.AddColumn("Изм.").AddToggleRenderer(x => x.ChangePrice).AddSetter((w, x) => w.Activatable = x.CanChangePrice)
+						.AddColumn("Новая цена").AddTextRenderer(x => x.DisplayNewPrice)
+						.AddColumn("Поставщик").AddTextRenderer(x => x.DisplayProvider);
+				}
+			}
+
+			ytreeviewParsing.ColumnsConfig = config.Finish();
+		}
+
+		void ObservablexlsRows_ListContentChanged (object sender, EventArgs e)
+		{
+			if (notebook1.Page == 1)
+				NextButtonStateUpdate();
+		}
+
+		string GetColorByStatus(UpdatingXLSRow.RowStatus status)
 		{
 			switch(status)
 			{
-				case ReadingXlsStatus.BadDiameter:
+				case UpdatingXLSRow.RowStatus.BadDiameter:
 					return "red";
-				case ReadingXlsStatus.FoundModel:
-				case ReadingXlsStatus.ManualSet:
+				case UpdatingXLSRow.RowStatus.AutoNewPrice:
+				case UpdatingXLSRow.RowStatus.ManualSet:
 					return "green";
-				case ReadingXlsStatus.MultiFound:
+				case UpdatingXLSRow.RowStatus.MultiFound:
 					return "violet";
-				case ReadingXlsStatus.NotFound:
+				case UpdatingXLSRow.RowStatus.NotFound:
+				case UpdatingXLSRow.RowStatus.OnlyModelFound:
 					return "blue";
-				case ReadingXlsStatus.WillCreated:
+				case UpdatingXLSRow.RowStatus.PriceNotChanged:
 					return "lime";
+				case UpdatingXLSRow.RowStatus.Skiped:
+					return "gray";
 				default:
 					return "black";
 			}
@@ -294,69 +394,67 @@ namespace Fittings
 
 		void YtreeviewParsing_Selection_Changed (object sender, EventArgs e)
 		{
-			var newSelected = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().Any(x => x.Fitting == null);
-			buttonMultiEdit.Sensitive = newSelected;
+			var selectedList = ytreeviewParsing.GetSelectedObjects<UpdatingXLSRow>();
 
-			bool oneRowSelected = ytreeviewParsing.Selection.CountSelectedRows() == 1;
-			buttonManualSet.Sensitive = oneRowSelected;
-			var oneRow = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().FirstOrDefault();
-			buttonResolveMultiFound.Sensitive = oneRowSelected && oneRow.IsMultiFound;
+			if (selectedList.Any(x => x.IsMultiFound))
+			{
+				comboProvider.ItemsList = selectedList.Where(x => x.IsMultiFound).SelectMany(x => x.Prices).Select(x => x.Price.Provider).Distinct();
+			}
+			else
+			{
+				comboProvider.ItemsList = null;
+			}
+			buttonResolveMultiFound.Sensitive = false;
+
+			CheckedButtonsStateUpdate();
 		}
 
-		protected void OnButtonMultiEditClicked(object sender, EventArgs e)
+		private void CheckedButtonsStateUpdate()
 		{
-			var newSelected = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().ToList();
-			multiedit.StartEditing(newSelected);
-		}
-
-		protected void OnYtreeviewParsingRowActivated(object o, RowActivatedArgs args)
-		{
-			var row = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow>().First();
-			if (row.IsMultiFound)
-				buttonResolveMultiFound.Click();
-			else if (row.Status == ReadingXlsStatus.BadDiameter || row.Status == ReadingXlsStatus.NotFound || row.Status == ReadingXlsStatus.WillCreated)
-				buttonMultiEdit.Click();
-			else if (row.Status == ReadingXlsStatus.FoundModel || row.Status == ReadingXlsStatus.ManualSet)
-				buttonManualSet.Click();
+			var selectedList = ytreeviewParsing.GetSelectedObjects<UpdatingXLSRow>();
+			buttonSelectAll.Sensitive = selectedList.Any(x => x.CanChangePrice && x.ChangePrice == false);
+			buttonUnSelect.Sensitive = selectedList.Any(x => x.CanChangePrice && x.ChangePrice == true);
 		}
 
 		protected void OnButtonResolveMultiFoundClicked(object sender, EventArgs e)
 		{
-			var editingRow = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow> ().First();
-			var filter = new FittingsFlt(UoW);
-			filter.RestrictDiameter = editingRow.Diameter;
-			filter.RestrictModel = editingRow.Code;
-			var dlg = new ReferenceRepresentation (new Fittings.ViewModel.FittingsVM(filter));
-			dlg.Tag = editingRow;
-			dlg.Mode = OrmReferenceMode.Select;
-			dlg.ObjectSelected += DlgMultiFoundResolve_ObjectSelected;
-			TabParent.AddSlaveTab(this, dlg);
+			var selectedList = ytreeviewParsing.GetSelectedObjects<UpdatingXLSRow>().Where(x => x.IsMultiFound);
+			var selectedProvider = comboProvider.SelectedItem as Provider;
+			foreach(var item in selectedList)
+			{
+				var newPrice = item.Prices.FirstOrDefault(x => x.Price.Provider.Id == selectedProvider.Id);
+				if(newPrice != null)
+				{
+					item.SelectedPrice = newPrice;
+					item.Status = UpdatingXLSRow.RowStatus.ManualSet;
+					item.ChangePrice = item.CanChangePrice;
+				}
+			}
+			CheckedButtonsStateUpdate();
 		}
 
-		void DlgMultiFoundResolve_ObjectSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
+		protected void OnComboProviderChanged(object sender, EventArgs e)
 		{
-			var dlg = sender as ReferenceRepresentation;
-			var editingRow = dlg.Tag as ReadingXLSRow;
-			editingRow.Fitting = UoW.GetById<Fitting>(e.ObjectId);
-			editingRow.Status = ReadingXlsStatus.ManualSet;
+			buttonResolveMultiFound.Sensitive = comboProvider.SelectedItem != null;
 		}
 
-		protected void OnButtonManualSetClicked(object sender, EventArgs e)
+		protected void OnButtonSelectAllClicked(object sender, EventArgs e)
 		{
-			var editingRow = ytreeviewParsing.GetSelectedObjects<ReadingXLSRow> ().First();
-			var dlg = new ReferenceRepresentation (new Fittings.ViewModel.FittingsVM());
-			dlg.Tag = editingRow;
-			dlg.Mode = OrmReferenceMode.Select;
-			dlg.ObjectSelected += DlgManualSet_ObjectSelected;
-			TabParent.AddSlaveTab(this, dlg);
+			var selectedList = ytreeviewParsing.GetSelectedObjects<UpdatingXLSRow>();
+			selectedList.Where(x => x.CanChangePrice && x.ChangePrice == false).ToList().ForEach(x => x.ChangePrice = true);
+			CheckedButtonsStateUpdate();
 		}
 
-		void DlgManualSet_ObjectSelected (object sender, ReferenceRepresentationSelectedEventArgs e)
+		protected void OnButtonUnSelectClicked(object sender, EventArgs e)
 		{
-			var dlg = sender as ReferenceRepresentation;
-			var editingRow = dlg.Tag as ReadingXLSRow;
-			editingRow.Fitting = UoW.GetById<Fitting>(e.ObjectId);
-			editingRow.Status = ReadingXlsStatus.ManualSet;
+			var selectedList = ytreeviewParsing.GetSelectedObjects<UpdatingXLSRow>();
+			selectedList.Where(x => x.CanChangePrice && x.ChangePrice == true).ToList().ForEach(x => x.ChangePrice = false);
+			CheckedButtonsStateUpdate();
+		}
+
+		private void NextButtonStateUpdate()
+		{
+			buttonNext.Sensitive = xlsRows.Any(x => x.ChangePrice);
 		}
 
 		#endregion
@@ -366,64 +464,79 @@ namespace Fittings
 		void CalculateCompleteInfo()
 		{
 			labelTotal.LabelProp = xlsRows.Count.ToString();
-			labelFind.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.FoundModel).ToString();
-			labelManualSet.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.ManualSet).ToString();
-			labelCreate.LabelProp = xlsRows.Count(x => x.Status == ReadingXlsStatus.WillCreated).ToString();
-			var withoutPrice = xlsRows.Count(x => x.Price == null);
-			if (withoutPrice > 0)
-				labelWithoutPrice.Markup = String.Format("<span foreground=\"red\">{0}</span>", withoutPrice);
-			else
-				labelWithoutPrice.Markup = withoutPrice.ToString();
+			labelFind.LabelProp = xlsRows.Count(x => x.Status == UpdatingXLSRow.RowStatus.AutoNewPrice).ToString();
+			labelManualSet.LabelProp = xlsRows.Count(x => x.Status == UpdatingXLSRow.RowStatus.ManualSet).ToString();
+			labelPriceNotChanged.LabelProp = xlsRows.Count(x => x.Status == UpdatingXLSRow.RowStatus.PriceNotChanged).ToString();
+			labelWillChangePrice.Markup = String.Format("<span foreground=\"green\">{0}</span>", xlsRows.Count(x => x.ChangePrice));
 
-			var toAdd = xlsRows.Where(x => x.Price.HasValue).Count(x => x.Status == ReadingXlsStatus.WillCreated
-				            || x.Status == ReadingXlsStatus.ManualSet
-				            || x.Status == ReadingXlsStatus.FoundModel
-			            );
-			var skiped = xlsRows.Count - toAdd;
-			if (skiped > 0)
-				labelSkiped.Markup = String.Format("<span foreground=\"red\">{0}</span>", skiped);
-			else
-				labelSkiped.Markup = skiped.ToString();
 			labelCurrency.LabelProp = comboCurrency.ActiveText;
-
-			buttonFinish.Label = RusNumber.FormatCase(toAdd, "Добавить {0} позицию в прайс", "Добавить {0} позиции в прайс", "Добавить {0} позиций в прайс");
-			buttonFinish.Sensitive = toAdd > 0;
 		}
 
 		protected void OnButtonFinishClicked(object sender, EventArgs e)
 		{
-			progressFinal.Adjustment.Upper = 3;
-			logger.Info("Создаем новую арматуру...");
-			foreach(var row in xlsRows.Where(x => x.Status == ReadingXlsStatus.WillCreated))
+			string saveTo = null;
+			progressFinal.Adjustment.Upper = 2;
+			logger.Info("Пользователь выбирает файл...");
+			using (FileChooserDialog Chooser = new FileChooserDialog("Выберите куда сохранить изменения...", 
+				(Window)MainClass.MainWin.Toplevel,
+				FileChooserAction.Save,
+				"Отмена", ResponseType.Cancel,
+				"Сохранить", ResponseType.Accept))
 			{
-				row.Fitting = new Fitting{
-					Code = row.Code,
-					BodyMaterial = row.BodyMaterial,
-					ConnectionType = row.ConnectionType,
-					Diameter = row.Diameter,
-					DiameterUnits = row.DiameterUnits,
-					Name = row.Name,
-					Note = row.Note,
-					Pressure = row.Pressure,
-					PressureUnits = row.PressureUnits,
-				};
-				UoW.Save(row.Fitting);
+				Chooser.SetFilename(filePath);
+				Chooser.DoOverwriteConfirmation = true;
+
+				FileFilter Filter = new FileFilter();
+				Filter.AddPattern("*.xls");
+				Filter.AddPattern("*.xlsx");
+				Filter.Name = "Все поддерживаемые";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.xls");
+				Filter.Name = "Excel 2003";
+				Chooser.AddFilter(Filter);
+
+				Filter = new FileFilter();
+				Filter.AddPattern("*.xlsx");
+				Filter.Name = "Excel 2007";
+				Chooser.AddFilter(Filter);
+
+				if ((ResponseType)Chooser.Run() == ResponseType.Accept)
+				{
+					saveTo = Chooser.Filename;
+				}
+
+				Chooser.Destroy();
+			}
+			if (String.IsNullOrEmpty(saveTo))
+				return;
+
+			progressFinal.Adjustment.Value++;
+			logger.Info("Обновляем таблицы...");
+
+			foreach(var row in xlsRows.Where(x => x.ChangePrice))
+			{
+				var priceCell = row.XlsRow.GetCell(row.ColumnsMap[UpdatingXLSRow.ColumnType.Price]);
+
+				priceCell.SetCellValue((double)row.NewPrice.Value);
+			}
+
+			progressFinal.Adjustment.Value++;
+			logger.Info("Записываем фаил...");
+
+			using (FileStream file = new FileStream(saveTo, FileMode.Create, FileAccess.Write))
+			{
+				wb.Write(file);
 			}
 			progressFinal.Adjustment.Value++;
-			logger.Info("Записываем в базу...");
-			UoW.Commit();
-			progressFinal.Adjustment.Value++;
-			logger.Info("Передаем в диалог прайса...");
-			if(PriceLoadCompleted != null)
+			if(checkOpenAfterSave.Active)
 			{
-				var arg = new PriceLoadCompletedEventArgs{
-					Rows = xlsRows.Where(x => x.Fitting != null && x.Price != null).ToArray(),
-					Currency = (PriceСurrency)comboCurrency.SelectedItem
-				};
-				PriceLoadCompleted(this, arg);
+				logger.Info("Открываем во внешем приложении...");
+				System.Diagnostics.Process.Start (saveTo);
 			}
-			progressFinal.Adjustment.Value++;
 			logger.Info("Ок");
+
 			OnCloseTab(false);
 		}
 
@@ -439,13 +552,13 @@ namespace Fittings
 			switch(notebook1.Page)
 			{
 				case 0:
-					TabName = "Загрузка прайса (Шаг 2)";
+					TabName = "Обновляем цены (Шаг 2)";
 					buttonPrev.Sensitive = true;
 					notebook1.NextPage();
 					PrepareData();
 					break;
 				case 1:
-					TabName = "Загрузка прайса (Шаг 3)";
+					TabName = "Сохраняем XLS (Шаг 3)";
 					buttonPrev.Sensitive = true;
 					buttonNext.Sensitive = false;
 					notebook1.NextPage();
@@ -459,24 +572,19 @@ namespace Fittings
 			switch(notebook1.Page)
 			{
 				case 1:
-					TabName = "Загрузка прайса (Шаг 1)";
+					TabName = "Расположение колонок (Шаг 1)";
 					buttonPrev.Sensitive = false;
 					buttonNext.Sensitive = true;
 					notebook1.PrevPage();
 					break;
 				case 2:
-					TabName = "Загрузка прайса (Шаг 2)";
+					TabName = "Обновляем цены (Шаг 2)";
 					buttonPrev.Sensitive = true;
 					buttonNext.Sensitive = true;
 					notebook1.PrevPage();
 					break;
 			}
 		}
-	}
-
-	public class PriceLoadCompletedEventArgs : EventArgs{
-		public ReadingXLSRow[] Rows;
-		public PriceСurrency Currency;
 	}
 }
 

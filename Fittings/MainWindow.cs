@@ -6,6 +6,7 @@ using QSOrmProject;
 using QSProjectsLib;
 using QSSupportLib;
 using QSUpdater;
+using Fittings;
 
 public partial class MainWindow: Gtk.Window
 {
@@ -151,5 +152,11 @@ public partial class MainWindow: Gtk.Window
 	protected void OnChekUpdateActionActivated(object sender, EventArgs e)
 	{
 		CheckUpdate.StartCheckUpdateThread (UpdaterFlags.ShowAnyway);
+	}
+
+	protected void OnActionUpdatePricesActivated(object sender, EventArgs e)
+	{
+		var dlg = new UpdatePricesDlg();
+		tdiMain.AddTab(dlg);
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using QSOrmProject;
 using Fittings.Domain;
+using System.Collections.Generic;
+using NHibernate.Criterion;
 
 namespace Fittings.Repository
 {
@@ -22,6 +24,33 @@ namespace Fittings.Repository
 				.Take(1)
 				.SingleOrDefault();
 		}
+
+		/// <summary>
+		/// Получаем цены уникальные для каждого поставщика.
+		/// </summary>
+		public static IList<PriceItem> GetLastPrices (IUnitOfWork uow, Fitting[] fittings)
+		{
+			PriceItem queryPriceItemAlias = null;
+			PriceItem subqueryPriceItemAlias = null;
+			Price queryPriceAlias = null;
+			Price subqueryPriceAlias = null;
+
+			var subquery = QueryOver.Of<PriceItem>(() => subqueryPriceItemAlias)
+				.JoinAlias(c => c.Price, () => subqueryPriceAlias)
+				.Where(() => subqueryPriceItemAlias.Fitting.Id == queryPriceItemAlias.Fitting.Id)
+				.Where(() => subqueryPriceAlias.Provider.Id == queryPriceAlias.Provider.Id)
+				.OrderBy(() => subqueryPriceAlias.Date).Desc
+				.Select(x => x.Id)
+				.Take(1);
+
+			var query = uow.Session.QueryOver<PriceItem>(() => queryPriceItemAlias)
+				.JoinAlias(c => c.Price, () => queryPriceAlias)
+				.Where(() => queryPriceItemAlias.Fitting.IsIn(fittings))
+				.WithSubquery.WhereProperty(x => x.Id).Eq(subquery);
+
+			return query.List();
+		}
+
 	}
 }
 

@@ -73,6 +73,8 @@
     <EmbeddedResource Include="icons\flow_logo.png" />
     <EmbeddedResource Include="SqlScripts\new-0.1.sql" />
     <EmbeddedResource Include="icons\header-logo.ico" />
+    <EmbeddedResource Include="icons\buttons\checkbox-checked-symbolic.png" />
+    <EmbeddedResource Include="icons\buttons\checkbox-symbolic.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
@@ -142,6 +144,10 @@
     <Compile Include="Dialogs\PriceLoad\ReadingXLSWorkClass.cs" />
     <Compile Include="Dialogs\PriceLoad\MultiEditXLSRows.cs" />
     <Compile Include="gtk-gui\Fittings.MultiEditXLSRows.cs" />
+    <Compile Include="Dialogs\UpdatePrices\UpdatePricesDlg.cs" />
+    <Compile Include="gtk-gui\Fittings.UpdatePricesDlg.cs" />
+    <Compile Include="Dialogs\UpdatePrices\UpdatingXLSRow.cs" />
+    <Compile Include="Dialogs\UpdatePrices\UpdatingXLSWorkClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -197,6 +203,8 @@
     <Folder Include="JournalFilters\" />
     <Folder Include="Repository\" />
     <Folder Include="Dialogs\PriceLoad\" />
+    <Folder Include="Dialogs\UpdatePrices\" />
+    <Folder Include="icons\buttons\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NLog.config">
