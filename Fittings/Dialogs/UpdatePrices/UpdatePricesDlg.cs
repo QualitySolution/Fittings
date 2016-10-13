@@ -55,9 +55,22 @@ namespace Fittings
 
 			TabName = "Расположение колонок (Шаг 1)";
 
-			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+			try
 			{
-				wb = new XSSFWorkbook(fs);
+				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+				{
+					wb = new XSSFWorkbook(fs);
+				}
+			}
+			catch(IOException ex)
+			{
+				if (ex.HResult == -2147024864)
+				{
+					MessageDialogWorks.RunErrorDialog("Указанный файл уже открыт в другом приложении. Оно заблокировало доступ к файлу.");
+					FailInitialize = true;
+					return;
+				}
+				throw ex;
 			}
 
 			comboCurrency.ItemsEnum = typeof(PriceСurrency);
@@ -524,11 +537,23 @@ namespace Fittings
 
 			progressFinal.Adjustment.Value++;
 			logger.Info("Записываем фаил...");
-
-			using (FileStream file = new FileStream(saveTo, FileMode.Create, FileAccess.Write))
+			try
 			{
-				wb.Write(file);
+				using (FileStream file = new FileStream(saveTo, FileMode.Create, FileAccess.Write))
+				{
+					wb.Write(file);
+				}
 			}
+			catch(IOException ex)
+			{
+				if (ex.HResult == -2147024864)
+				{
+					MessageDialogWorks.RunErrorDialog("Указанный файл уже открыт в другом приложении. Оно заблокировало доступ к файлу.");
+					return;
+				}
+				throw ex;
+			}
+
 			progressFinal.Adjustment.Value++;
 			if(checkOpenAfterSave.Active)
 			{

@@ -45,9 +45,21 @@ namespace Fittings
 
 			TabName = "Загрузка прайса (Шаг 1)";
 
-			using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+			try
 			{
-				wb = new XSSFWorkbook(fs);
+				using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+				{
+					wb = new XSSFWorkbook(fs);
+				}
+			}catch(IOException ex)
+			{
+				if (ex.HResult == -2147024864)
+				{
+					MessageDialogWorks.RunErrorDialog("Указанный файл уже открыт в другом приложении. Оно заблокировало доступ к файлу.");
+					FailInitialize = true;
+					return;
+				}
+				throw ex;
 			}
 
 			var sheets = new List<string>();
