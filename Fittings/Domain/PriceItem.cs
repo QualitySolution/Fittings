@@ -47,6 +47,12 @@ namespace Fittings.Domain
 		{
 
 		}
+
+		public virtual string Title{
+			get{
+				return String.Format("{0} {1} - {2:N2} {3}", Fitting.Code, Fitting.DiameterText, Cost, Currency);
+			}
+		}
 	}
 
 	public enum PriceСurrency {
