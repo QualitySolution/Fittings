@@ -163,7 +163,15 @@ namespace Fittings
 			var fittings = UoW.GetById<Fitting> (e.Rows.Select (x => x.Fitting.Id).ToArray());
 
 			foreach (var item in e.Rows) {
-				Entity.AddItem(fittings.First(x => x.Id == item.Fitting.Id), e.Currency, item.Price.Value);
+				var exist = Entity.Prices.FirstOrDefault(x => x.Fitting.Id == item.Fitting.Id);
+				if(exist != null)
+				{
+					logger.Debug("Арматура Id:{0} уже существует в прайсе, просто обновляем цену.", exist.Fitting.Id);
+					exist.Currency = e.Currency;
+					exist.Cost = item.Price.Value;
+				}
+				else
+					Entity.AddItem(fittings.First(x => x.Id == item.Fitting.Id), e.Currency, item.Price.Value);
 			}
 		}
 	}
