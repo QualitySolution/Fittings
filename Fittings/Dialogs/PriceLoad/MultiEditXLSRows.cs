@@ -142,12 +142,20 @@ namespace Fittings
 		{
 			foreach(var row in editingList.Where(x => x.Fitting == null))
 			{
+				bool fittingCheck = false;
 				if (checkModel.Active)
+				{
+					if (row.Code != codeEntry.Text)
+						fittingCheck = true;
 					row.Code = codeEntry.Text;
+				}
+					
 				if (checkType.Active)
 					row.Name = fittingTypeReference.Subject as FittingType;
 				if(checkDiameter.Active)
 				{
+					if (row.Diameter != diameterCombobox.SelectedItem as Diameter)
+						fittingCheck = true;
 					row.DiameterUnits = (DiameterUnits)diameterUnitscombobox.SelectedItem;
 					row.Diameter = diameterCombobox.SelectedItem as Diameter;
 				}
@@ -163,6 +171,9 @@ namespace Fittings
 				if (checkComments.Active)
 					row.Note = commentTextview.Buffer.Text;
 
+				if(fittingCheck)
+					row.TryFoundFitting();
+				
 				row.UpdateCreatingStatus();
 			}
 			Hide();

@@ -268,6 +268,8 @@ namespace Fittings
 			wc.Diameters = uow.GetAll<Diameter>().ToList();
 			wc.Pressures = uow.GetAll<Pressure>().ToList();
 
+			xlsRows.ForEach(x => x.WC = wc);
+
 			progressParsing.Text = "Разбор данных";
 			progressParsing.Adjustment.Value++;
 			progressParsing.Adjustment.Upper = xlsRows.Count + 2;
@@ -275,7 +277,7 @@ namespace Fittings
 
 			foreach(var row in xlsRows)
 			{
-				row.TryParse(wc);
+				row.TryParse();
 				progressParsing.Adjustment.Value++;
 				QSProjectsLib.QSMain.WaitRedraw();
 			}

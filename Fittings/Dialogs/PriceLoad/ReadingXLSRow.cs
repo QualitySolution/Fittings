@@ -12,6 +12,8 @@ namespace Fittings
 	{
 		public NPOI.SS.UserModel.IRow XlsRow;
 
+		public ReadingXLSWorkClass WC;
+
 		public Dictionary<ColumnType, int> ColumnsMap;
 
 		public decimal? Price { get; set; }
@@ -49,7 +51,7 @@ namespace Fittings
 			return null;
 		}
 
-		public void TryParse(ReadingXLSWorkClass wc)
+		public void TryParse()
 		{
 			//Парсим цену
 			var priceCell = XlsRow.GetCell(ColumnsMap[ColumnType.Price]);
@@ -67,9 +69,9 @@ namespace Fittings
 			//Парсим диаметр
 			var dnCell = XlsRow.GetCell(ColumnsMap[ColumnType.DN]);
 			if (dnCell.CellType == CellType.Numeric)
-				wc.ParseDiameter(dnCell.NumericCellValue.ToString(), this);
+				WC.ParseDiameter(dnCell.NumericCellValue.ToString(), this);
 			else if (dnCell.CellType == CellType.String)
-				wc.ParseDiameter(dnCell.StringCellValue, this);
+				WC.ParseDiameter(dnCell.StringCellValue, this);
 
 			if (Diameter == null)
 			{
@@ -81,9 +83,9 @@ namespace Fittings
 			{
 				var pnCell = XlsRow.GetCell(ColumnsMap[ColumnType.PN]);
 				if (pnCell.CellType == CellType.Numeric)
-					wc.ParsePressure(pnCell.NumericCellValue.ToString(), this);
+					WC.ParsePressure(pnCell.NumericCellValue.ToString(), this);
 				else if (pnCell.CellType == CellType.String)
-					wc.ParsePressure(pnCell.StringCellValue, this);
+					WC.ParsePressure(pnCell.StringCellValue, this);
 			}
 
 			//Находим номенклатуру.
@@ -100,24 +102,30 @@ namespace Fittings
 				if (Diameter == null)
 					return;
 
-				if(!String.IsNullOrWhiteSpace(model))
-				{
-					var foundList = Repository.FittingRepository.GetFittings(wc.UoW, model, Diameter);
-					if(foundList.Count == 1)
-					{
-						Status = RowStatus.FoundModel;
-						Fitting = foundList.First();
-						return;
-					}
-					else if(foundList.Count > 1)
-					{
-						Status = RowStatus.MultiFound;
-						IsMultiFound = true;
-						return;
-					}
-				}
-				Status = RowStatus.NotFound;
+				if(!TryFoundFitting())
+					Status = RowStatus.NotFound;
 			}
+		}
+
+		public bool TryFoundFitting()
+		{
+			if(!String.IsNullOrWhiteSpace(Code))
+			{
+				var foundList = Repository.FittingRepository.GetFittings(WC.UoW, Code, Diameter);
+				if(foundList.Count == 1)
+				{
+					Status = RowStatus.FoundModel;
+					Fitting = foundList.First();
+					return true;
+				}
+				else if(foundList.Count > 1)
+				{
+					Status = RowStatus.MultiFound;
+					IsMultiFound = true;
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public void UpdateCreatingStatus()
