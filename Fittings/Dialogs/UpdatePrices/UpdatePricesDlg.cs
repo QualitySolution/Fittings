@@ -227,7 +227,7 @@ namespace Fittings
 			for(int i = 0; i < columnsCount; i++)
 			{
 				int col = i;
-				config.AddColumn(getColumnNameFromIndex(i)).HeaderAlignment(0.5f)
+				config.AddColumn(getColumnNameFromIndex(i)).HeaderAlignment(0.5f).Resizable()
 					.ClickedEvent(OnSetColumnHeaderClicked)
 					.AddTextRenderer(x => x.ToString(col));
 			}
@@ -353,7 +353,7 @@ namespace Fittings
 
 				if(dataColumnsMap[UpdatingXLSRow.ColumnType.Price] == col)
 				{
-					config.AddColumn("Статус").AddTextRenderer(x => x.Status.GetEnumTitle())
+					config.AddColumn("Статус").Resizable().AddTextRenderer(x => x.Status.GetEnumTitle())
 						.AddSetter((w, x) => w.Foreground = GetColorByStatus(x.Status));
 					columnTitle = "Цена в файле";
 				}
@@ -362,14 +362,14 @@ namespace Fittings
 				else
 					columnTitle = getColumnNameFromIndex(i);
 
-				config.AddColumn(columnTitle).HeaderAlignment(0.5f)
+				config.AddColumn(columnTitle).HeaderAlignment(0.5f).Resizable()
 					.AddTextRenderer(x => x.ToString(col));
 
 				if(dataColumnsMap[UpdatingXLSRow.ColumnType.Price] == col)
 				{
 					config.AddColumn("Изм.").AddToggleRenderer(x => x.ChangePrice).AddSetter((w, x) => w.Activatable = x.CanChangePrice)
 						.AddColumn("Новая цена").AddTextRenderer(x => x.DisplayNewPrice)
-						.AddColumn("Поставщик").AddTextRenderer(x => x.DisplayProvider);
+						.AddColumn("Поставщик").Resizable().AddTextRenderer(x => x.DisplayProvider);
 				}
 			}
 

@@ -76,20 +76,20 @@ namespace Fittings
 
 			//Вкладка второго экрана
 			ytreeviewParsing.ColumnsConfig = ColumnsConfigFactory.Create<ReadingXLSRow>()
-				.AddColumn("Статус").AddTextRenderer(x => x.Status.GetEnumTitle())
+				.AddColumn("Статус").Resizable().AddTextRenderer(x => x.Status.GetEnumTitle())
 				.AddSetter((w, x) => w.Foreground = GetColorByStatus(x.Status))
-				.AddColumn ("Тип").SetDataProperty (node => node.DispalyType)
-				.AddColumn ("Диаметр").SetDataProperty (node => node.DispalyDiameter)
-				.AddColumn ("Давление").SetDataProperty (node => node.DispalyPressure)
-				.AddColumn ("Cоединения").SetDataProperty (node => node.DispalyConnection)
-				.AddColumn ("Материал").SetDataProperty (node => node.DispalyMaterial)
-				.AddColumn ("Артикул").SetDataProperty (node => node.DispalyModel)
-				.AddColumn("Цена").AddNumericRenderer(x => x.Price)
+				.AddColumn ("Тип").Resizable().SetDataProperty (node => node.DispalyType)
+				.AddColumn ("Диаметр").Resizable().SetDataProperty (node => node.DispalyDiameter)
+				.AddColumn ("Давление").Resizable().SetDataProperty (node => node.DispalyPressure)
+				.AddColumn ("Cоединения").Resizable().SetDataProperty (node => node.DispalyConnection)
+				.AddColumn ("Материал").Resizable().SetDataProperty (node => node.DispalyMaterial)
+				.AddColumn ("Артикул").Resizable().SetDataProperty (node => node.DispalyModel)
+				.AddColumn("Цена").Resizable().AddNumericRenderer(x => x.Price)
 				.AddSetter((w, x) => w.Background = x.Price.HasValue ? "white" : "red")
-				.AddColumn("DN(XLS)").AddTextRenderer(x => x.DNText).Background("White Smoke")
-				.AddColumn("PN(XLS)").AddTextRenderer(x => x.PNText).Background("White Smoke")
-				.AddColumn("Модель(XLS)").AddTextRenderer(x => x.ModelText).Background("White Smoke")
-				.AddColumn("Цена(XLS)").AddTextRenderer(x => x.PriceText).Background("White Smoke")
+				.AddColumn("DN(XLS)").Resizable().AddTextRenderer(x => x.DNText).Background("White Smoke")
+				.AddColumn("PN(XLS)").Resizable().AddTextRenderer(x => x.PNText).Background("White Smoke")
+				.AddColumn("Модель(XLS)").Resizable().AddTextRenderer(x => x.ModelText).Background("White Smoke")
+				.AddColumn("Цена(XLS)").Resizable().AddTextRenderer(x => x.PriceText).Background("White Smoke")
 				.Finish();
 			ytreeviewParsing.EnableGridLines = TreeViewGridLines.Both;
 			ytreeviewParsing.Selection.Mode = SelectionMode.Multiple;
@@ -183,7 +183,7 @@ namespace Fittings
 			for(int i = 0; i < columnsCount; i++)
 			{
 				int col = i;
-				config.AddColumn(getColumnNameFromIndex(i)).HeaderAlignment(0.5f)
+				config.AddColumn(getColumnNameFromIndex(i)).HeaderAlignment(0.5f).Resizable()
 					.ClickedEvent(OnSetColumnHeaderClicked)
 					.AddTextRenderer(x => x.ToString(col));
 			}

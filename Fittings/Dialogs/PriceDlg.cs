@@ -37,15 +37,15 @@ namespace Fittings
 			commentTextview.Binding.AddBinding (Entity, e => e.Comment, w => w.Buffer.Text).InitializeFromSource();
 			datepicker.Binding.AddBinding (Entity, e => e.Date, w => w.Date).InitializeFromSource();
 			pricesTreeView.ColumnsConfig = ColumnsConfigFactory.Create <PriceItem> ()
-				.AddColumn ("Арматура")
+				.AddColumn ("Арматура").Resizable()
 					.AddTextRenderer (x => x.Fitting.Name.NameRus)
 				.AddColumn ("Диаметр")
 					.AddTextRenderer (x => x.Fitting.DiameterText)
 				.AddColumn ("Давление")
 					.AddTextRenderer (x => x.Fitting.PressureText)
-				.AddColumn ("Соединение")
+				.AddColumn ("Соединение").Resizable()
 					.AddTextRenderer (x => x.Fitting.ConnectionType.NameRus)
-				.AddColumn ("Материал")
+				.AddColumn ("Материал").Resizable()
 					.AddTextRenderer (x => x.Fitting.BodyMaterial != null ? x.Fitting.BodyMaterial.NameRus : String.Empty)
 				.AddColumn("Артикул")
 					.AddTextRenderer (x => x.Fitting.Code)
