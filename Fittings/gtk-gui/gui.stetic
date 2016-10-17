@@ -139,6 +139,12 @@
         <property name="Tooltip" translatable="yes">Помощник обновления цен в файле проекта.</property>
         <signal name="Activated" handler="OnActionUpdatePricesActivated" />
       </action>
+      <action id="ActionChangelog">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">История версий</property>
+        <property name="ShortLabel" translatable="yes">История версий</property>
+        <signal name="Activated" handler="OnActionChangelogActivated" />
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
@@ -177,6 +183,7 @@
                 <node type="Menuitem" action="ActionDiameter" />
               </node>
               <node type="Menu" action="Action4">
+                <node type="Menuitem" action="ActionChangelog" />
                 <node type="Menuitem" action="ChekUpdateAction" />
                 <node type="Separator" />
                 <node type="Menuitem" action="aboutAction" />

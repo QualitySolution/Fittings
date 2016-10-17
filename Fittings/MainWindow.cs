@@ -159,4 +159,9 @@ public partial class MainWindow: Gtk.Window
 		var dlg = new UpdatePricesDlg();
 		tdiMain.AddTab(dlg);
 	}
+
+	protected void OnActionChangelogActivated(object sender, EventArgs e)
+	{
+		QSMain.RunChangeLogDlg (this);
+	}
 }
