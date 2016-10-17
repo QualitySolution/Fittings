@@ -62,10 +62,10 @@ namespace Fittings
 		{
 			switch ((PressureUnits)pressureUnitscombobox.SelectedItem) {
 			case PressureUnits.PN:
-				pressureCombobox.SetRenderTextFunc<Pressure> (x => x.Pn.ToString());
+				pressureCombobox.SetRenderTextFunc<Pressure> (x => x.Pn);
 				break;
 			case PressureUnits.Pclass:
-				pressureCombobox.SetRenderTextFunc<Pressure> (x => x.Pclass.ToString());
+				pressureCombobox.SetRenderTextFunc<Pressure> (x => x.Pclass);
 				break;
 			}
 		}

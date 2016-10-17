@@ -27,8 +27,9 @@ namespace Fittings
 
 		private void ConfigureDlg ()
 		{
-			pnEntry.Binding.AddBinding (Entity, e => e.Pn, w => w.Text).InitializeFromSource(); 
-			pclassEntry.Binding.AddBinding (Entity, e => e.Pclass, w => w.Text).InitializeFromSource();
+			var converterToNull = new NullToEmptyStringConverter();
+			pnEntry.Binding.AddBinding (Entity, e => e.Pn, w => w.Text, converterToNull).InitializeFromSource(); 
+			pclassEntry.Binding.AddBinding (Entity, e => e.Pclass, w => w.Text, converterToNull).InitializeFromSource();
 		}
 
 		public override bool Save ()
