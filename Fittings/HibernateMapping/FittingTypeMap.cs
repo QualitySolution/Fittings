@@ -8,6 +8,7 @@ namespace Fittings.HMap
 		public FittingTypeMap ()
 		{
 			Table ("fitting_type");
+			Not.LazyLoad();
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.NameRus).Column ("name_rus");

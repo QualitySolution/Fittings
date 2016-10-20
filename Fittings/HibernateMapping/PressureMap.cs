@@ -8,6 +8,7 @@ namespace Fittings.HMap
 		public PressureMap ()
 		{
 			Table ("pressure");
+			Not.LazyLoad();
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.Pn).Column ("PN");

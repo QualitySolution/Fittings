@@ -8,6 +8,7 @@ namespace Fittings.HMap
 		public DiameterMap ()
 		{
 			Table ("diameter");
+			Not.LazyLoad();
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.Inch).Column ("inch");

@@ -8,6 +8,7 @@ namespace Fittings.HMap
 		public ConductorMap ()
 		{
 			Table ("conductor");
+			Not.LazyLoad();
 
 			Id (x => x.Id).Column ("id").GeneratedBy.Native ();
 			Map (x => x.NameRus).Column ("name_rus");
