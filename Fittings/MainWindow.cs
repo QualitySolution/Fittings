@@ -43,8 +43,12 @@ public partial class MainWindow: Gtk.Window
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
-		Application.Quit ();
-		a.RetVal = true;
+		if (tdiMain.CloseAllTabs ()) {
+			a.RetVal = false;
+			Application.Quit ();
+		} else {
+			a.RetVal = true;
+		}
 	}
 		
 	protected void OnActionPasswordChangeActivated (object sender, EventArgs e)
@@ -62,7 +66,9 @@ public partial class MainWindow: Gtk.Window
 		
 	protected void OnQuitActionActivated (object sender, EventArgs e)
 	{
-		Application.Quit ();
+		if (tdiMain.CloseAllTabs ()) {
+			Application.Quit ();
+		}
 	}
 
 	protected void OnAboutActionActivated (object sender, EventArgs e)
