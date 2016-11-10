@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 using QSProjectsLib;
 
-[assembly: AssemblyTitle ("QS: Рассчет арматуры")]
+[assembly: AssemblyTitle ("QS: Расчет арматуры")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyEdition ("com")]
