@@ -176,6 +176,8 @@ namespace Fittings.ViewModel
 	{
 		public int Id{ get; set;}
 
+		[UseForSearch]
+		[SearchHighlight]
 		public string Name{ get; set;}
 
 		public string DiameterMm{ get; set;}
