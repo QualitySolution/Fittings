@@ -11,7 +11,7 @@ using QSProjectsLib;
 [assembly: AssemblyEdition ("com")]
 [assembly: AssemblyCompany ("Quality Solution")]
 [assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("Quality Solution 2016")]
+[assembly: AssemblyCopyright ("Quality Solution 2017")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 [assembly: AssemblyLogoIcon ("Fittings.icons.flow_logo.png")]
